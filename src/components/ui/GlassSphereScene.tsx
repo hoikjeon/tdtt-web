@@ -152,7 +152,7 @@ export function GlassSphereScene() {
   }, []);
 
   return (
-    <div className="w-full h-screen bg-[#121212] overflow-hidden fixed top-0 left-0 z-0 text-white select-none touch-none">
+    <div className="w-full h-screen bg-[#121212] overflow-hidden relative text-white select-none touch-none">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 35 }}
         dpr={dpr as [number, number]}
