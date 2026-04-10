@@ -187,7 +187,7 @@ export default function ProjectDetailView({ src, onClose }: ProjectDetailViewPro
             {/* 닫기 버튼 (스크롤을 따라다니도록 fixed로 변경) */}
             <button 
               onClick={onClose}
-              className="group flex flex-col items-center gap-1 cursor-pointer fixed top-12 right-6 md:right-12 z-[60]"
+              className="group flex flex-col items-center gap-1 cursor-pointer fixed bottom-8 right-6 md:bottom-12 md:right-12 z-[60]"
             >
               <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center transition-colors group-hover:bg-white group-hover:text-black">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
