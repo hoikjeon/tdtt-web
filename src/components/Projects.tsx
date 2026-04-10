@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import ProjectTransition3D from "./ui/ProjectTransition3D";
 import ProjectDetailView from "./ui/ProjectDetailView";
+import NextProjectCTA from "./NextProjectCTA";
 import { AnimatePresence } from "framer-motion";
 
 interface ProjectCardProps {
@@ -197,6 +198,9 @@ export default function Projects({ data }: ProjectsProps) {
           </div>
         </div>
       </section>
+      
+      {/* 🔮 Next Work CTA Section */}
+      <NextProjectCTA />
 
       <ProjectTransition3D 
         isActive={transitionState.isActive}

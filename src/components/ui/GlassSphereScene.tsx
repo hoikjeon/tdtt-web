@@ -2,6 +2,7 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Text, Lightformer, Html } from "@react-three/drei";
+import { motion } from "framer-motion";
 import { LiquidSphere } from "./LiquidSphere";
 import { Suspense, useEffect, useState, useRef } from "react";
 import * as THREE from "three";
@@ -142,7 +143,7 @@ function ReactiveLine({ text, y, fontSize, color, baseOutlineColor }: { text: st
   );
 }
 
-export function GlassSphereScene() {
+export default function GlassSphereScene() {
   const [dpr, setDpr] = useState([1, 2]);
 
   useEffect(() => {
@@ -150,6 +151,13 @@ export function GlassSphereScene() {
       setDpr([1, 1.5]);
     }
   }, []);
+
+  const scrollToNext = () => {
+    const nextSection = document.getElementById("intro");
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="w-full h-screen bg-[#121212] overflow-hidden relative text-white select-none touch-none">
@@ -191,6 +199,32 @@ export function GlassSphereScene() {
 
         </Suspense>
       </Canvas>
+
+      {/* 🖱 Scroll Down Indicator (Innovative Design) */}
+      <motion.button
+        onClick={scrollToNext}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 cursor-pointer z-50 group pointer-events-auto"
+      >
+        <span className="text-[10px] tracking-[0.4em] font-bold text-white/40 uppercase transition-colors group-hover:text-white">
+          Scroll
+        </span>
+        <div className="relative w-[1px] h-12 bg-white/10 overflow-hidden">
+          <motion.div 
+            animate={{ 
+              y: ["-100%", "100%"] 
+            }}
+            transition={{ 
+              duration: 2, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="absolute top-0 left-0 w-full h-1/2 bg-white/60"
+          />
+        </div>
+      </motion.button>
     </div>
   );
 }

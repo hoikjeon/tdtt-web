@@ -1,4 +1,4 @@
-import { GlassSphereScene } from "@/components/ui/GlassSphereScene";
+import GlassSphereScene from "@/components/ui/GlassSphereScene";
 import Header from "@/components/Header";
 import Intro from "@/components/Intro";
 import ScrollMarquee from "@/components/ScrollMarquee";
@@ -41,7 +41,7 @@ const fallbackProjects: Project[] = [
 export default async function Home() {
   let projectData: Project[] = fallbackProjects;
 
-  // Supabase에서 데이터 가져오기 시도
+  /* Supabase 임시 비활성화 (4개 프로젝트 모두 보이기 위함)
   try {
     const { data, error } = await supabase
       .from('projects')
@@ -54,6 +54,7 @@ export default async function Home() {
   } catch (err) {
     console.error('Failed to fetch projects from Supabase:', err);
   }
+  */
 
   return (
     <>
