@@ -28,8 +28,12 @@ export default function Header() {
     <>
       <header className="fixed top-0 left-0 w-full z-50 p-6 md:p-10 flex justify-between items-center mix-blend-difference">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold tracking-tighter text-white">
-          tdtt<span className="text-[10px] align-top ml-0.5">TM</span>
+        <Link href="/" className="block">
+          <img 
+            src="/main-logo-bk.png" 
+            alt="tdtt" 
+            className="h-16 md:h-20 w-auto invert"
+          />
         </Link>
 
         {/* Menu Button */}
@@ -59,9 +63,13 @@ export default function Header() {
           >
             {/* Header in overlay */}
             <div className="absolute top-0 left-0 w-full p-6 md:p-10 flex justify-between items-center">
-              <div className="text-2xl font-bold tracking-tighter text-white">
-                tdtt<span className="text-[10px] align-top ml-0.5">TM</span>
-              </div>
+              <Link href="/" className="block" onClick={() => setIsOpen(false)}>
+                <img 
+                  src="/main-logo-bk.png" 
+                  alt="tdtt" 
+                  className="h-16 md:h-20 w-auto invert"
+                />
+              </Link>
               <button
                 onClick={() => setIsOpen(false)}
                 className="flex items-center gap-3 cursor-pointer group"

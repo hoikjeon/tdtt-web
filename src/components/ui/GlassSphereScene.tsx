@@ -209,7 +209,7 @@ export default function GlassSphereScene() {
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 cursor-pointer z-50 group pointer-events-auto"
       >
         <span className="text-[10px] tracking-[0.4em] font-bold text-white/40 uppercase transition-colors group-hover:text-white">
-          Scroll
+          Touch
         </span>
         <div className="relative w-[1px] h-12 bg-white/10 overflow-hidden">
           <motion.div 

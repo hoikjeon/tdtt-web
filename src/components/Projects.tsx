@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import ProjectTransition3D from "./ui/ProjectTransition3D";
@@ -78,7 +78,7 @@ function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, onClick 
         />
 
         {/* Text Info on Hover */}
-        <div className="absolute bottom-0 left-0 w-full p-8">
+        <div className="absolute bottom-0 left-0 w-full p-8 text-left">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 30 }}
@@ -91,7 +91,7 @@ function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, onClick 
             </div>
             <p className="text-white/70 text-sm mb-1">{year}</p>
             <p className="text-white/70 text-sm italic mb-2">{subtitle}</p>
-            <h3 className="text-white text-4xl md:text-5xl font-bold leading-tight">{title}</h3>
+            <h3 className="text-white text-4xl md:text-5xl font-bold leading-tight uppercase whitespace-pre-line">{title}</h3>
           </motion.div>
         </div>
 
@@ -145,31 +145,29 @@ export default function Projects({ data }: ProjectsProps) {
 
   const [detailActive, setDetailActive] = useState(false);
 
-  const handleCardClick = (rect: DOMRect, src: string) => {
+  const handleCardClick = useCallback((rect: DOMRect, src: string) => {
     setTransitionState({ isActive: true, isReversing: false, src, rect });
-  };
+  }, []);
 
-  const handleTransitionComplete = () => {
+  const handleTransitionComplete = useCallback(() => {
     setDetailActive(true);
-  };
+  }, []);
 
-  const handleDetailClose = () => {
+  const handleDetailClose = useCallback(() => {
     setDetailActive(false);
     setTransitionState(prev => ({ ...prev, isReversing: true }));
-  };
+  }, []);
 
-  const handleTransitionClosed = () => {
+  const handleTransitionClosed = useCallback(() => {
     setTransitionState(prev => ({ ...prev, isActive: false, isReversing: false }));
-  };
+  }, []);
 
-  // 데이터가 없을 경우를 대비한 가상 렌더링 방지
   const projectList = data || [];
 
   return (
     <>
       <section className="bg-white text-black py-20 md:py-32 px-6 md:px-12">
         <div className="max-w-7xl mx-auto flex flex-col gap-20 md:gap-24">
-          {/* Row 1: Left Big (38%), Right Small (25%) */}
           <div className="flex flex-col md:flex-row gap-8 md:gap-20 items-start justify-center">
             {projectList[0] && (
               <div className="w-full md:w-[38%]">
@@ -183,7 +181,6 @@ export default function Projects({ data }: ProjectsProps) {
             )}
           </div>
 
-          {/* Row 2: Left Small (25%), Right Big (38%) */}
           <div className="flex flex-col md:flex-row gap-8 md:gap-20 items-start justify-center">
             {projectList[2] && (
               <div className="w-full md:w-[25%] md:mt-32 order-2 md:order-1">
@@ -199,7 +196,6 @@ export default function Projects({ data }: ProjectsProps) {
         </div>
       </section>
       
-      {/* 🔮 Next Work CTA Section */}
       <NextProjectCTA />
 
       <ProjectTransition3D 
@@ -214,6 +210,7 @@ export default function Projects({ data }: ProjectsProps) {
       <AnimatePresence>
         {detailActive && (
           <ProjectDetailView 
+            key={transitionState.src}
             src={transitionState.src} 
             onClose={handleDetailClose} 
           />

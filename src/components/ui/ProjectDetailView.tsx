@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, useMotionValue, useSpring } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -170,17 +171,23 @@ export default function ProjectDetailView({ src, onClose }: ProjectDetailViewPro
             variants={{ hidden: { y: 50, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
             className="flex justify-between items-start w-full"
           >
-            <span className="text-sm md:text-base font-medium tracking-widest text-white/80">Y STUDIO™</span>
+            <Link href="/" className="block">
+              <img 
+                src="/main-logo-bk.png" 
+                alt="tdtt" 
+                className="h-10 md:h-12 w-auto invert"
+              />
+            </Link>
             
             <div className="flex flex-col text-right">
               <span className="text-xs md:text-sm text-white/60 mb-1">2025</span>
               <span className="text-xs md:text-sm text-white/80 tracking-widest uppercase">NEW CGV APP</span>
             </div>
 
-            {/* 닫기 버튼 */}
+            {/* 닫기 버튼 (스크롤을 따라다니도록 fixed로 변경) */}
             <button 
               onClick={onClose}
-              className="group flex flex-col items-center gap-1 cursor-pointer absolute top-12 right-6 md:right-12 z-50"
+              className="group flex flex-col items-center gap-1 cursor-pointer fixed top-12 right-6 md:right-12 z-[60]"
             >
               <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center transition-colors group-hover:bg-white group-hover:text-black">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
