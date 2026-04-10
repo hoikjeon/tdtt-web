@@ -32,7 +32,7 @@ export default function Header() {
           <img 
             src="/main-logo-bk.png" 
             alt="tdtt" 
-            className="h-8 md:h-10 lg:h-20 w-auto invert"
+            className="h-7 md:h-9 lg:h-12 w-auto invert"
           />
         </Link>
 
@@ -67,7 +67,7 @@ export default function Header() {
                 <img 
                   src="/main-logo-bk.png" 
                   alt="tdtt" 
-                  className="h-8 md:h-10 lg:h-20 w-auto invert"
+                  className="h-7 md:h-9 lg:h-12 w-auto invert"
                 />
               </Link>
               <button

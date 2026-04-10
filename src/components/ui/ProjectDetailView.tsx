@@ -175,7 +175,7 @@ export default function ProjectDetailView({ src, onClose }: ProjectDetailViewPro
               <img 
                 src="/main-logo-bk.png" 
                 alt="tdtt" 
-                className="h-10 md:h-12 w-auto invert"
+                className="h-7 md:h-9 w-auto invert"
               />
             </Link>
             <div className="flex flex-col text-right">
