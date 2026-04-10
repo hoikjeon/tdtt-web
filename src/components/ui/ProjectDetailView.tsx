@@ -178,24 +178,10 @@ export default function ProjectDetailView({ src, onClose }: ProjectDetailViewPro
                 className="h-10 md:h-12 w-auto invert"
               />
             </Link>
-            
             <div className="flex flex-col text-right">
               <span className="text-xs md:text-sm text-white/60 mb-1">2025</span>
               <span className="text-xs md:text-sm text-white/80 tracking-widest uppercase">NEW CGV APP</span>
             </div>
-
-            {/* 닫기 버튼 (스크롤을 따라다니도록 fixed로 변경) */}
-            <button 
-              onClick={onClose}
-              className="group flex flex-col items-center gap-2 cursor-pointer fixed bottom-8 right-6 md:bottom-12 md:right-12 z-[80] select-none"
-            >
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-black/50 backdrop-blur-xl border border-white/15 flex items-center justify-center transition-all duration-500 group-hover:bg-white group-hover:text-black group-hover:scale-110 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
-                <svg width="18" height="18" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <span className="text-[9px] md:text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 group-hover:text-white transition-all duration-500 translate-y-0 opacity-0 group-hover:opacity-100 group-hover:translate-y-1">Close</span>
-            </button>
           </motion.div>
 
           {/* 중앙 거대 타이틀 */}
@@ -384,6 +370,19 @@ export default function ProjectDetailView({ src, onClose }: ProjectDetailViewPro
         </div>
 
       </div>
+
+      {/* 닫기 버튼 (최상위 fixed 위치로 이동하여 스크롤 영향을 받지 않도록 함) */}
+      <button 
+        onClick={onClose}
+        className="group flex flex-col items-center gap-2 cursor-pointer fixed bottom-8 right-6 md:bottom-12 md:right-12 z-[80] select-none"
+      >
+        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-black/50 backdrop-blur-xl border border-white/15 flex items-center justify-center transition-all duration-500 group-hover:bg-white group-hover:text-black group-hover:scale-110 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+          <svg width="18" height="18" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <span className="text-[9px] md:text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 group-hover:text-white transition-all duration-500 translate-y-0 opacity-0 group-hover:opacity-100 group-hover:translate-y-1">Close</span>
+      </button>
     </motion.div>
   );
 }
