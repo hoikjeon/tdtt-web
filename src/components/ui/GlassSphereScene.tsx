@@ -7,12 +7,13 @@ import { LiquidSphere } from "./LiquidSphere";
 import { Suspense, useEffect, useState, useRef } from "react";
 import * as THREE from "three";
 
-// A rudimentary kerning map for uppercase Inter Black to simulate a continuous string while rendering distinct meshes
+// Character width map – Latin chars have individual widths; Korean (Hangul) chars default to 0.95 (full-width)
 const charWidthMap: Record<string, number> = {
-  "I": 0.3, " ": 0.3, "!": 0.35, "L": 0.55, "F": 0.55, "E": 0.6,
+  "I": 0.3, " ": 0.35, "!": 0.35, "L": 0.55, "F": 0.55, "E": 0.6,
   "T": 0.65, "P": 0.65, "S": 0.65, "B": 0.65, "R": 0.65, "Y": 0.65, "K": 0.65,
   "D": 0.75, "G": 0.75, "C": 0.75, "N": 0.7, "H": 0.7, "U": 0.7, "A": 0.7,
-  "O": 0.8, "M": 0.9, "W": 0.9
+  "O": 0.8, "M": 0.9, "W": 0.9, "-": 0.4, "V": 0.7, "J": 0.5, "Q": 0.8, "X": 0.7, "Z": 0.65,
+  "1": 0.55
 };
 
 function ReactiveChar({ char, originX, originY, fontSize, color, baseOutlineColor }: { char: string, originX: number, originY: number, fontSize: number, color: string, baseOutlineColor: string }) {
@@ -91,7 +92,7 @@ function ReactiveChar({ char, originX, originY, fontSize, color, baseOutlineColo
   return (
     <Text 
       ref={ref}
-      font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYMZhrib2Bg-4.ttf" 
+      font="/fonts/NanumSquareNeo-dEb.ttf" 
       position={[originX, originY - 1.5, 0]} 
       fillOpacity={0}
       fontSize={fontSize} 
@@ -107,26 +108,69 @@ function ReactiveChar({ char, originX, originY, fontSize, color, baseOutlineColo
   );
 }
 
-function ReactiveLine({ text, y, fontSize, color, baseOutlineColor }: { text: string, y: number, fontSize: number, color: string, baseOutlineColor: string }) {
+// Helper: compute natural width of a line
+function getLineNaturalWidth(text: string, fontSize: number) {
+  let w = 0;
+  for (const char of text) {
+    w += (charWidthMap[char] || 0.95) * fontSize;
+  }
+  return w;
+}
+
+function ReactiveLine({ text, y, fontSize, color, baseOutlineColor, targetWidth }: { text: string, y: number, fontSize: number, color: string, baseOutlineColor: string, targetWidth?: number }) {
   const chars = text.split("");
-  
-  let totalWidth = 0;
+  if (chars.length === 0) return null;
+
+  // Calculate individual char widths
+  const charWidths: number[] = [];
+  let naturalWidth = 0;
+  for (let i = 0; i < chars.length; i++) {
+    const w = (charWidthMap[chars[i]] || 0.95) * fontSize;
+    charWidths.push(w);
+    naturalWidth += w;
+  }
+
+  // If targetWidth is specified, we achieve perfect justification by locking 
+  // the first character to the left edge and the last character to the right edge.
+  const totalWidth = targetWidth || naturalWidth;
   const positions: number[] = [];
   
-  for (let i = 0; i < chars.length; i++) {
-    const char = chars[i];
-    const width = (charWidthMap[char] || 0.65) * fontSize;
-    positions.push(totalWidth + width / 2);
-    totalWidth += width;
+  if (chars.length > 1 && targetWidth) {
+    // Distance between the CENTER of the first char and the CENTER of the last char
+    const edgeToEdgeCenter = targetWidth - (charWidths[0] / 2) - (charWidths[chars.length - 1] / 2);
+    
+    // Sum of widths of middle characters and gaps
+    // Wait, the natural distance between first and last center is:
+    let naturalDistBetweenCenters = 0;
+    for (let i = 0; i < chars.length - 1; i++) {
+      naturalDistBetweenCenters += (charWidths[i]/2 + charWidths[i+1]/2);
+    }
+    
+    // We scale the gaps (the space between centers) to fit the target edgeToEdgeCenter
+    const scaleFactor = edgeToEdgeCenter / naturalDistBetweenCenters;
+    
+    let currentX = -targetWidth / 2 + charWidths[0] / 2;
+    positions.push(currentX);
+    
+    for (let i = 0; i < chars.length - 1; i++) {
+      const gap = (charWidths[i]/2 + charWidths[i+1]/2) * scaleFactor;
+      currentX += gap;
+      positions.push(currentX);
+    }
+  } else {
+    // Default natural spacing
+    let currentX = -naturalWidth / 2;
+    for (let i = 0; i < chars.length; i++) {
+      positions.push(currentX + charWidths[i] / 2);
+      currentX += charWidths[i];
+    }
   }
-  
-  const startX = -totalWidth / 2;
 
   return (
     <group>
       {chars.map((char, i) => {
         if (char === " ") return null;
-        const originX = startX + positions[i];
+        const originX = positions[i];
         return (
           <ReactiveChar 
             key={`${i}-${char}`} 
@@ -139,6 +183,38 @@ function ReactiveLine({ text, y, fontSize, color, baseOutlineColor }: { text: st
           />
         );
       })}
+    </group>
+  );
+}
+
+// 4 lines of Korean text with justified alignment
+const heroLines = [
+  { text: "단순한 외주 대행 그 이상", color: "#b5b5b5" },
+  { text: "병원으로 직접 출근합니다", color: "#e6e6e6" },
+  { text: "직원 1명의 인건비로 누리는", color: "#e6e6e6" },
+  { text: "가장 완벽한 올인원 마케팅 팀", color: "#b5b5b5" },
+];
+const HERO_FONT_SIZE = 0.55;
+
+function JustifiedTextBlock() {
+  // Compute the max natural width to use as target for all lines
+  const maxWidth = Math.max(...heroLines.map(l => getLineNaturalWidth(l.text, HERO_FONT_SIZE)));
+
+  const yPositions = [1.5, 0.5, -0.5, -1.5];
+
+  return (
+    <group position={[0, 0, -2]}>
+      {heroLines.map((line, i) => (
+        <ReactiveLine
+          key={i}
+          text={line.text}
+          y={yPositions[i]}
+          fontSize={HERO_FONT_SIZE}
+          color={line.color}
+          baseOutlineColor={line.color}
+          targetWidth={maxWidth}
+        />
+      ))}
     </group>
   );
 }
@@ -187,42 +263,49 @@ export default function GlassSphereScene() {
 
         <Suspense fallback={<Html center><div className="text-white/50 text-sm tracking-widest">LOADING 3D...</div></Html>}>
 
-          <group position={[0, 0, -2]}>
-            <ReactiveLine text="DISTORTING!" y={1.8} fontSize={0.85} color="#b5b5b5" baseOutlineColor="#b5b5b5" />
-            <ReactiveLine text="SKIES BEYOND" y={0.9} fontSize={0.8} color="#e6e6e6" baseOutlineColor="#e6e6e6" />
-            <ReactiveLine text="THE LIMITS OF" y={0} fontSize={0.8} color="#e6e6e6" baseOutlineColor="#e6e6e6" />
-            <ReactiveLine text="TYPOGRAPHIC" y={-0.9} fontSize={0.8} color="#e6e6e6" baseOutlineColor="#e6e6e6" />
-            <ReactiveLine text="GLASS REFLECTION" y={-1.8} fontSize={0.8} color="#b5b5b5" baseOutlineColor="#b5b5b5" />
-          </group>
+          <JustifiedTextBlock />
 
           <LiquidSphere />
 
         </Suspense>
       </Canvas>
 
-      {/* 🖱 Scroll Down Indicator (Innovative Design) */}
+      {/* 🖱 Scroll Down Indicator (Refined Design) */}
       <motion.button
         onClick={scrollToNext}
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 cursor-pointer z-50 group pointer-events-auto"
+        transition={{ delay: 1.5, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer z-50 group pointer-events-auto"
       >
-        <span className="text-[10px] tracking-[0.4em] font-bold text-white/40 uppercase transition-colors group-hover:text-white">
-          Touch
-        </span>
-        <div className="relative w-[1px] h-12 bg-white/10 overflow-hidden">
-          <motion.div 
-            animate={{ 
-              y: ["-100%", "100%"] 
-            }}
-            transition={{ 
-              duration: 2, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-            className="absolute top-0 left-0 w-full h-1/2 bg-white/60"
-          />
+        <div 
+          className="relative w-12 h-16 flex items-center justify-center overflow-hidden"
+          style={{
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+            maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)'
+          }}
+        >
+          {[0, 1].map((i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ 
+                opacity: [0, 0.4, 0.4, 0],
+                y: [30, -30],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                delay: i * 1.5,
+                ease: "linear"
+              }}
+              className="absolute"
+            >
+              <svg width="30" height="15" viewBox="0 0 24 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2L12 10L22 2" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </motion.div>
+          ))}
         </div>
       </motion.button>
     </div>
