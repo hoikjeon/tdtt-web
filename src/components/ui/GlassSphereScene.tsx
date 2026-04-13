@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Text, Lightformer, Html } from "@react-three/drei";
+import { Environment, Text, Lightformer, Html, PerformanceMonitor } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { LiquidSphere } from "./LiquidSphere";
 import { Suspense, useEffect, useState, useRef } from "react";
@@ -220,11 +220,11 @@ function JustifiedTextBlock() {
 }
 
 export default function GlassSphereScene() {
-  const [dpr, setDpr] = useState([1, 2]);
+  const [dpr, setDpr] = useState(1.5);
 
   useEffect(() => {
     if (window.innerWidth < 768) {
-      setDpr([1, 1.5]);
+      setDpr(1); // Mobile defaults to 1 for better performance
     }
   }, []);
 
@@ -239,9 +239,10 @@ export default function GlassSphereScene() {
     <div className="w-full h-screen bg-[#121212] overflow-hidden relative text-white select-none touch-none">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 35 }}
-        dpr={dpr as [number, number]}
+        dpr={dpr}
         gl={{ antialias: false, powerPreference: "high-performance", alpha: false }}
       >
+        <PerformanceMonitor onIncline={() => setDpr(1.5)} onDecline={() => setDpr(1)}>
         <color attach="background" args={["#121212"]} />
         <ambientLight intensity={0.2} />
         
@@ -268,6 +269,7 @@ export default function GlassSphereScene() {
           <LiquidSphere />
 
         </Suspense>
+        </PerformanceMonitor>
       </Canvas>
 
       {/* 🖱 Scroll Down Indicator (Refined Design) */}

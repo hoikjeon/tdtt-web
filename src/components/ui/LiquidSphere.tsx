@@ -73,7 +73,7 @@ export function LiquidSphere() {
     ior: 1.5, 
     chromaticAberration: 0.05,
     backside: true, 
-    resolution: 1024, 
+    resolution: 256, 
     color: "#ffffff",
   };
 
@@ -82,7 +82,7 @@ export function LiquidSphere() {
       {/* Main Large Sphere */}
       <group ref={mainRef} position={[mainPos[0], mainPos[1], mainPos[2]]}>
         <mesh>
-          <sphereGeometry args={[0.72, 64, 64]} />
+          <sphereGeometry args={[0.72, 48, 48]} />
           <MeshTransmissionMaterial ref={mainMatRef} {...materialProps} thickness={4} />
         </mesh>
       </group>
@@ -90,7 +90,7 @@ export function LiquidSphere() {
       {/* Medium Sphere */}
       <group ref={sat1Ref} position={[sat1Pos[0], sat1Pos[1], sat1Pos[2]]}>
         <mesh>
-          <sphereGeometry args={[0.36, 64, 64]} />
+          <sphereGeometry args={[0.36, 32, 32]} />
           <MeshTransmissionMaterial ref={sat1MatRef} {...materialProps} thickness={2} />
         </mesh>
       </group>
@@ -98,7 +98,7 @@ export function LiquidSphere() {
       {/* Small Sphere */}
       <group ref={sat2Ref} position={[sat2Pos[0], sat2Pos[1], sat2Pos[2]]}>
         <mesh>
-          <sphereGeometry args={[0.26, 64, 64]} />
+          <sphereGeometry args={[0.26, 24, 24]} />
           <MeshTransmissionMaterial ref={sat2MatRef} {...materialProps} thickness={1.5} />
         </mesh>
       </group>
@@ -106,7 +106,7 @@ export function LiquidSphere() {
       {/* Tiny Sphere */}
       <group ref={sat3Ref} position={[sat3Pos[0], sat3Pos[1], sat3Pos[2]]}>
         <mesh>
-          <sphereGeometry args={[0.1, 32, 32]} />
+          <sphereGeometry args={[0.1, 16, 16]} />
           <MeshTransmissionMaterial ref={sat3MatRef} {...materialProps} thickness={1} />
         </mesh>
       </group>

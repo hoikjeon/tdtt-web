@@ -11,9 +11,9 @@ export default function Intro() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-sm font-medium tracking-wider mb-8"
+          className="text-[21px] font-medium tracking-wider mb-8"
         >
-          Keep Exploring
+          ThatDayTime
         </motion.p>
 
         <motion.h2
@@ -26,10 +26,10 @@ export default function Intro() {
           className="text-3xl md:text-5xl font-bold leading-tight"
         >
           {[
-            "AI 시대에 걸맞은 디지털 웹 스튜디오 —",
-            "경험과 기술력, 그리고 AI와 데이터 활용",
-            "역량으로 사용자 경험(UX)을 혁신적으로",
-            "향상시키는 파트너입니다."
+            "AI 검색 시대의 병원 마케팅,",
+            "생존을 넘어 압도적 1위로.",
+            "미래의 환자 유입까지 선제적으로 확보하는",
+            "가장 확실한 온라인 환경 최적화 전략입니다."
           ].map((line, i) => (
             <motion.span
               key={i}
