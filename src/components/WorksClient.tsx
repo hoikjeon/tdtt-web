@@ -20,7 +20,7 @@ export default function WorksClient({ projectData }: WorksClientProps) {
         <motion.div
           initial={{ scale: 1.2, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.6 }}
-          transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] as any }}
           className="absolute inset-0 z-0"
         >
           <img
@@ -35,7 +35,7 @@ export default function WorksClient({ projectData }: WorksClientProps) {
           <motion.div
             initial={{ y: 60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] as any }}
           >
             <span className="text-xs md:text-sm font-bold tracking-[0.4em] uppercase text-white/60 mb-6 block">
               Selected Projects

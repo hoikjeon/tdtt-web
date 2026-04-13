@@ -277,7 +277,7 @@ export default function GlassSphereScene() {
         onClick={scrollToNext}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ delay: 1.5, duration: 1.2, ease: [0.22, 1, 0.36, 1] as any }}
         className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer z-50 group pointer-events-auto"
       >
         <div 

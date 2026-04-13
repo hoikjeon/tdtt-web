@@ -42,11 +42,11 @@ const services: ServiceItem[] = [
   },
   {
     id: "monitoring-app",
-    title: "전용 모니터링 앱",
-    description: "실시간 데이터 및 마케팅 현황 확인",
-    detail: "직접 개발한 전용 앱을 통해 마케팅 성과와 환자 유입 현황을 언제 어디서나 투명하게 모니터링하세요.",
-    icon: Smartphone,
-    color: "#3385ff",
+    title: "프로그램 개발",
+    description: "병원 실무 효율을 높이는 맞춤 도구 제작",
+    detail: "마케팅 효율 측정기부터 예약 연동 툴까지 필요한 모든 솔루션을 직접 개발해 드립니다.",
+    icon: Code,
+    color: "#2d3748",
     size: "large",
     isApp: true,
   },
@@ -115,11 +115,11 @@ const services: ServiceItem[] = [
   },
   {
     id: "program",
-    title: "프로그램 개발",
-    description: "병원 실무 효율을 높이는 맞춤 도구 제작",
-    detail: "마케팅 효율 측정기부터 예약 연동 툴까지 필요한 모든 솔루션을 직접 개발해 드립니다.",
-    icon: Code,
-    color: "#2d3748",
+    title: "전용 모니터링 앱",
+    description: "실시간 데이터 및 마케팅 현황 확인",
+    detail: "직접 개발한 전용 앱을 통해 마케팅 성과와 환자 유입 현황을 언제 어디서나 투명하게 모니터링하세요.",
+    icon: Smartphone,
+    color: "#3385ff",
     size: "small",
   },
   {
@@ -174,7 +174,7 @@ export default function ServiceBento() {
                   initial={{ width: 0 }}
                   whileInView={{ width: "100%" }}
                   viewport={{ once: false, amount: 0.8 }}
-                  transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
                   className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
                 >
                   All-in-One 파트너, Medical EU
@@ -206,7 +206,7 @@ export default function ServiceBento() {
                 ${service.size === "small" ? "md:col-span-1 md:row-span-1" : ""}
               `}
               whileHover={{ scale: 1.01, y: -5 }}
-              transition={{ layout: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
+              transition={{ layout: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as any } }}
             >
               {/* Icon & Label */}
               <div className="flex flex-col h-full justify-between relative z-10">

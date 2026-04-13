@@ -66,7 +66,7 @@ export default function ContactForm() {
                 initial={{ width: 0 }}
                 whileInView={{ width: "100%" }}
                 viewport={{ once: false, amount: 0.8 }}
-                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
                 className="absolute top-0 left-0 text-4xl md:text-6xl font-black text-[#121212] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
               >
                 성장을 위한 첫 걸음.

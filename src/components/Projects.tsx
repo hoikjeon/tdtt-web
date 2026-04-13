@@ -82,7 +82,7 @@ function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, onClick 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 30 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as any }}
           >
             <div className="flex items-center gap-2 mb-3">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-white">

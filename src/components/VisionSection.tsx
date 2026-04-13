@@ -45,7 +45,7 @@ export default function VisionSection() {
                 initial={{ width: 0 }}
                 whileInView={{ width: "100%" }}
                 viewport={{ once: false, amount: 0.8 }}
-                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
                 className="absolute top-0 left-0 text-3xl md:text-6xl font-black text-[#121212] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap leading-tight"
               >
                 우리 병원도 지역 1등이 될 수 있습니다.
