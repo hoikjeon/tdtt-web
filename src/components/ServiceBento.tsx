@@ -168,7 +168,7 @@ export default function ServiceBento() {
             {/* Scroll Triggered Fill Text */}
             <div className="relative inline-block overflow-hidden">
               <span className="text-3xl md:text-5xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">
-                All-in-One 파트너, Medical EU
+                All-in-One 파트너, 그날그때
               </span>
                 <motion.span 
                   initial={{ width: 0 }}
@@ -177,7 +177,7 @@ export default function ServiceBento() {
                   transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
                   className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
                 >
-                  All-in-One 파트너, Medical EU
+                  All-in-One 파트너, 그날그때
                 </motion.span>
             </div>
           </motion.h2>

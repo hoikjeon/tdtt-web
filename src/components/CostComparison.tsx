@@ -35,7 +35,7 @@ export default function CostComparison() {
   const comparisonData = [
     { label: "직접 채용 (인하우스)", cost: directTotal, color: "#64748b", isWinning: false },
     { label: "일반 마케팅 회사", cost: otherTotal, color: "#94a3b8", isWinning: false },
-    { label: "Medical EU", cost: tdttTotal, color: "#FF5733", isWinning: true },
+    { label: "그날그때", cost: tdttTotal, color: "#FF5733", isWinning: true },
   ];
 
   return (
@@ -147,7 +147,7 @@ export default function CostComparison() {
                 <th className="py-8 px-6 text-gray-400 font-bold text-xs uppercase tracking-widest w-[16%]">구분</th>
                 <th className="py-8 px-6 text-gray-800 font-bold text-lg w-[28%]">내부직원채용 (인하우스)</th>
                 <th className="py-8 px-6 text-gray-800 font-bold text-lg w-[28%]">일반마케팅 회사</th>
-                <th className="py-8 px-6 text-[#FF5733] font-black text-xl w-[28%] bg-[#FF5733]/5 rounded-t-3xl border-x border-t border-[#FF5733]/10">Medical EU</th>
+                <th className="py-8 px-6 text-[#FF5733] font-black text-xl w-[28%] bg-[#FF5733]/5 rounded-t-3xl border-x border-t border-[#FF5733]/10">그날그때</th>
               </tr>
             </thead>
             <tbody className="text-gray-500 font-medium">
@@ -217,7 +217,7 @@ export default function CostComparison() {
               주 1회 현장 출근 / 25가지 올인원 실무 / 부대비용 및 인쇄 마진 0원 / 자체 모니터링 앱 제공
             </p>
             <p className="text-[#FF5733] font-black text-xl md:text-3xl mt-4">
-              Medical EU가 병원의 진짜 성장을 책임집니다.
+              그날그때 가 병원의 진짜 성장을 책임집니다.
             </p>
           </div>
         </motion.div>

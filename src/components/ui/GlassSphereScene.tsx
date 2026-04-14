@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Text, Lightformer, Html, PerformanceMonitor } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { LiquidSphere } from "./LiquidSphere";
@@ -16,7 +16,27 @@ const charWidthMap: Record<string, number> = {
   "1": 0.55
 };
 
-function ReactiveChar({ char, originX, originY, fontSize, color, baseOutlineColor }: { char: string, originX: number, originY: number, fontSize: number, color: string, baseOutlineColor: string }) {
+function ReactiveChar({ 
+  char, 
+  originX, 
+  originY, 
+  fontSize, 
+  color, 
+  baseOutlineColor,
+  maxDist = 2.0,
+  pushFactor = 0.26,
+  scaleFactor = 0.15
+}: { 
+  char: string, 
+  originX: number, 
+  originY: number, 
+  fontSize: number, 
+  color: string, 
+  baseOutlineColor: string,
+  maxDist?: number,
+  pushFactor?: number,
+  scaleFactor?: number
+}) {
   const ref = useRef<any>(null); 
   const isReady = useRef(false);
 
@@ -69,16 +89,16 @@ function ReactiveChar({ char, originX, originY, fontSize, color, baseOutlineColo
     if (distance < maxDist && distance > 0.01) {
       const force = Math.pow((maxDist - distance) / maxDist, 2);
       
-      const pushX = (orgDistX / distance) * -0.26 * force; 
-      const pushY = (orgDistY / distance) * -0.26 * force; 
+      const pushX = (orgDistX / distance) * -pushFactor * force; 
+      const pushY = (orgDistY / distance) * -pushFactor * force; 
 
       ref.current.position.x = THREE.MathUtils.lerp(ref.current.position.x, originX + pushX, 0.15);
       ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, originY + pushY, 0.15);
       
-      const targetScale = 1.0 + force * 0.15;
+      const targetScale = 1.0 + force * scaleFactor;
       ref.current.scale.setScalar(THREE.MathUtils.lerp(ref.current.scale.x, targetScale, 0.15));
       
-      const targetRotation = Math.sin(originX * 10) * force * 0.15;
+      const targetRotation = Math.sin(originX * 10) * force * scaleFactor;
       ref.current.rotation.z = THREE.MathUtils.lerp(ref.current.rotation.z, targetRotation, 0.15);
 
     } else {
@@ -117,7 +137,27 @@ function getLineNaturalWidth(text: string, fontSize: number) {
   return w;
 }
 
-function ReactiveLine({ text, y, fontSize, color, baseOutlineColor, targetWidth }: { text: string, y: number, fontSize: number, color: string, baseOutlineColor: string, targetWidth?: number }) {
+function ReactiveLine({ 
+  text, 
+  y, 
+  fontSize, 
+  color, 
+  baseOutlineColor, 
+  targetWidth,
+  maxDist,
+  pushFactor,
+  scaleFactor
+}: { 
+  text: string, 
+  y: number, 
+  fontSize: number, 
+  color: string, 
+  baseOutlineColor: string, 
+  targetWidth?: number,
+  maxDist?: number,
+  pushFactor?: number,
+  scaleFactor?: number
+}) {
   const chars = text.split("");
   if (chars.length === 0) return null;
 
@@ -180,6 +220,9 @@ function ReactiveLine({ text, y, fontSize, color, baseOutlineColor, targetWidth 
             fontSize={fontSize} 
             color={color} 
             baseOutlineColor={baseOutlineColor} 
+            maxDist={maxDist}
+            pushFactor={pushFactor}
+            scaleFactor={scaleFactor}
           />
         );
       })}
@@ -194,13 +237,43 @@ const heroLines = [
   { text: "직원 1명의 인건비로 누리는", color: "#e6e6e6" },
   { text: "가장 완벽한 올인원 마케팅 팀", color: "#b5b5b5" },
 ];
-const HERO_FONT_SIZE = 0.55;
+// Removed static HERO_FONT_SIZE for responsiveness
 
 function JustifiedTextBlock() {
-  // Compute the max natural width to use as target for all lines
-  const maxWidth = Math.max(...heroLines.map(l => getLineNaturalWidth(l.text, HERO_FONT_SIZE)));
+  const { size } = useThree();
+  const width = size.width;
 
-  const yPositions = [1.5, 0.5, -0.5, -1.5];
+  // Responsive scaling based on window width
+  let fontSize = 0.55;
+  let ySep = 1.0;
+  let maxDist = 2.0;
+  let pushFactor = 0.26;
+  let scaleFactor = 0.15;
+
+  if (width < 480) {
+    fontSize = 0.28;
+    ySep = 0.5;
+    maxDist = 0.8;
+    pushFactor = 0.12;
+    scaleFactor = 0.08;
+  } else if (width < 768) {
+    fontSize = 0.38;
+    ySep = 0.7;
+    maxDist = 1.2;
+    pushFactor = 0.18;
+    scaleFactor = 0.10;
+  } else if (width < 1024) {
+    fontSize = 0.48;
+    ySep = 0.85;
+    maxDist = 1.6;
+    pushFactor = 0.22;
+    scaleFactor = 0.12;
+  }
+
+  // Compute the max natural width to use as target for all lines
+  const maxWidth = Math.max(...heroLines.map(l => getLineNaturalWidth(l.text, fontSize)));
+
+  const yPositions = [ySep * 1.5, ySep * 0.5, ySep * -0.5, ySep * -1.5];
 
   return (
     <group position={[0, 0, -2]}>
@@ -209,10 +282,13 @@ function JustifiedTextBlock() {
           key={i}
           text={line.text}
           y={yPositions[i]}
-          fontSize={HERO_FONT_SIZE}
+          fontSize={fontSize}
           color={line.color}
           baseOutlineColor={line.color}
           targetWidth={maxWidth}
+          maxDist={maxDist}
+          pushFactor={pushFactor}
+          scaleFactor={scaleFactor}
         />
       ))}
     </group>

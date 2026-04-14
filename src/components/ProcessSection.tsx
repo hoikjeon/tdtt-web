@@ -67,7 +67,7 @@ export default function ProcessSection() {
           <div className="flex justify-center">
             <div className="relative inline-block overflow-hidden">
                <span className="text-3xl md:text-5xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">
-                결제 후, 이렇게 진행됩니다.
+                계약 후, 이렇게 진행됩니다.
               </span>
               <motion.span 
                 initial={{ width: 0 }}
@@ -76,7 +76,7 @@ export default function ProcessSection() {
                 transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
                 className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
               >
-                결제 후, 이렇게 진행됩니다.
+                계약 후, 이렇게 진행됩니다.
               </motion.span>
             </div>
           </div>
@@ -86,7 +86,7 @@ export default function ProcessSection() {
         <div className="relative grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
           
           {/* Connecting Line (Desktop) */}
-          <div className="hidden md:block absolute top-[50px] left-[10%] right-[10%] h-[2px] bg-gray-100 z-0">
+          <div className="hidden md:block absolute top-[74px] left-[10%] right-[10%] h-[2px] bg-gray-100 z-0">
             <motion.div 
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
@@ -137,7 +137,7 @@ export default function ProcessSection() {
 
               {/* Progress Arrow (Desktop, hide for last item) */}
               {idx < steps.length - 1 && (
-                <div className="hidden md:flex absolute top-[54px] -right-4 translate-x-1/2 text-gray-100">
+                <div className="hidden md:flex absolute top-[78px] -right-4 translate-x-1/2 text-gray-100">
                   <ChevronRight size={32} />
                 </div>
               )}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Network, MapPin, Zap } from "lucide-react";
+import { Network, MapPin, Zap, Hospital } from "lucide-react";
 
 // Simplified coordinates for Bu-Ul-Gyeong region on a 1000x1000 SVG
 const mapNodes = [
@@ -19,6 +19,31 @@ const mapNodes = [
 const connections = [
   [1, 2], [1, 4], [2, 6], [4, 6], [4, 3], [3, 8], [3, 5], [5, 9], [9, 1], [7, 2], [7, 1]
 ];
+
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.8, y: 10 },
+  visible: { 
+    opacity: 1, 
+    scale: 1, 
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  },
+};
 
 export default function VisionSection() {
   return (
@@ -58,7 +83,7 @@ export default function VisionSection() {
               transition={{ delay: 0.5 }}
               className="mt-4 text-2xl md:text-5xl font-black text-[#FF5733] tracking-tighter uppercase"
             >
-              &lt;그날그때&gt; 에 합류하세요.
+              &lt;Medical EU&gt; 에 합류하세요.
             </motion.h3>
           </div>
         </div>
@@ -72,7 +97,7 @@ export default function VisionSection() {
         >
           <p className="text-gray-500 text-lg md:text-2xl font-bold leading-relaxed px-4">
             단순한 마케팅 대행을 넘어, <br className="hidden md:block" />
-            <span className="text-[#121212]">&lt;그날그때&gt;와 함께하는 부울경 지역 우수 병원 간의</span> <br />
+            <span className="text-[#121212]">&lt;Medical EU&gt;와 함께하는 부울경 지역 우수 병원 간의</span> <br />
             <span className="bg-[#FF5733]/5 px-2 text-[#FF5733]">양방향 환자 크로스 프로모션(네트워크)</span> 혜택까지 <br className="hidden md:block" />
             독보적으로 누리실 수 있습니다.
           </p>
@@ -82,9 +107,10 @@ export default function VisionSection() {
       {/* Map Visualization Layout (Enhanced Glassmorphism Card) */}
       <div className="relative w-full max-w-6xl mx-auto mt-12 group">
         <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.05 }}
           className="relative w-full bg-white/60 backdrop-blur-xl rounded-[4rem] border border-gray-100 shadow-[0_40px_100px_rgba(0,0,0,0.04)] overflow-hidden h-[500px] md:h-[700px] flex items-center justify-center p-8 md:p-12"
         >
           {/* Background Grid Pattern */}
@@ -92,7 +118,7 @@ export default function VisionSection() {
                style={{ backgroundImage: 'radial-gradient(#FF5733 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
 
           <svg className="w-full h-full drop-shadow-2xl relative z-10" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Stylized Bu-Ul-Gyeong Border Path (Premium stroke) */}
+            {/* Stylized Bu-Ul-Gyeong Border Path */}
             <motion.path 
               d="M150,300 L350,80 L700,40 L950,150 L980,450 L850,580 L500,580 L250,520 Z"
               stroke="#FF5733"
@@ -100,8 +126,8 @@ export default function VisionSection() {
               strokeOpacity="0.1"
               strokeDasharray="10,10"
               initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              transition={{ duration: 3 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 3, delay: 0.5 }}
             />
             
             {/* Light Trails between Nodes */}
@@ -111,7 +137,7 @@ export default function VisionSection() {
               
               return (
                 <g key={`edge-${i}`}>
-                  <motion.line 
+                  <line 
                     x1={start.x} y1={start.y} x2={end.x} y2={end.y} 
                     stroke="#FF5733" strokeWidth="2" strokeOpacity="0.1"
                   />
@@ -134,64 +160,57 @@ export default function VisionSection() {
               );
             })}
 
-            {/* Hospital Nodes (Premium Button Style) */}
-            {mapNodes.map((node, i) => (
-              <g key={`node-${i}`} className="cursor-default">
-                <motion.circle 
-                  cx={node.x} cy={node.y} r="32" 
-                  fill="white" 
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ type: "spring", damping: 15, delay: 0.5 + i * 0.1 }}
-                  className="drop-shadow-[0_10px_25px_rgba(0,0,0,0.08)]"
-                />
-                <motion.circle 
-                  cx={node.x} cy={node.y} r="28" 
-                  fill="none" stroke="#f8f9fa" strokeWidth="1"
-                />
-                
-                {/* Cross Icon */}
-                <motion.path
-                  d={`M${node.x - 7},${node.y} h14 M${node.x},${node.y - 7} v14`}
-                  stroke="#FF5733" strokeWidth="4" strokeLinecap="round"
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.8 + i * 0.1 }}
-                />
-
-                {/* Node Glow Effect */}
-                <motion.circle 
-                  cx={node.x} cy={node.y} r="32" fill="none" stroke="#FF5733" strokeWidth="2"
-                  animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0, 0.3] }}
-                  transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.4 }}
-                />
-
-                {/* Premium Label Style */}
-                <motion.g
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 1 + i * 0.1 }}
+            {/* Hospital Nodes */}
+            <g>
+              {mapNodes.map((node, i) => (
+                <motion.g 
+                  key={`node-${i}`} 
+                  variants={itemVariants}
+                  className="cursor-default"
                 >
-                  <rect 
-                    x={node.x - 50} y={node.y + 45} width="100" height="30" rx="15" 
-                    fill="white" className="drop-shadow-sm border border-gray-50" 
+                  {/* Outer Glow Animation */}
+                  <motion.circle 
+                    cx={node.x} cy={node.y} r="32" 
+                    fill="#FF5733" fillOpacity="0.05"
+                    animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.1, 0.3] }}
+                    transition={{ repeat: Infinity, duration: 3, delay: i * 0.3 }}
                   />
-                  <text
-                    x={node.x} y={node.y + 65}
-                    textAnchor="middle"
-                    fill="#121212"
-                    fontSize="13"
-                    fontWeight="900"
-                    className="tracking-tighter"
-                  >
-                    {node.label}
-                  </text>
+                  
+                  {/* Main Hospital Circle */}
+                  <circle 
+                    cx={node.x} cy={node.y} r="30" 
+                    fill="white" 
+                    stroke="#FF5733" strokeWidth="1" strokeOpacity="0.3"
+                  />
+                  
+                  {/* Icon Representation (Red Cross + Building outline) */}
+                  <g transform={`translate(${node.x}, ${node.y})`}>
+                    <rect x="-8" y="-10" width="16" height="20" rx="2" fill="#FF5733" fillOpacity="0.15" stroke="#FF5733" strokeWidth="1.5" />
+                    <path d="M-4,0 h8 M0,-4 v8" stroke="#FF5733" strokeWidth="3" strokeLinecap="round" />
+                  </g>
+
+                  {/* Label with visibility optimizations */}
+                  <g>
+                    <rect 
+                      x={node.x - 45} y={node.y + 38} width="90" height="24" rx="12" 
+                      fill="white" 
+                      stroke="#FF5733" strokeWidth="2" strokeOpacity="0.1"
+                      className="shadow-sm"
+                    />
+                    <text
+                      x={node.x} y={node.y + 55}
+                      textAnchor="middle"
+                      fill="#121212"
+                      fontSize="13"
+                      fontWeight="900"
+                      className="tracking-tighter"
+                    >
+                      {node.label}
+                    </text>
+                  </g>
                 </motion.g>
-              </g>
-            ))}
+              ))}
+            </g>
           </svg>
 
           {/* Map Title Badge */}
