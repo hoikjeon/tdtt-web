@@ -44,7 +44,7 @@ export default function PromotionSection() {
           {[
             { status: "closed", label: "계약 완료", date: "24.04.10" },
             { status: "open", label: "계약중", pulse: true },
-            { status: "open", label: "계약중", pulse: false },
+            { status: "open", label: "남음", pulse: false },
           ].map((slot, idx) => (
             <motion.div
               key={idx}
