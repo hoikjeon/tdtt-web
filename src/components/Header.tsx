@@ -14,21 +14,33 @@ const menuItems = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
-  // Handle scroll to change header color
+  const [headerTheme, setHeaderTheme] = useState<"light" | "dark">("dark");
+
+  // Intersection Observer to detect section theme
   useEffect(() => {
-    const handleScroll = () => {
-      // If we scroll past 100px (entering the Intro section), switch to light header
-      if (window.scrollY > 100) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -90% 0px', // Detect when section is at the very top
+      threshold: 0
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const theme = entry.target.getAttribute("data-header-theme") as "light" | "dark";
+          if (theme) setHeaderTheme(theme);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+    
+    // Find all sections that should trigger theme change
+    const sections = document.querySelectorAll("[data-header-theme]");
+    sections.forEach(section => observer.observe(section));
+
+    return () => observer.disconnect();
   }, []);
 
   // Prevent scrolling when menu is open
@@ -40,9 +52,12 @@ export default function Header() {
     }
   }, [isOpen]);
 
-  const headerTextColor = isScrolled ? "text-black" : "text-white";
-  const headerBarBg = isScrolled ? "bg-black" : "bg-white";
-  const logoInvert = isScrolled ? "" : "invert";
+  // Theme derived values
+  // "dark" theme means background is dark -> header should be white (initial state)
+  // "light" theme means background is light -> header should be black
+  const headerTextColor = headerTheme === "light" ? "text-black" : "text-white";
+  const headerBarBg = headerTheme === "light" ? "bg-black" : "bg-white";
+  const logoInvert = headerTheme === "light" ? "" : "invert";
 
   return (
     <>

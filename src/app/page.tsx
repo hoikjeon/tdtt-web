@@ -16,18 +16,22 @@ export default async function Home() {
   return (
     <>
       <main>
-        <GlassSphereScene />
-        <Intro />
-        <ScrollMarquee />
-        <ProblemSection />
-        <AgitationSection />
-        <SolutionSection />
-        <ServiceBento />
-        <CostComparison />
-        <VisionSection />
-        <ProcessSection />
-        <PromotionSection />
-        <ContactForm />
+        <div data-header-theme="dark"><GlassSphereScene /></div>
+        <div data-header-theme="light">
+          <Intro />
+          <ScrollMarquee />
+          <ProblemSection />
+          <AgitationSection />
+        </div>
+        <div data-header-theme="dark"><SolutionSection /></div>
+        <div data-header-theme="light">
+          <ServiceBento />
+          <CostComparison />
+          <VisionSection />
+          <ProcessSection />
+          <PromotionSection />
+          <ContactForm />
+        </div>
       </main>
       <Header />
     </>
