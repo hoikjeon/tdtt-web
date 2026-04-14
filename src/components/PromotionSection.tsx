@@ -43,8 +43,8 @@ export default function PromotionSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
           {[
             { status: "closed", label: "계약 완료", date: "24.04.10" },
-            { status: "open", label: "남음", pulse: true },
-            { status: "open", label: "남음", pulse: false },
+            { status: "open", label: "계약중", pulse: true },
+            { status: "open", label: "계약중", pulse: false },
           ].map((slot, idx) => (
             <motion.div
               key={idx}
