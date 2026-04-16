@@ -118,6 +118,7 @@ export default function AgitationSection() {
             src="/images/ai_digital_shift.png"
             alt="Digital AI workspace representing the shift in search era"
             fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover transition-transform duration-1000 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-1000" />

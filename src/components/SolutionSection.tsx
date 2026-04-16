@@ -74,8 +74,8 @@ export default function SolutionSection() {
 
               <div className="space-y-6 max-w-2xl mx-auto">
                 <p className="text-xl md:text-2xl font-medium text-white/90 leading-relaxed">
-                  내부 직원의 장점인 '현장감'과<br className="md:hidden" />
-                  전문 에이전시의 노하우를 완벽하게 결합했습니다.
+                  내부 직원의 장점인 '현장감'과 전문 에이전시의 노하우를<br />
+                  완벽하게 결합했습니다.
                 </p>
                 
                 <div className="h-[1px] w-20 bg-[#FF5733] mx-auto opacity-50" />

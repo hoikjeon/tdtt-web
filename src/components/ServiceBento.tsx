@@ -2,17 +2,17 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef } from "react";
-import { 
-  Video, 
-  Newspaper, 
-  MessageSquare, 
-  Globe, 
-  Share2, 
-  Search, 
-  Star, 
-  Camera, 
-  Plane, 
-  Code, 
+import {
+  Video,
+  Newspaper,
+  MessageSquare,
+  Globe,
+  Share2,
+  Search,
+  Star,
+  Camera,
+  Plane,
+  Code,
   Target,
   Smartphone,
   ChevronRight,
@@ -32,12 +32,12 @@ interface ServiceItem {
 
 const services: ServiceItem[] = [
   {
-    id: "ai-search",
-    title: "AI 검색 최적화",
-    description: "ChatGPT, 네이버 등 AI 검색 시대 필수 전략",
-    detail: "단순 키워드 노출을 넘어 AI가 학습하고 추천하는 병원이 되도록 알고리즘 최적화를 선점합니다.",
-    icon: Search,
-    color: "#FF5733",
+    id: "db-ad",
+    title: "DB 마케팅 광고",
+    description: "최저가로 확보하는 유효 가망 고객 리스트",
+    detail: "광고 매체별 데이터를 분석하여 가장 저렴한 비용으로 실제 내원 확률이 높은 고객을 발굴합니다.",
+    icon: Target,
+    color: "#f56565",
     size: "large",
   },
   {
@@ -123,12 +123,12 @@ const services: ServiceItem[] = [
     size: "small",
   },
   {
-    id: "db-ad",
-    title: "DB 마케팅 광고",
-    description: "최저가로 확보하는 유효 가망 고객 리스트",
-    detail: "광고 매체별 데이터를 분석하여 가장 저렴한 비용으로 실제 내원 확률이 높은 고객을 발굴합니다.",
-    icon: Target,
-    color: "#f56565",
+    id: "ai-search",
+    title: "AI 검색 최적화",
+    description: "ChatGPT, 네이버 등 AI 검색 시대 필수 전략",
+    detail: "단순 키워드 노출을 넘어 AI가 학습하고 추천하는 병원이 되도록 알고리즘 최적화를 선점합니다.",
+    icon: Search,
+    color: "#FF5733",
     size: "small",
   },
   {
@@ -145,40 +145,62 @@ const services: ServiceItem[] = [
 export default function ServiceBento() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { 
+        duration: 0.8, 
+        ease: [0.22, 1, 0.36, 1] as any 
+      },
+    },
+  };
+
   return (
     <section className="relative bg-white py-24 md:py-32 px-6 md:px-16 overflow-hidden">
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Section Header */}
         <div className="space-y-4 max-w-3xl">
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="text-[#FF5733] font-bold tracking-[.2em] text-sm uppercase"
           >
             OUR ALL-IN-ONE OFFER
           </motion.p>
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="text-3xl md:text-6xl font-black text-[#121212] tracking-tighter flex flex-col gap-4"
           >
             <span>현장 밀착형 병원 전담</span>
-            
+
             {/* Scroll Triggered Fill Text */}
             <div className="relative inline-block overflow-hidden">
-              <span className="text-3xl md:text-5xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">
+              <span className="text-3xl md:text-6xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">All-in-One 파트너, 그날그때</span>
+              <motion.span
+                initial={{ width: 0 }}
+                whileInView={{ width: "100%" }}
+                viewport={{ once: false, amount: 0.8 }}
+                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
+                className="absolute top-0 left-0 text-3xl md:text-6xl font-black text-[#121212] tracking-tighter overflow-hidden block whitespace-nowrap"
+              >
                 All-in-One 파트너, 그날그때
-              </span>
-                <motion.span 
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "100%" }}
-                  viewport={{ once: false, amount: 0.8 }}
-                  transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
-                  className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
-                >
-                  All-in-One 파트너, 그날그때
-                </motion.span>
+              </motion.span>
             </div>
           </motion.h2>
           <motion.p
@@ -193,11 +215,17 @@ export default function ServiceBento() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-4 h-auto md:h-[1200px]">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-4 gap-4"
+        >
           {services.map((service) => (
             <motion.div
-              layoutId={service.id}
               key={service.id}
+              variants={itemVariants}
               onClick={() => setSelectedId(service.id)}
               className={`
                 relative bg-[#f8f9fa] rounded-3xl p-8 cursor-pointer overflow-hidden border border-gray-100 group shadow-sm hover:shadow-xl transition-all duration-300
@@ -205,13 +233,12 @@ export default function ServiceBento() {
                 ${service.size === "medium" ? "md:col-span-2 md:row-span-1" : ""}
                 ${service.size === "small" ? "md:col-span-1 md:row-span-1" : ""}
               `}
-              whileHover={{ scale: 1.01, y: -5 }}
-              transition={{ layout: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as any } }}
+              whileHover={{ scale: 1.015, y: -8, transition: { duration: 0.4, ease: "easeOut" } }}
             >
               {/* Icon & Label */}
-              <div className="flex flex-col h-full justify-between relative z-10">
+              <div className="flex flex-col h-full relative z-10">
                 <div className="space-y-4">
-                  <div 
+                  <div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg"
                     style={{ backgroundColor: service.color }}
                   >
@@ -223,13 +250,13 @@ export default function ServiceBento() {
                   </div>
                 </div>
 
-                {service.isApp ? (
-                  <div className="mt-8 flex justify-center relative h-64 w-full">
+                {service.isApp && (
+                  <div className="mt-auto flex justify-center relative h-64 w-full">
                     {/* Simplified Phone Mockup */}
-                    <div className="relative w-40 h-[300px] bg-[#121212] rounded-[2.5rem] border-[4px] border-gray-800 shadow-2xl overflow-hidden self-start">
+                    <div className="relative w-40 h-[300px] bg-[#121212] rounded-[1.25rem] border-[4px] border-gray-800 shadow-2xl overflow-hidden self-start">
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-5 bg-[#121212] rounded-b-xl z-20" />
-                      <iframe 
-                        src="https://yonsei-cheok-patient.vercel.app/" 
+                      <iframe
+                        src="https://yonsei-cheok-patient.vercel.app/"
                         className="w-full h-full border-none pointer-events-none"
                         title="App Mockup"
                       />
@@ -237,20 +264,34 @@ export default function ServiceBento() {
                     {/* Background Light Effect */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#3385ff]/20 blur-[60px] rounded-full pointer-events-none" />
                   </div>
-                ) : (
-                  <div className="flex justify-end mt-4">
-                    <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:bg-[#121212] group-hover:text-white transition-colors duration-300">
-                      <ChevronRight size={18} />
-                    </div>
-                  </div>
                 )}
               </div>
 
               {/* Subtle Grid Background Pattern */}
               <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#121212_1px,transparent_1px)] [background-size:20px_20px]" />
+
+              {/* Enhanced Visuals for specific cards */}
+              {service.id === "db-ad" && (
+                <div 
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 blur-[60px] rounded-full opacity-50 pointer-events-none" 
+                  style={{ background: `radial-gradient(circle, ${service.color}33 0%, transparent 70%)` }}
+                />
+              )}
+              {service.id === "db-ad" && (
+                <div className="absolute bottom-8 right-8 flex flex-col gap-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <div className="w-32 h-1.5 bg-[#121212] rounded-full" />
+                  <div className="w-48 h-1.5 bg-[#121212] rounded-full" />
+                  <div className="w-24 h-1.5 bg-[#121212] rounded-full" />
+                </div>
+              )}
+              {(service.id === "youtube" || service.id === "hospital-photo") && (
+                <div className="absolute -bottom-4 -right-4 w-32 h-32 opacity-[0.05] group-hover:scale-110 transition-transform duration-700">
+                  <service.icon size={128} />
+                </div>
+              )}
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {/* Expanded Modal Overlay */}
@@ -266,10 +307,13 @@ export default function ServiceBento() {
             />
             <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-[101] px-6">
               <motion.div
-                layoutId={selectedId}
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
                 className="bg-white rounded-[3rem] p-8 md:p-12 w-full max-w-4xl shadow-[0_32px_128px_rgba(0,0,0,0.1)] pointer-events-auto relative overflow-hidden"
               >
-                <button 
+                <button
                   onClick={() => setSelectedId(null)}
                   className="absolute top-8 right-8 w-12 h-12 rounded-full border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-colors"
                 >
@@ -282,7 +326,7 @@ export default function ServiceBento() {
                   return (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                       <div className="space-y-8">
-                        <div 
+                        <div
                           className="w-16 h-16 rounded-[2rem] flex items-center justify-center text-white"
                           style={{ backgroundColor: service.color }}
                         >
@@ -300,23 +344,23 @@ export default function ServiceBento() {
 
                       <div className="relative">
                         {service.isApp ? (
-                          <div className="relative w-full aspect-[9/16] bg-[#121212] rounded-[3rem] border-[8px] border-gray-900 shadow-3xl overflow-hidden">
+                          <div className="relative w-full aspect-[9/16] bg-[#121212] rounded-[1.5rem] border-[8px] border-gray-900 shadow-3xl overflow-hidden">
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#121212] rounded-b-2xl z-20" />
-                            <iframe 
-                              src="https://yonsei-cheok-patient.vercel.app/" 
+                            <iframe
+                              src="https://yonsei-cheok-patient.vercel.app/"
                               className="w-full h-full border-none"
                               title="Full App View"
                             />
                           </div>
                         ) : (
                           <div className="relative aspect-square rounded-[3rem] bg-gray-50 flex items-center justify-center overflow-hidden">
-                             {/* Decorative graphics */}
-                             <div 
-                               className="absolute inset-0 opacity-10" 
-                               style={{ backgroundColor: service.color }}
-                             />
-                             <service.icon size={120} className="relative z-10" style={{ color: service.color, opacity: 0.4 }} />
-                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 blur-[80px] rounded-full pointer-events-none" style={{ backgroundColor: service.color, opacity: 0.2 }} />
+                            {/* Decorative graphics */}
+                            <div
+                              className="absolute inset-0 opacity-10"
+                              style={{ backgroundColor: service.color }}
+                            />
+                            <service.icon size={120} className="relative z-10" style={{ color: service.color, opacity: 0.4 }} />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 blur-[80px] rounded-full pointer-events-none" style={{ backgroundColor: service.color, opacity: 0.2 }} />
                           </div>
                         )}
                       </div>

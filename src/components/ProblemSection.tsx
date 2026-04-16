@@ -69,6 +69,7 @@ export default function ProblemSection() {
             src="/images/empty_hospital_bw.png"
             alt="Empty hospital interior representing stagnation"
             fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover transition-transform duration-1000 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-1000" />
@@ -85,7 +86,8 @@ export default function ProblemSection() {
           <motion.div variants={itemFadeRight} className="space-y-4">
             <p className="text-[#FF5733] font-bold tracking-tight text-lg">PROBLEM & EMPATHY</p>
             <h3 className="text-3xl md:text-5xl font-extrabold text-[#121212] leading-[1.2] tracking-tight">
-              원장님, 매달 마케팅 비용은 나가는데<br />
+              원장님, 매달 마케팅 비용은<br />
+              나가는데,<br />
               왜 신환은 늘지 않을까요?
             </h3>
           </motion.div>

@@ -103,8 +103,7 @@ export default function PromotionSection() {
             <div className="bg-white/5 border border-white/10 rounded-3xl p-6 inline-flex items-center gap-4 max-w-2xl mx-auto">
               <AlertCircle className="text-[#FF5733] shrink-0" size={32} />
               <p className="text-left text-sm md:text-lg font-bold text-white leading-snug">
-                (주의) <span className="text-[#FF5733]">3개 병원 T/O 마감 시,</span> 4번째 병원부터는 <br className="hidden md:block" />
-                월 400만 원<span className="text-gray-500 text-xs ml-1">(VAT 별도)</span>으로 비용이 <span className="underline decoration-2 underline-offset-4">50만 원 즉시 인상</span>됩니다.
+                월 400만 원으로 비용이 <span className="underline decoration-2 underline-offset-4">50만 원 즉시 인상</span>됩니다.
               </p>
             </div>
 

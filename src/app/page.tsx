@@ -16,15 +16,15 @@ export default async function Home() {
   return (
     <>
       <main>
-        <div data-header-theme="dark"><GlassSphereScene /></div>
-        <div data-header-theme="light">
+        <div className="relative" data-header-theme="dark"><GlassSphereScene /></div>
+        <div className="relative" data-header-theme="light">
           <Intro />
           <ScrollMarquee />
           <ProblemSection />
           <AgitationSection />
         </div>
-        <div data-header-theme="dark"><SolutionSection /></div>
-        <div data-header-theme="light">
+        <div className="relative" data-header-theme="dark"><SolutionSection /></div>
+        <div className="relative" data-header-theme="light">
           <ServiceBento />
           <CostComparison />
           <VisionSection />

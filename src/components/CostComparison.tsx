@@ -60,18 +60,14 @@ export default function CostComparison() {
               
               {/* Scroll Triggered Fill Text */}
               <div className="relative inline-block overflow-hidden">
-                <span className="text-3xl md:text-5xl font-black text-gray-200 leading-[1.3] tracking-tighter block whitespace-nowrap">
-                  진짜 비용을 아시나요?
-                </span>
+                <span className="text-3xl md:text-5xl font-black text-gray-200 leading-[1.3] tracking-tighter block whitespace-nowrap">진짜 비용을 아시나요?</span>
                 <motion.span 
                   initial={{ width: 0 }}
                   whileInView={{ width: "100%" }}
                   viewport={{ once: false, amount: 0.8 }}
                   transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
-                  className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] leading-[1.3] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
-                >
-                  진짜 비용을 아시나요?
-                </motion.span>
+                  className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] leading-[1.3] tracking-tighter overflow-hidden block whitespace-nowrap"
+                >진짜 비용을 아시나요?</motion.span>
               </div>
             </div>
           </div>
@@ -118,7 +114,7 @@ export default function CostComparison() {
                 <h4 className={`text-2xl md:text-3xl font-black mb-1 ${item.isWinning ? "text-[#121212]" : "text-gray-400"}`}>
                   월 <CountUp value={item.cost / 10000} />만원
                 </h4>
-                <p className="text-[10px] text-gray-400 font-bold mb-4 uppercase">VAT 별도</p>
+
                 <div className="h-12 flex items-start justify-center">
                   {item.isWinning && (
                     <motion.div 
