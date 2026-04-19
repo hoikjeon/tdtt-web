@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { MoveDown } from "lucide-react";
 import Projects, { Project } from "@/components/Projects";
 
@@ -115,25 +116,13 @@ export default function WorksClient({ projectData }: WorksClientProps) {
         <div className="flex whitespace-nowrap gap-20 items-center overflow-hidden">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="text-[12vw] font-black text-white/5 uppercase tracking-tighter select-none">
-              EXPERIENCE THE FUTURE — NOW — 
+              THATDAYTIME — NOW —
             </div>
           ))}
         </div>
       </section>
 
-      {/* Footer-like simple section */}
-      <footer className="py-20 text-center flex flex-col items-center gap-10">
-        <div className="w-px h-20 bg-gradient-to-b from-white/0 to-white/40" />
-        <h3 className="text-2xl md:text-4xl font-light tracking-tight text-white/80">
-          Interested in working with us?
-        </h3>
-        <button className="px-10 py-4 border border-white/20 rounded-full text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-500">
-          Get in Touch
-        </button>
-        <p className="text-white/20 text-[10px] tracking-[0.5em] mt-10 uppercase">
-          © 2026 TDTT — All Rights Reserved
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -266,6 +266,20 @@ export default function ServiceBento() {
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#3385ff]/20 blur-[60px] rounded-full pointer-events-none" />
                   </div>
                 )}
+
+                {service.id === "news" && (
+                  <div className="mt-4 md:mt-6 mt-auto flex justify-end relative w-full h-24 md:h-32 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                    <img
+                      src="https://cdn.kormedi.com/wp-content/uploads/2025/08/kakaotalk-20250827-112337595-06.jpg"
+                      alt="News Article"
+                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/10 to-transparent" />
+                    <div className="absolute bottom-2 left-3 pr-2 text-left">
+                       <p className="text-white text-[11px] md:text-xs font-semibold leading-relaxed drop-shadow-md line-clamp-2">연세척병원, “부산 펜싱선수들 척추 관절 책임지겠다”</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Subtle Grid Background Pattern */}
@@ -344,7 +358,27 @@ export default function ServiceBento() {
                       </div>
 
                       <div className="relative">
-                        {service.isApp ? (
+                        {service.id === "news" ? (
+                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
+                           <img 
+                             src="https://cdn.kormedi.com/wp-content/uploads/2025/08/kakaotalk-20250827-112337595-06.jpg"
+                             alt="뉴스 기사"
+                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                           />
+                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col gap-4">
+                             <h3 className="text-white text-xl md:text-2xl font-bold leading-snug drop-shadow-md">연세척병원, “부산 펜싱선수들 척추 관절 책임지겠다”</h3>
+                             <a 
+                               href="https://kormedi.com/2744007/" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               className="inline-flex items-center justify-center gap-2 bg-[#FF5733] text-white py-3 px-6 rounded-xl font-bold hover:bg-[#e64a2e] transition-colors shadow-lg self-start mt-2"
+                             >
+                               기사 원문 보기 <ChevronRight size={18} />
+                             </a>
+                           </div>
+                          </div>
+                        ) : service.isApp ? (
                           <div className="relative w-full aspect-[9/16] bg-[#121212] rounded-[1.5rem] border-[8px] border-gray-900 shadow-3xl overflow-hidden">
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#121212] rounded-b-2xl z-20" />
                             <iframe

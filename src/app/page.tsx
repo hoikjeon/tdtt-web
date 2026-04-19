@@ -6,6 +6,7 @@ import AgitationSection from "@/components/AgitationSection";
 import SolutionSection from "@/components/SolutionSection";
 import ScrollMarquee from "@/components/ScrollMarquee";
 import ContactForm from "@/components/ContactForm";
+import Footer from "@/components/Footer";
 import GlassSphereScene from "@/components/ui/GlassSphereSceneClient";
 
 const ServiceBento = dynamic(() => import("@/components/ServiceBento"));
@@ -33,10 +34,11 @@ export default async function Home() {
           <ProcessSection />
         </div>
         <div className="relative" data-header-theme="dark"><PromotionSection /></div>
-        <div className="relative" data-header-theme="light">
+        <div className="relative" data-header-theme="dark">
           <ContactForm />
         </div>
       </main>
+      <Footer />
       <Header />
     </>
   );
