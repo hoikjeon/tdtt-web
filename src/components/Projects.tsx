@@ -14,11 +14,13 @@ interface ProjectCardProps {
   subtitle: string;
   title: string;
   parallaxOffset?: number;
-  onClick?: (rect: DOMRect, src: string) => void;
+  images?: string[];
+  onClick?: (rect: DOMRect, src: string, images?: string[], subtitle?: string, title?: string) => void;
 }
 
-function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, onClick }: ProjectCardProps) {
+function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, images, onClick }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
@@ -36,24 +38,26 @@ function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, onClick 
   });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (rafRef.current) return;
+    const { clientX, clientY } = e;
     const rect = e.currentTarget.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+    rafRef.current = requestAnimationFrame(() => {
+      setMousePos({ x: clientX - rect.left, y: clientY - rect.top });
+      rafRef.current = null;
     });
   };
 
   const handleClick = () => {
     if (cardRef.current && onClick) {
       const rect = cardRef.current.getBoundingClientRect();
-      onClick(rect, src);
+      onClick(rect, src, images, subtitle, title);
     }
   };
 
   return (
     <motion.div
       ref={cardRef}
-      style={{ y }}
+      style={{ y, willChange: 'transform' }}
       className="relative w-full overflow-hidden cursor-pointer group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -61,12 +65,20 @@ function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, onClick 
       onClick={handleClick}
     >
       {/* Image */}
-      <div className="relative w-full aspect-[3/4] overflow-hidden">
+      <div className="relative w-full aspect-[3/4] overflow-hidden bg-black">
+        {/* 블러 배경 레이어 — div로 처리해 GPU 레이어 절약 */}
+        <div
+          aria-hidden
+          className="absolute inset-0 scale-[1.4] blur-xl opacity-60"
+          style={{ backgroundImage: `url(${src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+        />
+        {/* 실제 이미지 — 전체 표시 */}
         <Image
           src={src}
           alt={title}
           fill
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, 38vw"
+          className="object-contain transition-transform duration-700 group-hover:scale-105 relative z-10"
         />
 
         {/* Hover Overlay */}
@@ -78,7 +90,7 @@ function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, onClick 
         />
 
         {/* Text Info on Hover */}
-        <div className="absolute bottom-0 left-0 w-full p-8 text-left">
+        <div className="absolute bottom-0 left-0 w-full p-8 text-left z-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 30 }}
@@ -89,9 +101,8 @@ function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, onClick 
                 <path d="M2 14L14 2M14 2H4M14 2V12" stroke="currentColor" strokeWidth="2" />
               </svg>
             </div>
-            <p className="text-white/70 text-sm mb-1">{year}</p>
             <p className="text-white/70 text-sm italic mb-2">{subtitle}</p>
-            <h3 className="text-white text-4xl md:text-5xl font-bold leading-tight uppercase whitespace-pre-line">{title}</h3>
+            <h3 className="text-white text-2xl md:text-3xl font-bold leading-tight uppercase whitespace-pre-line">{title}</h3>
           </motion.div>
         </div>
 
@@ -111,13 +122,14 @@ function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, onClick 
             scale: { duration: 0.3 },
           }}
         >
-          <div className="w-[100px] h-[100px] rounded-full bg-white/90 flex items-center justify-center">
-            <span className="text-black text-sm font-bold text-center leading-tight">
+          <div className="w-[100px] h-[100px] rounded-full bg-[#FF5733] flex items-center justify-center">
+            <span className="text-white text-sm font-bold text-center leading-tight">
               View<br />Project
             </span>
           </div>
         </motion.div>
       </div>
+
     </motion.div>
   );
 }
@@ -129,6 +141,7 @@ export interface Project {
   subtitle: string;
   title: string;
   parallaxOffset?: number;
+  images?: string[];
 }
 
 interface ProjectsProps {
@@ -141,12 +154,16 @@ export default function Projects({ data }: ProjectsProps) {
     isReversing: boolean;
     src: string;
     rect: DOMRect | null;
-  }>({ isActive: false, isReversing: false, src: "", rect: null });
+    images?: string[];
+    subtitle?: string;
+    title?: string;
+  }>({ isActive: false, isReversing: false, src: "", rect: null, images: [] });
 
   const [detailActive, setDetailActive] = useState(false);
+  const closedByButtonRef = useRef(false);
 
-  const handleCardClick = useCallback((rect: DOMRect, src: string) => {
-    setTransitionState({ isActive: true, isReversing: false, src, rect });
+  const handleCardClick = useCallback((rect: DOMRect, src: string, images?: string[], subtitle?: string, title?: string) => {
+    setTransitionState({ isActive: true, isReversing: false, src, rect, images, subtitle, title });
   }, []);
 
   const handleTransitionComplete = useCallback(() => {
@@ -154,13 +171,35 @@ export default function Projects({ data }: ProjectsProps) {
   }, []);
 
   const handleDetailClose = useCallback(() => {
+    closedByButtonRef.current = true;
     setDetailActive(false);
     setTransitionState(prev => ({ ...prev, isReversing: true }));
+    if (window.history.state?.projectDetail) {
+      window.history.back();
+    }
   }, []);
 
   const handleTransitionClosed = useCallback(() => {
     setTransitionState(prev => ({ ...prev, isActive: false, isReversing: false }));
   }, []);
+
+  // 모달 열릴 때 history 진입점 추가, 뒤로가기로 닫기 처리
+  useEffect(() => {
+    if (!detailActive) return;
+    window.history.pushState({ projectDetail: true }, '');
+
+    const handlePopState = () => {
+      if (closedByButtonRef.current) {
+        closedByButtonRef.current = false;
+        return;
+      }
+      setDetailActive(false);
+      setTransitionState(prev => ({ ...prev, isReversing: true }));
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [detailActive]);
 
   const projectList = data || [];
 
@@ -209,10 +248,13 @@ export default function Projects({ data }: ProjectsProps) {
 
       <AnimatePresence>
         {detailActive && (
-          <ProjectDetailView 
+          <ProjectDetailView
             key={transitionState.src}
-            src={transitionState.src} 
-            onClose={handleDetailClose} 
+            src={transitionState.src}
+            images={transitionState.images}
+            subtitle={transitionState.subtitle}
+            title={transitionState.title}
+            onClose={handleDetailClose}
           />
         )}
       </AnimatePresence>

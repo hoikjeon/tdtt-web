@@ -15,7 +15,7 @@ export default function WorksClient({ projectData }: WorksClientProps) {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+      <section data-header-theme="dark" className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
         {/* Background Image with Entrance Effect */}
         <motion.div
           initial={{ scale: 1.2, opacity: 0 }}
@@ -45,8 +45,8 @@ export default function WorksClient({ projectData }: WorksClientProps) {
               <span className="italic font-light opacity-80 text-gray-300">WORKS.</span>
             </h1>
             <p className="text-gray-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed font-light px-4">
-              Exploring the boundary between digital precision and artistic chaos. 
-              Our collection showcases selected works that redefine interactive experiences.
+              정교한 마케팅 전략과 신뢰감을 주는 시각적 디자인의 시너지.<br />
+              환자의 발걸음을 이끌어내고 병원의 가치를 증명해 낸 확실한 작업물들을 소개합니다.
             </p>
           </motion.div>
         </div>
@@ -71,7 +71,7 @@ export default function WorksClient({ projectData }: WorksClientProps) {
       </section>
 
       {/* Content Sections */}
-      <section className="py-32 px-6 md:px-20 lg:px-40 max-w-7xl mx-auto">
+      <section data-header-theme="dark" className="py-32 px-6 md:px-20 lg:px-40 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 md:gap-40">
           {/* Section 1 */}
           <motion.div
@@ -82,9 +82,9 @@ export default function WorksClient({ projectData }: WorksClientProps) {
             className="flex flex-col gap-6"
           >
             <div className="w-12 h-px bg-white/30" />
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">VISIONARY<br/>CONCEPT</h2>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">VISUAL &<br/>WEB DESIGN</h2>
             <p className="text-gray-400 leading-relaxed font-light">
-              We believe that every pixel tells a story. Our approach combines rigorous strategy with boundary-pushing design to create digital products that don't just work—they resonate. 
+              포토샵과 일러스트레이터를 활용해 병원만의 세련된 브랜드 아이덴티티를 구축합니다. 단순한 미적 아름다움을 넘어, 환자의 편의성과 마케팅 전환율까지 고려한 최적화된 웹디자인으로 신뢰감을 주는 첫인상을 설계합니다.
             </p>
           </motion.div>
 
@@ -97,19 +97,21 @@ export default function WorksClient({ projectData }: WorksClientProps) {
             className="flex flex-col gap-6 pt-0 md:pt-40"
           >
             <div className="w-12 h-px bg-white/30" />
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">MASTERFUL<br/>EXECUTION</h2>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">CINEMATIC<br/>PRODUCTION</h2>
             <p className="text-gray-400 leading-relaxed font-light">
-              From concept to launch, we meticulously refine every detail. Our technical expertise ensures that the most complex visions are translated into seamless, high-performance realities.
+              드론과 전문 장비를 활용한 생생한 현장 촬영부터, 프리미어 프로와 에프터 이펙트를 거치는 정교한 후반 작업까지. 퀄리티 높은 모션 그래픽이 더해진 하이엔드 영상으로 병원의 전문성과 가치를 시각적으로 증명합니다.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Projects Section (Moved from Home Page) */}
-      <Projects data={projectData} />
+      <div data-header-theme="light">
+        <Projects data={projectData} />
+      </div>
 
       {/* Full Width Quote Section */}
-      <section className="py-20 border-y border-white/10 overflow-hidden">
+      <section data-header-theme="dark" className="py-20 border-y border-white/10 overflow-hidden">
         <div className="flex whitespace-nowrap gap-20 items-center overflow-hidden">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="text-[12vw] font-black text-white/5 uppercase tracking-tighter select-none">

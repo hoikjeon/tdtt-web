@@ -29,7 +29,9 @@ export default async function Home() {
           <CostComparison />
           <VisionSection />
           <ProcessSection />
-          <PromotionSection />
+        </div>
+        <div className="relative" data-header-theme="dark"><PromotionSection /></div>
+        <div className="relative" data-header-theme="light">
           <ContactForm />
         </div>
       </main>
