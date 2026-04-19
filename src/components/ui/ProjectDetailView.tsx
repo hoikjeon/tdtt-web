@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, useMotionValue, useSpring } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -110,7 +109,6 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
       // --- 마지막 섹션 전용: 화면 고정(Pin) + 순차적 텍스트 채우기 ---
       const lastSection = document.querySelector('.last-pinned-section');
       if (lastSection) {
-        const titleContainer = lastSection.querySelector('.scroll-title-container');
         const lines = lastSection.querySelectorAll('.scroll-fill-text');
         
         const tl = gsap.timeline({
@@ -270,7 +268,7 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
                 loop
                 playsInline
                 className="w-full h-auto block"
-                src={isMedical ? "/video/motionvideo2.mp4" : "/video/motion%20video1.mp4"}
+                src={isMedical ? "/video/motionvideo2.mp4" : "/video/motionvideo1.mp4"}
               />
             </motion.div>
           )}

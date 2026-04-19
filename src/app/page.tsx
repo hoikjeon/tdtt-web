@@ -1,16 +1,18 @@
-import GlassSphereScene from "@/components/ui/GlassSphereScene";
+import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import Intro from "@/components/Intro";
 import ProblemSection from "@/components/ProblemSection";
 import AgitationSection from "@/components/AgitationSection";
 import SolutionSection from "@/components/SolutionSection";
-import ServiceBento from "@/components/ServiceBento";
-import CostComparison from "@/components/CostComparison";
-import VisionSection from "@/components/VisionSection";
-import ProcessSection from "@/components/ProcessSection";
-import PromotionSection from "@/components/PromotionSection";
 import ScrollMarquee from "@/components/ScrollMarquee";
 import ContactForm from "@/components/ContactForm";
+import GlassSphereScene from "@/components/ui/GlassSphereSceneClient";
+
+const ServiceBento = dynamic(() => import("@/components/ServiceBento"));
+const CostComparison = dynamic(() => import("@/components/CostComparison"));
+const VisionSection = dynamic(() => import("@/components/VisionSection"));
+const ProcessSection = dynamic(() => import("@/components/ProcessSection"));
+const PromotionSection = dynamic(() => import("@/components/PromotionSection"));
 
 export default async function Home() {
   return (

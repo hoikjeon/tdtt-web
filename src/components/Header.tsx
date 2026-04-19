@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { X } from "lucide-react";
 
 const menuItems = [
@@ -64,9 +65,12 @@ export default function Header() {
       <header className={`fixed top-0 left-0 w-full z-[9999] p-6 md:p-10 flex justify-between items-center transition-all duration-500`}>
         {/* Logo */}
         <Link href="/" className="block">
-          <img 
-            src="/main-logo-bk.png" 
-            alt="tdtt" 
+          <Image
+            src="/main-logo-bk.png"
+            alt="tdtt"
+            width={120}
+            height={48}
+            priority
             className={`h-7 md:h-9 lg:h-12 w-auto transition-all duration-500 ${logoInvert}`}
           />
         </Link>
@@ -99,9 +103,11 @@ export default function Header() {
             {/* Header in overlay */}
             <div className="absolute top-0 left-0 w-full p-6 md:p-10 flex justify-between items-center">
               <Link href="/" className="block" onClick={() => setIsOpen(false)}>
-                <img 
-                  src="/main-logo-bk.png" 
-                  alt="tdtt" 
+                <Image
+                  src="/main-logo-bk.png"
+                  alt="tdtt"
+                  width={120}
+                  height={48}
                   className="h-7 md:h-9 lg:h-12 w-auto invert"
                 />
               </Link>

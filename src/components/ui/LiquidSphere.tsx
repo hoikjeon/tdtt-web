@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
@@ -15,7 +15,20 @@ export function LiquidSphere() {
   const sat1MatRef = useRef<any>(null);
   const sat2MatRef = useRef<any>(null);
   const sat3MatRef = useRef<any>(null);
-  
+
+  useEffect(() => {
+    return () => {
+      [mainRef, sat1Ref, sat2Ref, sat3Ref].forEach((groupRef) => {
+        groupRef.current?.children.forEach((child) => {
+          if (child instanceof THREE.Mesh) {
+            child.geometry?.dispose();
+            if (child.material instanceof THREE.Material) child.material.dispose();
+          }
+        });
+      });
+    };
+  }, []);
+
   // Base relative layout positions
   const mainPos = [-0.3, 0, 0.5];
   const sat1Pos = [-1.58, 0.23, 0.2];
