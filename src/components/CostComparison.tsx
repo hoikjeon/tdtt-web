@@ -90,15 +90,15 @@ export default function CostComparison() {
         </div>
 
         {/* Comparison Chart */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-end h-auto min-h-[400px]">
+        <div className="grid grid-cols-3 gap-2 md:gap-8 items-end h-auto min-h-[200px] md:min-h-[400px]">
           {comparisonData.map((item, idx) => (
-            <div key={item.label} className="flex flex-col gap-6 group">
+            <div key={item.label} className="flex flex-col gap-2 md:gap-6 group">
               <div className="flex flex-col items-center">
-                <motion.div 
+                <motion.div
                    initial={{ height: 0 }}
                    animate={{ height: `${(item.cost / maxCost) * 300}px` }}
                    transition={{ type: "spring", damping: 20, stiffness: 100 }}
-                  className="w-full max-w-[120px] rounded-2xl relative overflow-hidden shadow-lg group-hover:shadow-2xl transition-all"
+                  className="w-full max-w-[60px] md:max-w-[120px] rounded-xl md:rounded-2xl relative overflow-hidden shadow-lg group-hover:shadow-2xl transition-all"
                   style={{ backgroundColor: item.color }}
                 >
                   {item.isWinning && (
@@ -106,27 +106,29 @@ export default function CostComparison() {
                   )}
                 </motion.div>
               </div>
-              
-              <div className="text-center flex flex-col items-center min-h-[140px]">
-                <p className={`text-sm font-bold tracking-widest uppercase mb-2 ${item.isWinning ? "text-[#FF5733]" : "text-gray-400"}`}>
+
+              <div className="text-center flex flex-col items-center min-h-[80px] md:min-h-[140px]">
+                <p className={`text-[10px] md:text-sm font-bold tracking-wide md:tracking-widest uppercase mb-1 md:mb-2 leading-tight ${item.isWinning ? "text-[#FF5733]" : "text-gray-400"}`}>
                   {item.label}
                 </p>
-                <h4 className={`text-2xl md:text-3xl font-black mb-1 ${item.isWinning ? "text-[#121212]" : "text-gray-400"}`}>
+                <h4 className={`text-sm md:text-3xl font-black mb-1 ${item.isWinning ? "text-[#121212]" : "text-gray-400"}`}>
                   월 <CountUp value={item.cost / 10000} />만원
                 </h4>
 
-                <div className="h-12 flex items-start justify-center">
+                <div className="flex items-start justify-center">
                   {item.isWinning && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="flex flex-col items-center gap-1 px-4 py-2 bg-[#FF5733]/10 text-[#FF5733] rounded-2xl text-xs font-bold"
+                      className="flex flex-col items-center gap-1 px-2 md:px-4 py-1 md:py-2 bg-[#FF5733]/10 text-[#FF5733] rounded-xl md:rounded-2xl text-[9px] md:text-xs font-bold"
                     >
                       <div className="flex items-center gap-1">
-                        <TrendingDown size={14} /> 
-                        월 {((maxCost - item.cost) / 10000).toLocaleString()}만원 절감
+                        <TrendingDown size={10} className="md:hidden" />
+                        <TrendingDown size={14} className="hidden md:block" />
+                        <span className="hidden md:inline">월 {((maxCost - item.cost) / 10000).toLocaleString()}만원 절감</span>
+                        <span className="md:hidden">{((maxCost - item.cost) / 10000).toLocaleString()}만원↓</span>
                       </div>
-                      <span className="text-[10px] opacity-70">추가 비용 및 퇴사 리스크 제로</span>
+                      <span className="hidden md:inline text-[10px] opacity-70">추가 비용 및 퇴사 리스크 제로</span>
                     </motion.div>
                   )}
                 </div>
@@ -136,64 +138,100 @@ export default function CostComparison() {
         </div>
 
         {/* Detailed Comparison Table */}
-        <div className="pt-12 overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[900px]">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="py-8 px-6 text-gray-400 font-bold text-xs uppercase tracking-widest w-[16%]">구분</th>
-                <th className="py-8 px-6 text-gray-800 font-bold text-lg w-[28%]">내부직원채용 (인하우스)</th>
-                <th className="py-8 px-6 text-gray-800 font-bold text-lg w-[28%]">일반마케팅 회사</th>
-                <th className="py-8 px-6 text-[#FF5733] font-black text-xl w-[28%] bg-[#FF5733]/5 rounded-t-3xl border-x border-t border-[#FF5733]/10">그날그때</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-500 font-medium">
-              {[
-                { 
-                  category: "업무 범위", 
-                  direct: "개인 역량에 따라 매우 제한적", 
-                  other: "계약된 특정 플랫폼(블로그 등) 한정", 
-                  tdtt: "디자인, 기획, 영상, 앱, 마케팅 분야 총괄",
-                },
-                { 
-                  category: "현장 이해도", 
-                  direct: "100% 파악 가능", 
-                  other: "원격 관리, 병원 현장 소통 단절", 
-                  tdtt: "주 1회 이상 방문으로 원내 상황 100% 파악",
-                },
-                { 
-                  category: "인건비/리스크", 
-                  direct: "4대보험, 퇴직금, 휴가 공백, 장비 구매 필수", 
-                  other: "월 400이상 + 추가 옵션 시 비용 기하급수적으로 증가", 
-                  tdtt: "월 350~400 (추가 비용 및 퇴사 리스크 제로)",
-                },
-                { 
-                  category: "디자인발주비", 
-                  direct: "가능하나 인쇄소 등 핸들링 경험 부족", 
-                  other: "통상 1.3배 ~ 1.5배의 중간 마진 발생", 
-                  tdtt: "거품 없는 실비 진행 (추가 마진 없음)",
-                },
-                { 
-                  category: "AI 및 트렌드", 
-                  direct: "트렌드 스터디 및 적용 현실적 불가", 
-                  other: "기존 매뉴얼 방식 고수", 
-                  tdtt: "AI 툴 활용 및 데이터 기반 추적 시스템 구축",
-                },
-              ].map((row, i) => (
-                <tr key={i} className="border-b border-gray-50 group transition-colors hover:bg-gray-50/50">
-                  <td className="py-6 px-6 font-bold text-[#121212] bg-gray-50/10">{row.category}</td>
-                  <td className="py-6 px-6 text-sm leading-relaxed">{row.direct}</td>
-                  <td className="py-6 px-6 text-sm leading-relaxed">{row.other}</td>
-                  <td className="py-6 px-6 font-bold text-gray-900 bg-[#FF5733]/5 border-x border-[#FF5733]/5">
-                    <div className="flex items-start gap-2 text-[#FF5733]">
-                      <ShieldCheck size={18} fill="#FF5733" className="text-white shrink-0 mt-1" />
-                      <span>{row.tdtt}</span>
+        {(() => {
+          const rows = [
+            {
+              category: "업무 범위",
+              direct: "개인 역량에 따라 매우 제한적",
+              other: "계약된 특정 플랫폼(블로그 등) 한정",
+              tdtt: "디자인, 기획, 영상, 앱, 마케팅 분야 총괄",
+            },
+            {
+              category: "현장 이해도",
+              direct: "100% 파악 가능",
+              other: "원격 관리, 병원 현장 소통 단절",
+              tdtt: "주 1회 이상 방문으로 원내 상황 100% 파악",
+            },
+            {
+              category: "인건비/리스크",
+              direct: "4대보험, 퇴직금, 휴가 공백, 장비 구매 필수",
+              other: "월 400이상 + 추가 옵션 시 비용 기하급수적으로 증가",
+              tdtt: "월 350~400 (추가 비용 및 퇴사 리스크 제로)",
+            },
+            {
+              category: "디자인발주비",
+              direct: "가능하나 인쇄소 등 핸들링 경험 부족",
+              other: "통상 1.3배 ~ 1.5배의 중간 마진 발생",
+              tdtt: "거품 없는 실비 진행 (추가 마진 없음)",
+            },
+            {
+              category: "AI 및 트렌드",
+              direct: "트렌드 스터디 및 적용 현실적 불가",
+              other: "기존 매뉴얼 방식 고수",
+              tdtt: "AI 툴 활용 및 데이터 기반 추적 시스템 구축",
+            },
+          ];
+          return (
+            <>
+              {/* Desktop Table */}
+              <div className="pt-12 overflow-x-auto hidden md:block">
+                <table className="w-full text-left border-collapse min-w-[900px]">
+                  <thead>
+                    <tr className="border-b border-gray-100">
+                      <th className="py-8 px-6 text-gray-400 font-bold text-xs uppercase tracking-widest w-[16%]">구분</th>
+                      <th className="py-8 px-6 text-gray-800 font-bold text-lg w-[28%]">내부직원채용 (인하우스)</th>
+                      <th className="py-8 px-6 text-gray-800 font-bold text-lg w-[28%]">일반마케팅 회사</th>
+                      <th className="py-8 px-6 text-[#FF5733] font-black text-xl w-[28%] bg-[#FF5733]/5 rounded-t-3xl border-x border-t border-[#FF5733]/10">그날그때</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-gray-500 font-medium">
+                    {rows.map((row, i) => (
+                      <tr key={i} className="border-b border-gray-50 group transition-colors hover:bg-gray-50/50">
+                        <td className="py-6 px-6 font-bold text-[#121212] bg-gray-50/10">{row.category}</td>
+                        <td className="py-6 px-6 text-sm leading-relaxed">{row.direct}</td>
+                        <td className="py-6 px-6 text-sm leading-relaxed">{row.other}</td>
+                        <td className="py-6 px-6 font-bold text-gray-900 bg-[#FF5733]/5 border-x border-[#FF5733]/5">
+                          <div className="flex items-start gap-2 text-[#FF5733]">
+                            <ShieldCheck size={18} fill="#FF5733" className="text-white shrink-0 mt-1" />
+                            <span>{row.tdtt}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Cards */}
+              <div className="pt-8 flex flex-col gap-4 md:hidden">
+                {rows.map((row, i) => (
+                  <div key={i} className="rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+                    <div className="bg-gray-50 px-4 py-3 border-b border-gray-100">
+                      <span className="text-xs font-black text-[#121212] uppercase tracking-wider">{row.category}</span>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    <div className="divide-y divide-gray-50">
+                      <div className="flex items-start gap-3 px-4 py-3">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide w-16 shrink-0 pt-0.5">직접채용</span>
+                        <span className="text-xs text-gray-400 leading-relaxed">{row.direct}</span>
+                      </div>
+                      <div className="flex items-start gap-3 px-4 py-3">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide w-16 shrink-0 pt-0.5">일반회사</span>
+                        <span className="text-xs text-gray-400 leading-relaxed">{row.other}</span>
+                      </div>
+                      <div className="flex items-start gap-3 px-4 py-3 bg-[#FF5733]/5">
+                        <span className="text-[10px] font-black text-[#FF5733] uppercase tracking-wide w-16 shrink-0 pt-0.5">그날그때</span>
+                        <div className="flex items-start gap-1.5">
+                          <ShieldCheck size={13} fill="#FF5733" className="text-white shrink-0 mt-0.5" />
+                          <span className="text-xs font-bold text-[#FF5733] leading-relaxed">{row.tdtt}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          );
+        })()}
 
         {/* Final Catchphrase */}
         <motion.div 

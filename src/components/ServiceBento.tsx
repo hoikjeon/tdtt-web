@@ -220,7 +220,7 @@ export default function ServiceBento() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4"
+          className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4"
         >
           {services.map((service) => (
             <motion.div
@@ -228,10 +228,10 @@ export default function ServiceBento() {
               variants={itemVariants}
               onClick={() => setSelectedId(service.id)}
               className={`
-                relative bg-[#f8f9fa] rounded-3xl p-8 cursor-pointer overflow-hidden border border-gray-100 group shadow-sm hover:shadow-xl transition-all duration-300
-                ${service.size === "large" ? "md:col-span-2 md:row-span-2" : ""}
-                ${service.size === "medium" ? "md:col-span-2 md:row-span-1" : ""}
-                ${service.size === "small" ? "md:col-span-1 md:row-span-1" : ""}
+                relative bg-[#f8f9fa] rounded-2xl md:rounded-3xl p-4 md:p-8 cursor-pointer overflow-hidden border border-gray-100 group shadow-sm hover:shadow-xl transition-all duration-300
+                ${service.size === "large" ? "col-span-2 md:col-span-2 md:row-span-2" : ""}
+                ${service.size === "medium" ? "col-span-2 md:col-span-2 md:row-span-1" : ""}
+                ${service.size === "small" ? "col-span-1 md:col-span-1 md:row-span-1" : ""}
               `}
               whileHover={{ scale: 1.015, y: -8, transition: { duration: 0.4, ease: "easeOut" } }}
             >
@@ -239,14 +239,15 @@ export default function ServiceBento() {
               <div className="flex flex-col h-full relative z-10">
                 <div className="space-y-4">
                   <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg"
+                    className="w-8 h-8 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-lg"
                     style={{ backgroundColor: service.color }}
                   >
-                    <service.icon size={24} />
+                    <service.icon size={16} className="md:hidden" />
+                    <service.icon size={24} className="hidden md:block" />
                   </div>
                   <div>
-                    <h4 className="text-xl md:text-2xl font-bold text-[#121212]">{service.title}</h4>
-                    <p className="text-gray-500 font-medium text-sm mt-1">{service.description}</p>
+                    <h4 className="text-xs md:text-2xl font-bold text-[#121212] leading-snug">{service.title}</h4>
+                    <p className="hidden md:block text-gray-500 font-medium text-sm mt-1">{service.description}</p>
                   </div>
                 </div>
 

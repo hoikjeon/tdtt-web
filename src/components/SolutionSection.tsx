@@ -67,7 +67,7 @@ export default function SolutionSection() {
               }}
               className="max-w-4xl space-y-8"
             >
-              <h2 className="text-3xl md:text-5xl font-black leading-[1.1] tracking-tighter">
+              <h2 className="text-xl md:text-5xl font-black leading-[1.1] tracking-tighter">
                 "그래서, 저희가 원장님 병원으로<br />
                 <span className="text-[#FF5733]">직접 출근하겠습니다.</span>"
               </h2>

@@ -56,8 +56,8 @@ export default function ProcessSection() {
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
-        <div className="text-center space-y-4 mb-24">
-          <motion.p 
+        <div className="text-center space-y-4 mb-12 md:mb-24">
+          <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="text-[#FF5733] font-bold tracking-[.3em] text-xs uppercase"
@@ -65,16 +65,25 @@ export default function ProcessSection() {
             HOW IT WORKS
           </motion.p>
           <div className="flex justify-center">
-            <div className="relative inline-block overflow-hidden">
-               <span className="text-3xl md:text-5xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">
+            {/* Mobile: 정적 텍스트 */}
+            <motion.h2
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="md:hidden text-2xl font-black text-[#121212] tracking-tighter"
+            >
+              계약 후, 이렇게 진행됩니다.
+            </motion.h2>
+            {/* Desktop: fill 애니메이션 */}
+            <div className="hidden md:block relative inline-block overflow-hidden">
+              <span className="text-5xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">
                 계약 후, 이렇게 진행됩니다.
               </span>
-              <motion.span 
+              <motion.span
                 initial={{ width: 0 }}
                 whileInView={{ width: "100%" }}
                 viewport={{ once: false, amount: 0.8 }}
                 transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
-                className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
+                className="absolute top-0 left-0 text-5xl font-black text-[#121212] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
               >
                 계약 후, 이렇게 진행됩니다.
               </motion.span>
@@ -82,12 +91,12 @@ export default function ProcessSection() {
           </div>
         </div>
 
-        {/* Steps Grid - Vertical on mobile, Horizontal on desktop */}
-        <div className="relative grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
-          
-          {/* Connecting Line (Desktop) */}
+        {/* Steps Grid */}
+        <div className="relative grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+
+          {/* Connecting Line (Desktop only) */}
           <div className="hidden md:block absolute top-[74px] left-[10%] right-[10%] h-[2px] bg-gray-100 z-0">
-            <motion.div 
+            <motion.div
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true, amount: 0.5 }}
@@ -97,40 +106,42 @@ export default function ProcessSection() {
           </div>
 
           {steps.map((step, idx) => (
-            <motion.div 
+            <motion.div
               key={step.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.2 }}
+              transition={{ delay: idx * 0.15 }}
               viewport={{ once: true }}
-              className="relative z-10 flex flex-col items-center text-center space-y-8 group"
+              className="relative z-10 flex flex-col items-center text-center group bg-white md:bg-transparent rounded-2xl md:rounded-none p-4 md:p-0 border border-gray-100 md:border-none shadow-sm md:shadow-none"
             >
               {/* Step Icon with Glow */}
-              <div className="relative pt-6">
-                {/* Step Number Dot - Overlapping the icon circle but in front */}
-                <div className="absolute top-4 right-0 translate-x-1/4 w-10 h-10 md:w-12 md:h-12 bg-[#FF5733] text-white rounded-full flex items-center justify-center text-base font-black shadow-lg z-20 border-4 border-[#fbfbfb]">
+              <div className="relative pt-4 md:pt-6">
+                <div className="absolute top-3 md:top-4 right-0 translate-x-1/4 w-6 h-6 md:w-12 md:h-12 bg-[#FF5733] text-white rounded-full flex items-center justify-center text-[10px] md:text-base font-black shadow-lg z-20 border-2 md:border-4 border-[#fbfbfb] md:border-white">
                   {step.number}
                 </div>
-
-                <motion.div 
+                <motion.div
                   initial={{ boxShadow: "0 0 0px rgba(255, 87, 51, 0)" }}
-                  whileInView={{ boxShadow: "0 0 40px rgba(255, 87, 51, 0.5)" }}
+                  whileInView={{ boxShadow: "0 0 30px rgba(255, 87, 51, 0.4)" }}
                   transition={{ delay: idx * 0.2 + 0.5, duration: 1 }}
-                  className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center border-2 border-gray-100 relative z-10 transition-colors group-hover:border-[#FF5733]"
+                  className="w-14 h-14 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center border-2 border-gray-100 relative z-10 transition-colors group-hover:border-[#FF5733]"
                 >
-                  <step.icon size={36} className="text-gray-400 group-hover:text-[#FF5733] transition-colors" />
+                  <step.icon size={20} className="md:hidden text-gray-400 group-hover:text-[#FF5733] transition-colors" />
+                  <step.icon size={36} className="hidden md:block text-gray-400 group-hover:text-[#FF5733] transition-colors" />
                 </motion.div>
               </div>
 
               {/* Step Text */}
-              <div className="space-y-4 px-4 overflow-visible">
-                <h4 className="text-2xl md:text-3xl font-black text-[#121212] group-hover:text-[#FF5733] transition-colors uppercase tracking-tight leading-tight">
-                  {step.title} <br className="hidden md:block lg:hidden" />
-                  <span className="text-base md:text-lg font-medium text-gray-400 block mt-1 tracking-widest">
+              <div className="space-y-1 md:space-y-4 mt-3 md:mt-8 px-1 md:px-4">
+                <h4 className="text-sm md:text-3xl font-black text-[#121212] group-hover:text-[#FF5733] transition-colors uppercase tracking-tight leading-tight">
+                  {step.title}
+                  <span className="text-[10px] md:text-lg font-medium text-gray-400 block mt-0.5 md:mt-1 tracking-widest normal-case">
                     ({step.labelEn})
                   </span>
                 </h4>
-                <p className="text-gray-500 text-base md:text-lg font-medium leading-relaxed max-w-[280px] mx-auto">
+                <p className="hidden md:block text-gray-500 text-lg font-medium leading-relaxed max-w-[280px] mx-auto">
+                  {step.description}
+                </p>
+                <p className="md:hidden text-gray-400 text-[10px] font-medium leading-relaxed">
                   {step.description}
                 </p>
               </div>

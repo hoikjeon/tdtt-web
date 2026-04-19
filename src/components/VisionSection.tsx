@@ -62,22 +62,33 @@ export default function VisionSection() {
           </motion.p>
           
           <div className="flex flex-col items-center">
-            <div className="relative inline-block overflow-hidden">
-               <span className="text-3xl md:text-6xl font-black text-gray-100 tracking-tighter block leading-tight">우리 병원도 지역 1등이 될 수 있습니다.</span>
-              <motion.span 
+            {/* Mobile: 애니메이션 없이 정적 텍스트 */}
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+              className="md:hidden text-2xl font-black text-[#121212] tracking-tighter leading-snug text-center px-2"
+            >
+              우리 병원도 지역 1등이<br />될 수 있습니다.
+            </motion.h2>
+
+            {/* Desktop: fill 애니메이션 */}
+            <div className="hidden md:block relative inline-block overflow-hidden">
+              <span className="text-6xl font-black text-gray-100 tracking-tighter block leading-tight whitespace-nowrap">우리 병원도 지역 1등이 될 수 있습니다.</span>
+              <motion.span
                 initial={{ width: 0 }}
                 whileInView={{ width: "100%" }}
                 viewport={{ once: false, amount: 0.8 }}
                 transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
-                className="absolute top-0 left-0 text-3xl md:text-6xl font-black text-[#121212] tracking-tighter overflow-hidden block whitespace-nowrap leading-tight"
+                className="absolute top-0 left-0 text-6xl font-black text-[#121212] tracking-tighter overflow-hidden block whitespace-nowrap leading-tight"
               >우리 병원도 지역 1등이 될 수 있습니다.</motion.span>
             </div>
-            
-            <motion.h3 
+
+            <motion.h3
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="mt-4 text-2xl md:text-5xl font-black text-[#FF5733] tracking-tighter uppercase"
+              className="mt-4 text-xl md:text-5xl font-black text-[#FF5733] tracking-tighter uppercase"
             >
               &lt;Medical EU&gt; 에 합류하세요.
             </motion.h3>
@@ -102,17 +113,47 @@ export default function VisionSection() {
 
       {/* Map Visualization Layout (Enhanced Glassmorphism Card) */}
       <div className="relative w-full max-w-6xl mx-auto mt-12 group">
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.05 }}
-          className="relative w-full bg-white/60 backdrop-blur-xl rounded-[4rem] border border-gray-100 shadow-[0_40px_100px_rgba(0,0,0,0.04)] overflow-hidden h-[500px] md:h-[700px] flex items-center justify-center p-8 md:p-12"
+          className="relative w-full bg-white/60 backdrop-blur-xl rounded-2xl md:rounded-[4rem] border border-gray-100 shadow-[0_40px_100px_rgba(0,0,0,0.04)] overflow-hidden"
         >
           {/* Background Grid Pattern */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                style={{ backgroundImage: 'radial-gradient(#FF5733 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
 
+          {/* Mobile: 병원 노드 카드 그리드 */}
+          <div className="md:hidden relative z-10 p-5 pt-12">
+            <div className="grid grid-cols-3 gap-3">
+              {mapNodes.map((node, i) => (
+                <motion.div
+                  key={node.id}
+                  variants={itemVariants}
+                  className="flex flex-col items-center gap-2 bg-white rounded-2xl p-3 border border-gray-100 shadow-sm"
+                >
+                  <div className="relative flex items-center justify-center">
+                    <motion.div
+                      className="absolute w-10 h-10 rounded-full bg-[#FF5733]/10"
+                      animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0.1, 0.4] }}
+                      transition={{ repeat: Infinity, duration: 3, delay: i * 0.3 }}
+                    />
+                    <div className="relative w-9 h-9 rounded-full bg-white border border-[#FF5733]/30 flex items-center justify-center shadow-sm">
+                      <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
+                        <rect x="1" y="2" width="12" height="13" rx="1.5" fill="#FF5733" fillOpacity="0.15" stroke="#FF5733" strokeWidth="1.5"/>
+                        <path d="M4 8h6M7 5v6" stroke="#FF5733" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-black text-[#121212] text-center leading-tight">{node.label}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: SVG 네트워크 맵 */}
+          <div className="hidden md:flex items-center justify-center h-[700px] p-12">
           <svg className="w-full h-full drop-shadow-2xl relative z-10" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg">
             {/* Stylized Bu-Ul-Gyeong Border Path */}
             <motion.path 
@@ -208,9 +249,10 @@ export default function VisionSection() {
               ))}
             </g>
           </svg>
+          </div>
 
           {/* Map Title Badge */}
-          <div className="absolute top-8 left-12 flex items-center gap-3">
+          <div className="absolute top-4 md:top-8 left-4 md:left-12 flex items-center gap-2 md:gap-3">
              <div className="w-3 h-3 bg-[#FF5733] rounded-full animate-ping" />
              <span className="text-[#121212] font-black text-sm tracking-widest uppercase opacity-40">Regional Network Live</span>
           </div>
