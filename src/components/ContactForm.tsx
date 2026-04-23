@@ -8,7 +8,7 @@ import { Send, CheckCircle2, Loader2, ArrowUpRight } from "lucide-react";
 const inputClass =
   "w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white/20 font-medium text-base focus:outline-none focus:border-[#FF5733]/60 focus:bg-white/8 transition-all duration-300";
 
-export default function ContactForm() {
+export default function ContactForm({ selectedPlan }: { selectedPlan?: string }) {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -24,7 +24,7 @@ export default function ContactForm() {
     try {
       const { error } = await supabase
         .from("contacts")
-        .insert([{ name: formData.name, phone: formData.phone, email: formData.email, message: formData.message }]);
+        .insert([{ name: formData.name, phone: formData.phone, email: formData.email, message: formData.message, plan: selectedPlan || "" }]);
 
       if (error) throw error;
 
@@ -122,6 +122,14 @@ export default function ContactForm() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <form onSubmit={handleSubmit} className="space-y-5">
+
+              {/* Selected plan */}
+              <div className="space-y-2">
+                <label className="block text-white/30 text-[10px] font-bold tracking-[.25em] uppercase pl-1">선택 플랜</label>
+                <div className={`${inputClass} ${selectedPlan ? "text-[#FF5733] border-[#FF5733]/30" : "text-white/20"}`}>
+                  {selectedPlan || "플랜을 선택하면 자동으로 입력됩니다"}
+                </div>
+              </div>
 
               {/* Row: name + phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

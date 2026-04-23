@@ -80,13 +80,13 @@ export function LiquidSphere() {
   });
 
   const materialProps = {
-    transmission: 1, 
+    transmission: 1,
     roughness: 0,
     thickness: 3,
-    ior: 1.5, 
+    ior: 1.5,
     chromaticAberration: 0.05,
-    backside: true, 
-    resolution: 256, 
+    backside: true,
+    resolution: 256,
     color: "#ffffff",
   };
 

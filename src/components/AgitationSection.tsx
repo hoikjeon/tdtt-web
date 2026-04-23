@@ -115,8 +115,8 @@ export default function AgitationSection() {
           className="relative aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000 group order-1 lg:order-2"
         >
           <Image
-            src="/images/ai_digital_shift.png"
-            alt="Digital AI workspace representing the shift in search era"
+            src="/images/airobot.jpg"
+            alt="AI robot representing the digital shift in search era"
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover transition-transform duration-1000 group-hover:scale-110"

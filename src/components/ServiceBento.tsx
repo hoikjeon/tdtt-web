@@ -54,7 +54,7 @@ const services: ServiceItem[] = [
     id: "youtube",
     title: "유튜브 촬영 & 편집",
     description: "전문 장비와 기획으로 완성되는 고품질 영상",
-    detail: "매주 현장 출근 시 직접 촬영하여 병원의 진심이 담긴 숏폼부터 롱폼까지 제작합니다.",
+    detail: "단순히 대본만 쓰는 것이 아닙니다. 환자가 궁금해하는 질문과 원장님의 전문성을 연결하여, 신뢰도가 200% 상승하는 '전문가용 시나리오'를 구성합니다.",
     icon: Video,
     color: "#ff0000",
     size: "medium",
@@ -70,9 +70,9 @@ const services: ServiceItem[] = [
   },
   {
     id: "blog",
-    title: "브랜드 블로그 개발",
-    description: "기계적인 공장형이 아닌 진료 철학을 담은 글",
-    detail: "원장님의 진료 스타일을 가장 잘 이해하는 팀장이 직접 원고의 완성도를 검수하고 발행합니다.",
+    title: "지역 타겟 블로그",
+    description: "지역 환자의 발길을 이끄는 전략적 검색 최적화",
+    detail: "원장님의 주력 진료 과목을 검색 결과 상단에 확실하게 노출시킵니다. 기계적인 단순 발행이 아닌, 지역 환자들에게 병원의 전문성이 가장 먼저 닿을 수 있도록 최적화된 브랜드 블로그를 운영합니다.",
     icon: MessageSquare,
     color: "#2db400",
     size: "small",
@@ -386,6 +386,27 @@ export default function ServiceBento() {
                               className="w-full h-full border-none"
                               title="Full App View"
                             />
+                          </div>
+                        ) : service.id === "youtube" ? (
+                          <div className="relative w-full aspect-square bg-black rounded-[3rem] overflow-hidden shadow-2xl">
+                            {/* Blurred background thumbnail */}
+                            <img
+                              src="https://img.youtube.com/vi/LHI25R8Eneg/maxresdefault.jpg"
+                              alt=""
+                              className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-60"
+                            />
+                            <div className="absolute inset-0 bg-black/30" />
+                            {/* Video at natural 16:9 ratio, centered */}
+                            <div className="absolute inset-0 flex items-center justify-center p-4">
+                              <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg">
+                                <iframe
+                                  src="https://www.youtube.com/embed/LHI25R8Eneg?autoplay=1&mute=1&loop=1&playlist=LHI25R8Eneg&controls=0&modestbranding=1&rel=0&iv_load_policy=3"
+                                  className="absolute inset-0 w-full h-full pointer-events-none"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  title="YouTube Video"
+                                />
+                              </div>
+                            </div>
                           </div>
                         ) : (
                           <div className="relative aspect-square rounded-[3rem] bg-gray-50 flex items-center justify-center overflow-hidden">

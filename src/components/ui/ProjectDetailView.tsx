@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useMotionValueEvent, useMotionValue, u
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import StickyScrollGallery from "./StickyScrollGallery";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -118,7 +119,7 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
             pin: true,           // 화면 고정
             scrub: 1,            // 부드러운 동기화
             start: "center center", 
-            end: "+=1200",       // 1200px 내려올 때까지 고정
+            end: "+=200",
           }
         });
 
@@ -135,41 +136,6 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
         tl.to({}, { duration: 0.5 }); 
       }
 
-      // --- 수평 스크롤 갤러리 (No-Pin Horizontal Marquee) 설정 ---
-      // pin 없이 섹션을 지나가는 동안 자연스럽게 좌우 교차 애니메이션
-      const gallerySections = gsap.utils.toArray<HTMLElement>('.gallery-crossfade');
-
-      gallerySections.forEach((section) => {
-        const topRow = section.querySelector('.row-top');
-        const bottomRow = section.querySelector('.row-bottom');
-        if (!topRow || !bottomRow) return;
-
-        // 윗줄: 왼쪽으로 밀려남 (xPercent -20)
-        gsap.to(topRow, {
-          xPercent: -20,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            scroller: scroller,
-            start: "top bottom",   // 섹션 상단이 뷰포트 하단에 닿을 때 시작
-            end: "bottom top",     // 섹션 하단이 뷰포트 상단을 벗어날 때 종료
-            scrub: 1,              // 1초 감쇠로 부드럽게
-          }
-        });
-
-        // 아랫줄: 오른쪽으로 밀려남 (xPercent +20)
-        gsap.to(bottomRow, {
-          xPercent: 20,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            scroller: scroller,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          }
-        });
-      });
 
     }, containerRef); // containerRef를 스코프로 지정하여 컴포넌트 내 요소만 타겟팅
 
@@ -315,7 +281,7 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
               </div>
               {/* Text with scroll-fill effect */}
               <div className="w-full md:w-1/2 flex flex-col items-start text-left">
-                <h2 className="scroll-title-container text-[4rem] md:text-[5.5rem] lg:text-[6rem] font-extrabold mb-6 leading-[1.1] tracking-tighter">
+                <h2 className="scroll-title-container text-[2.8rem] md:text-[3.8rem] lg:text-[4.5rem] font-extrabold mb-6 leading-[1.1] tracking-tighter">
                   {["랜딩 페이지", "제작"].map((line, lineIdx) => (
                     <span
                       key={lineIdx}
@@ -346,75 +312,75 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
         <div className="relative z-20 w-full bg-white text-black pt-40 pb-48 flex flex-col gap-40 md:gap-64">
           {(isLanding ? [
             {
-              title: "SNS 광고\n클릭은\n많은데?",
+              title: "SNS 광고 클릭은\n많은데?",
               subtitle: "Problem Statement",
               desc: "환자들은 복잡하고 느린 예약 과정에서 이탈합니다. 의미 없는 트래픽만 늘리는 광고에서 벗어나, 클릭이 실제 '환자 DB'로 이어지는 확실한 구조가 필요합니다.",
               reverse: false,
             },
             {
-              title: "이탈을\n막는\n전환 구조",
+              title: "이탈을 막는\n전환 구조",
               subtitle: "Direct Landing Page",
               desc: "오직 환자의 행동 전환에만 집중했습니다. 우리 병원의 주력 진료와 핵심 노출 포인트를 가장 직관적이고 매력적으로 담아냅니다.",
               reverse: true,
             },
             {
-              title: "버튼 하나로\nSNS\n간편 상담",
+              title: "버튼 하나로\nSNS 간편 상담",
               subtitle: "SNS Direct Consultation",
               desc: "환자가 광고를 보고 들어와 평소 사용하는 SNS 채널로 즉시 상담을 남길 수 있습니다. 복잡한 가입이나 절차를 없애 환자의 문의 장벽을 획기적으로 낮췄습니다.",
               reverse: false,
             },
             {
-              title: "잘 만든\n랜딩 하나,\n열 마케터",
+              title: "잘 만든 랜딩 하나,\n열 마케터",
               subtitle: "Revenue Impact",
               desc: "밑빠진 독에 물 붓는 광고비는 이제 멈추세요. 병원의 매출을 직접적으로 끌어올릴 맞춤형 랜딩페이지 시스템, 지금 바로 상담받아보세요.",
               reverse: true,
             },
           ] : isMedical ? [
             {
-              title: "수백만 원\n광고,\n누구에게?",
+              title: "수백만 원 광고,\n누구에게?",
               subtitle: "Targeting Strategy",
               desc: "아무리 좋은 영상도 내원할 수 없는 먼 지역 사람들에게 보여진다면 광고비 낭비입니다. 이제는 영상 퀄리티보다 '누구에게 보여줄 것인가'가 핵심입니다.",
               reverse: false
             },
             {
-              title: "스크롤을\n멈추게\n하는 힘",
+              title: "스크롤을 멈추게\n하는 힘",
               subtitle: "Motion Graphic",
               desc: "지루한 원장님 인사말 영상은 이제 그만. 텍스트와 그래픽이 리듬감 있게 움직이는 모션그래픽은 시청자의 이탈률을 획기적으로 낮춥니다.",
               reverse: true
             },
             {
-              title: "우리 동네\n환자만\n콕 집어서",
+              title: "우리 동네 환자만\n콕 집어서",
               subtitle: "Geo-Targeting",
               desc: "병원 위치를 중심으로 반경 5km, 10km 단위로 광고 노출 지역을 정밀하게 설정합니다. 실제 내원이 가능한 잠재 환자에게만 광고비를 사용하여 효율을 극대화합니다.",
               reverse: false
             },
             {
-              title: "결과를\n만드는\n영상",
+              title: "결과를 만드는\n영상",
               subtitle: "Portfolio",
               desc: "명확한 소구점, 의료진 신뢰도, 쉬운 접근성. 환자가 가장 원하는 키워드를 직관적인 모션으로 전달하여 실질적인 내원을 유도합니다.",
               reverse: true
             }
           ] : [
             {
-              title: "생동감\n넘치는\n언어",
+              title: "생동감 넘치는\n언어",
               subtitle: "Motion Graphic",
               desc: "브랜드의 아이덴티티를 살아있는 움직임으로 해석합니다. 단순한 정보를 넘어 감각적인 시각 언어로 고객의 마음을 사로잡는 모션 그래픽을 제작합니다.",
               reverse: false
             },
             {
-              title: "기술과\n감각의\n조화",
+              title: "기술과 감각의\n조화",
               subtitle: "Technical Excellence",
               desc: "최신 영상 기술과 뛰어난 연출력을 결합하여 완성도 높은 결과물을 만들어냅니다. 고해상도 그래픽과 매끄러운 트랜지션으로 몰입감을 극대화합니다.",
               reverse: true
             },
             {
-              title: "전략적\n메시지\n전달",
+              title: "전략적 메시지\n전달",
               subtitle: "Strategic Impact",
               desc: "브랜드가 전달하고자 하는 핵심 가치를 명확하게 분석하여, 시청자에게 가장 효과적으로 각인될 수 있는 전략적인 영상 흐름을 설계합니다.",
               reverse: false
             },
             {
-              title: "뉴미디어\n최적화\n솔루션",
+              title: "뉴미디어 최적화\n솔루션",
               subtitle: "Media Optimized",
               desc: "유튜브, 인스타그램, 틱톡 등 다양한 뉴미디어 채널의 특성에 맞게 최적화된 포맷과 연출로 최상의 광고 효과를 이끌어냅니다.",
               reverse: true
@@ -434,7 +400,7 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
               </div>
               <div className="w-full md:w-1/2 flex flex-col items-start text-left">
                  {/* 섹션 2의 우측 사진 너비(460px)에 맞게 제목이 꽉 차보이도록 폰트 크기를 대폭 키움 (5.5rem~6rem) */}
-                 <h2 className="scroll-title-container text-[4rem] md:text-[5.5rem] lg:text-[6rem] font-extrabold mb-6 leading-[1.1] tracking-tighter">
+                 <h2 className="scroll-title-container text-[2.8rem] md:text-[3.8rem] lg:text-[4.5rem] font-extrabold mb-6 leading-[1.1] tracking-tighter">
                    {section.title.split('\n').map((line, lineIdx) => (
                      <span 
                        key={lineIdx}
@@ -497,29 +463,13 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
            </div>
         </div>
 
-        {/* --- Scroll-triggered Horizontal Gallery (No Pin, xPercent 교차) --- */}
-        <div className="gallery-crossfade relative z-30 w-full bg-white overflow-hidden py-24 md:py-32">
-           {/* 윗줄 (row-top): 스크롤 시 왼쪽(-X)으로 부드럽게 밀려남 */}
-           <div className="row-top flex min-w-max mb-[2vw]" style={{ gap: '10vw' }}>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((idx) => (
-                <div key={`top-${idx}`} className="relative shrink-0" style={{ width: '35vw', aspectRatio: '4/3' }}>
-                  <Image src={images[(idx % images.length)] || src} fill className="object-cover" alt={`Gallery Top ${idx}`} />
-                </div>
-              ))}
-           </div>
-
-           {/* 아랫줄 (row-bottom): 처음에 왼쪽으로 치우쳐 시작, 스크롤 시 오른쪽(+X)으로 밀려남 */}
-           <div className="row-bottom flex min-w-max" style={{ gap: '10vw', transform: 'translateX(-15%)' }}>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((idx) => (
-                <div key={`bottom-${idx}`} className="relative shrink-0" style={{ width: '35vw', aspectRatio: '4/3' }}>
-                  <Image src={images[((idx + 4) % images.length)] || src} fill className="object-cover" alt={`Gallery Bottom ${idx}`} />
-                </div>
-              ))}
-           </div>
-        </div>
+        {/* bg-white wrapper: GSAP pin-spacer가 transparent이므로 부모 bg-white가 비쳐 어두운 갭이 생기지 않도록 감쌈 */}
+        <div className="relative z-30 bg-white">
+        {/* --- Sticky Scroll Gallery --- */}
+        <StickyScrollGallery images={images} fallback={src} />
 
         {/* --- 마지막 섹션: 마블스튜디오 오! 와이스튜디오 (고정 효과 적용) --- */}
-        <div className="last-pinned-section relative z-30 w-full bg-white flex flex-col items-center justify-center py-48 md:py-64 px-6">
+        <div className="last-pinned-section relative w-full bg-white flex flex-col items-center justify-center py-20 md:py-28 px-6">
            <div className="max-w-2xl w-full flex flex-col items-center text-center mx-auto">
              <h2 className="scroll-title-container text-[3.5rem] md:text-[5rem] font-bold mb-8 leading-[1.1] tracking-tighter text-center">
                {(isMedical ? "기획부터\n광고까지\n한 번에" : isLanding ? "클릭이\n환자로\n이어지다" : "영상으로\n여는\n새로운\n경험").split('\n').map((line, idx) => (
@@ -551,6 +501,7 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
              </p>
            </div>
         </div>
+        </div>{/* end bg-white wrapper */}
 
       </div>
 

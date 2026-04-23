@@ -40,6 +40,8 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
+  --gradient-color: #FF5733;
+  --sparkles-color: #FF5733;
 }
 
 @theme inline {
