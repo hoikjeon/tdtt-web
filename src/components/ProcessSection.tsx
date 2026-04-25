@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import { Search, Users, Rocket, LayoutDashboard, ChevronRight } from "lucide-react";
@@ -9,7 +10,7 @@ interface ProcessStep {
   number: string;
   title: string;
   labelEn: string;
-  description: string;
+  description: React.ReactNode;
   icon: any;
 }
 
@@ -27,7 +28,7 @@ const steps: ProcessStep[] = [
     number: "02",
     title: "대면 미팅",
     labelEn: "MEETING",
-    description: "원내 방문을 통한 맞춤형 전략 수립 및 계약",
+    description: <>원내 방문을 통한<br />맞춤형 전략 수립 및 계약</>,
     icon: Users
   },
   {
@@ -35,7 +36,7 @@ const steps: ProcessStep[] = [
     number: "03",
     title: "현장 투입",
     labelEn: "ON-SITE",
-    description: "매주 1회 정기 출근 및 25가지 실무 즉각 실행 (촬영/디자인/마케팅 등)",
+    description: <>매주 1회 정기 출근 및 25가지 실무 즉각 실행<br />(촬영/디자인/마케팅 등)</>,
     icon: Rocket
   },
   {
@@ -43,7 +44,7 @@ const steps: ProcessStep[] = [
     number: "04",
     title: "투명한 공유",
     labelEn: "MONITORING",
-    description: "자체 개발 전용 앱을 통한 실시간 데이터 성과 모니터링",
+    description: <>앱을 통한<br />실시간 데이터 성과 모니터링</>,
     icon: LayoutDashboard
   }
 ];

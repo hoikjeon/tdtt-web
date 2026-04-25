@@ -47,7 +47,7 @@ export default function WorksClient({ projectData }: WorksClientProps) {
             </h1>
             <p className="text-gray-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed font-light px-4">
               정교한 마케팅 전략과 신뢰감을 주는 시각적 디자인의 시너지.<br />
-              환자의 발걸음을 이끌어내고 병원의 가치를 증명해 낸 확실한 작업물들을 소개합니다.
+              환자의 발걸음을 이끌어내고 병원의 가치를 증명해 낸 확실한 작업물들을<br />소개합니다.
             </p>
           </motion.div>
         </div>

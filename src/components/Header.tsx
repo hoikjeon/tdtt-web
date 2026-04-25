@@ -7,7 +7,7 @@ import Image from "next/image";
 import { X } from "lucide-react";
 
 const menuItems = [
-  { name: "About", href: "#about" },
+  { name: "About", href: "/" },
   { name: "Works", href: "/works" },
   { name: "Plan", href: "/contact" },
   { name: "More", href: "#more" },
@@ -53,12 +53,10 @@ export default function Header() {
     }
   }, [isOpen]);
 
-  // Theme derived values
-  // "dark" theme means background is dark -> header should be white (initial state)
-  // "light" theme means background is light -> header should be black
+  // "dark" theme means background is dark -> white logo / white text
+  // "light" theme means background is light -> black logo / black text
   const headerTextColor = headerTheme === "light" ? "text-black" : "text-white";
   const headerBarBg = headerTheme === "light" ? "bg-black" : "bg-white";
-  const logoInvert = headerTheme === "light" ? "" : "invert";
 
   return (
     <>
@@ -66,12 +64,20 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="block">
           <Image
-            src="/main-logo-bk.png"
+            src="/images/thatdaytimelogowt.png"
             alt="tdtt"
-            width={120}
-            height={48}
+            width={240}
+            height={96}
             priority
-            className={`h-7 md:h-9 lg:h-12 w-auto transition-all duration-500 ${logoInvert}`}
+            className={`h-14 md:h-20 lg:h-24 w-auto transition-all duration-500 ${headerTheme === "dark" ? "block" : "hidden"}`}
+          />
+          <Image
+            src="/images/thatdaytimelogobk.png"
+            alt="tdtt"
+            width={240}
+            height={96}
+            priority
+            className={`h-14 md:h-20 lg:h-24 w-auto transition-all duration-500 ${headerTheme === "light" ? "block" : "hidden"}`}
           />
         </Link>
 
@@ -104,11 +110,11 @@ export default function Header() {
             <div className="absolute top-0 left-0 w-full p-6 md:p-10 flex justify-between items-center">
               <Link href="/" className="block" onClick={() => setIsOpen(false)}>
                 <Image
-                  src="/main-logo-bk.png"
+                  src="/images/thatdaytimelogowt.png"
                   alt="tdtt"
                   width={120}
                   height={48}
-                  className="h-7 md:h-9 lg:h-12 w-auto invert"
+                  className="h-7 md:h-9 lg:h-12 w-auto"
                 />
               </Link>
               <button

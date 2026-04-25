@@ -388,25 +388,14 @@ export default function ServiceBento() {
                             />
                           </div>
                         ) : service.id === "youtube" ? (
-                          <div className="relative w-full aspect-square bg-black rounded-[3rem] overflow-hidden shadow-2xl">
-                            {/* Blurred background thumbnail */}
-                            <img
-                              src="https://img.youtube.com/vi/LHI25R8Eneg/maxresdefault.jpg"
-                              alt=""
-                              className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-60"
+                          <div className="relative w-full aspect-[4/3] bg-black rounded-[3rem] overflow-hidden shadow-2xl">
+                            <iframe
+                              src="https://www.youtube.com/embed/LHI25R8Eneg?autoplay=1&mute=1&loop=1&playlist=LHI25R8Eneg&controls=0&modestbranding=1&rel=0&iv_load_policy=3"
+                              className="absolute top-0 h-full pointer-events-none"
+                              style={{ width: "133.34%", left: "-16.67%" }}
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              title="YouTube Video"
                             />
-                            <div className="absolute inset-0 bg-black/30" />
-                            {/* Video at natural 16:9 ratio, centered */}
-                            <div className="absolute inset-0 flex items-center justify-center p-4">
-                              <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg">
-                                <iframe
-                                  src="https://www.youtube.com/embed/LHI25R8Eneg?autoplay=1&mute=1&loop=1&playlist=LHI25R8Eneg&controls=0&modestbranding=1&rel=0&iv_load_policy=3"
-                                  className="absolute inset-0 w-full h-full pointer-events-none"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  title="YouTube Video"
-                                />
-                              </div>
-                            </div>
                           </div>
                         ) : (
                           <div className="relative aspect-square rounded-[3rem] bg-gray-50 flex items-center justify-center overflow-hidden">

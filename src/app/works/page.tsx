@@ -10,6 +10,7 @@ const fallbackProjects: Project[] = [
     subtitle: "Hospital Motion",
     title: "Motion\nGraphic",
     parallaxOffset: 120,
+    accentColor: "#599ac0",
     images: [
       "/video/hospital%20motion/motion1.jpg",
       "/video/hospital%20motion/motion2.jpg",
@@ -35,6 +36,7 @@ const fallbackProjects: Project[] = [
     subtitle: "Medical Video Marketing",
     title: "Medical\nAdvertising",
     parallaxOffset: 400,
+    accentColor: "#a790c4",
     images: [
       "/video/admotion/admotion1.jpg",
       "/video/admotion/admotion2.jpg",
@@ -56,6 +58,7 @@ const fallbackProjects: Project[] = [
     subtitle: "Direct SNS Consultation",
     title: "Medical\nLanding\nPage",
     parallaxOffset: 400,
+    accentColor: "#e2b923",
     images: [
       "/video/adlanding/landing1.png",
       "/video/adlanding/landing2.png",

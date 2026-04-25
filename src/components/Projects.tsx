@@ -15,10 +15,11 @@ interface ProjectCardProps {
   title: string;
   parallaxOffset?: number;
   images?: string[];
+  accentColor?: string;
   onClick?: (rect: DOMRect, src: string, images?: string[], subtitle?: string, title?: string) => void;
 }
 
-function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, images, onClick }: ProjectCardProps) {
+function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, images, accentColor = "#FF5733", onClick }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -122,7 +123,7 @@ function ProjectCard({ src, year, subtitle, title, parallaxOffset = 80, images, 
             scale: { duration: 0.3 },
           }}
         >
-          <div className="w-[100px] h-[100px] rounded-full bg-[#FF5733] flex items-center justify-center">
+          <div className="w-[100px] h-[100px] rounded-full flex items-center justify-center" style={{ backgroundColor: accentColor }}>
             <span className="text-white text-sm font-bold text-center leading-tight">
               View<br />Project
             </span>
@@ -142,6 +143,7 @@ export interface Project {
   title: string;
   parallaxOffset?: number;
   images?: string[];
+  accentColor?: string;
 }
 
 interface ProjectsProps {

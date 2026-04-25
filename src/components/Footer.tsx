@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const navLinks = [
-  { name: "About", href: "#about" },
+  { name: "About", href: "/" },
   { name: "Works", href: "/works" },
   { name: "Contact", href: "#contact" },
 ];
@@ -19,11 +19,11 @@ export default function Footer() {
           <div className="space-y-5 max-w-xs">
             <Link href="/">
               <Image
-                src="/main-logo-bk.png"
+                src="/images/thatdaytimelogowt.png"
                 alt="TDTT"
-                width={100}
-                height={40}
-                className="h-7 w-auto invert"
+                width={240}
+                height={96}
+                className="h-14 w-auto"
               />
             </Link>
             <p className="text-white/40 text-sm leading-relaxed">
