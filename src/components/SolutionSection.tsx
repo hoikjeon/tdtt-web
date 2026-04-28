@@ -74,7 +74,7 @@ export default function SolutionSection() {
 
               <div className="space-y-6 max-w-2xl mx-auto">
                 <p className="text-sm md:text-2xl font-medium text-white/90 leading-relaxed">
-                  내부 직원의 장점인 '현장감'과 전문 에이전시의 노하우를<br />
+                  내부 직원의 장점인 '현장감'과 <br /> 전문 에이전시의 노하우를 <br />
                   완벽하게 결합했습니다.
                 </p>
                 
@@ -93,7 +93,7 @@ export default function SolutionSection() {
                 transition={{ delay: 0.5, duration: 1 }}
                 className="pt-12"
               >
-                <div className="inline-block px-8 py-4 border border-white/20 rounded-full backdrop-blur-md bg-white/5 text-sm tracking-[0.2em] font-light uppercase">
+                <div className="inline-block px-5 py-2.5 border border-white/20 rounded-full backdrop-blur-md bg-white/5 text-[10px] md:text-xs tracking-[0.2em] font-light uppercase">
                   ThatDayTime : On-Site Partner
                 </div>
               </motion.div>
