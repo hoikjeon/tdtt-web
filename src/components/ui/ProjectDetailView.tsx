@@ -213,9 +213,7 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
               <div className="flex justify-between items-end border-b border-white/20 pb-4">
                 <span className="text-xs font-bold tracking-widest uppercase text-white/50">View Project</span>
                 <div className="flex gap-4">
-                  <span className="text-xs text-white uppercase cursor-pointer hover:text-white/70">Fb</span>
-                  <span className="text-xs text-white uppercase cursor-pointer hover:text-white/70">Tw</span>
-                  <span className="text-xs text-white uppercase cursor-pointer hover:text-white/70">In</span>
+                  <span className="text-xs text-white uppercase cursor-pointer hover:text-white/70">{isLanding ? "Web Design" : "AE"}</span>
                 </div>
               </div>
             </div>

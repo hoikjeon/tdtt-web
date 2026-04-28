@@ -28,30 +28,37 @@ const VertexShader = `
 const FragmentShader = `
   uniform float uDistortion;
   uniform sampler2D uTexture;
+  uniform float uTextureAspect;
+  uniform float uViewportAspect;
+  uniform float uCoverStrength;
   varying vec2 vUv;
 
   void main() {
     vec2 p = vUv - 0.5;
     float r2 = dot(p, p);
-    
-    // 왜곡 강도 설정 (부드러운 전파)
-    float k = 1.2 * uDistortion; 
-    
-    // 고급스러운 렌즈 효과를 위한 색수차(Chromatic Aberration) 적용
-    // 렌즈 굴절률이 빛의 파장(RGB)마다 다르다는 점을 모방하여 가장자리에 갈수록 색 번짐 생성
-    float kR = k * 1.08; // 빨간색 채널은 조금 더 왜곡
-    float kG = k * 1.00; // 초록색 채널 기본값
-    float kB = k * 0.92; // 파란색 채널 덜 왜곡
 
-    vec2 uvR = 0.5 + p * (1.0 - kR * r2);
-    vec2 uvG = 0.5 + p * (1.0 - kG * r2);
-    vec2 uvB = 0.5 + p * (1.0 - kB * r2);
-    
-    // 각 채널을 개별적으로 샘플링하여 결합
+    float k = 1.2 * uDistortion;
+    float kR = k * 1.08;
+    float kG = k * 1.00;
+    float kB = k * 0.92;
+
+    vec2 dR = 0.5 + p * (1.0 - kR * r2);
+    vec2 dG = 0.5 + p * (1.0 - kG * r2);
+    vec2 dB = 0.5 + p * (1.0 - kB * r2);
+
+    // object-fit: cover 보정 (모바일 비율 대응)
+    float ratio = uViewportAspect / uTextureAspect;
+    float xScale = mix(1.0, min(ratio, 1.0), uCoverStrength);
+    float yScale = mix(1.0, 1.0 / max(ratio, 1.0), uCoverStrength);
+
+    vec2 uvR = vec2(0.5 + (dR.x - 0.5) * xScale, 0.5 + (dR.y - 0.5) * yScale);
+    vec2 uvG = vec2(0.5 + (dG.x - 0.5) * xScale, 0.5 + (dG.y - 0.5) * yScale);
+    vec2 uvB = vec2(0.5 + (dB.x - 0.5) * xScale, 0.5 + (dB.y - 0.5) * yScale);
+
     float r = texture2D(uTexture, uvR).r;
     float g = texture2D(uTexture, uvG).g;
     float b = texture2D(uTexture, uvB).b;
-    
+
     gl_FragColor = vec4(r, g, b, 1.0);
   }
 `;
@@ -83,6 +90,9 @@ function TransitionMesh({ src, rect, isReversing, onReady, onAnimationComplete, 
   const uniforms = useRef({
     uTexture: { value: texture },
     uDistortion: { value: 0 },
+    uTextureAspect: { value: 1 },
+    uViewportAspect: { value: size.width / size.height },
+    uCoverStrength: { value: 0 },
   });
 
   useEffect(() => {
@@ -93,6 +103,13 @@ function TransitionMesh({ src, rect, isReversing, onReady, onAnimationComplete, 
 
     texture.generateMipmaps = true;
     texture.minFilter = THREE.LinearMipmapLinearFilter;
+
+    // 텍스처·뷰포트 비율 설정 (cover UV 보정용)
+    const img = texture.image as HTMLImageElement | undefined;
+    if (img && img.naturalWidth) {
+      materialRef.current.uniforms.uTextureAspect.value = img.naturalWidth / img.naturalHeight;
+    }
+    materialRef.current.uniforms.uViewportAspect.value = size.width / size.height;
 
     // 초기 Thumbnail 크기와 위치를 3D 공간(Viewport) 좌표로 변환
     const startScaleX = (rect.width / size.width) * viewport.width;
@@ -115,6 +132,7 @@ function TransitionMesh({ src, rect, isReversing, onReady, onAnimationComplete, 
       meshRef.current.position.set(targetPosX, targetPosY, 0);
       meshRef.current.scale.set(targetScaleX, targetScaleY, 1);
       materialRef.current.uniforms.uDistortion.value = 0;
+      materialRef.current.uniforms.uCoverStrength.value = 1;
 
       tl.to(meshRef.current.position, {
         x: startPosX,
@@ -125,6 +143,11 @@ function TransitionMesh({ src, rect, isReversing, onReady, onAnimationComplete, 
       tl.to(meshRef.current.scale, {
         x: startScaleX,
         y: startScaleY,
+        duration: 0.9,
+        ease: "power3.inOut"
+      }, 0);
+      tl.to(materialRef.current.uniforms.uCoverStrength, {
+        value: 0,
         duration: 0.9,
         ease: "power3.inOut"
       }, 0);
@@ -147,6 +170,7 @@ function TransitionMesh({ src, rect, isReversing, onReady, onAnimationComplete, 
       meshRef.current.position.set(startPosX, startPosY, 0);
       meshRef.current.scale.set(startScaleX, startScaleY, 1);
       materialRef.current.uniforms.uDistortion.value = 0;
+      materialRef.current.uniforms.uCoverStrength.value = 0;
 
       tl.to(meshRef.current.position, {
         x: targetPosX,
@@ -160,15 +184,20 @@ function TransitionMesh({ src, rect, isReversing, onReady, onAnimationComplete, 
         duration: 1.1,
         ease: "power3.inOut"
       }, 0);
-      
+      tl.to(materialRef.current.uniforms.uCoverStrength, {
+        value: 1,
+        duration: 1.1,
+        ease: "power3.inOut"
+      }, 0);
+
       // Bulge & Fisheye 효과 - 젤리처럼 늘어났다 풀리는 시네마틱 텐션
       tl.to(materialRef.current.uniforms.uDistortion, {
-        value: 1.4, // 몰입감을 위해 왜곡 강도를 높임 (색수차 극대화)
+        value: 1.4,
         duration: 0.55,
         ease: "power2.out",
       }, 0);
       tl.to(materialRef.current.uniforms.uDistortion, {
-        value: 0.0, // 전체화면에서는 왜곡 풀림
+        value: 0.0,
         duration: 0.55,
         ease: "sine.inOut",
         onComplete: () => cbRefs.current.onAnimationComplete()

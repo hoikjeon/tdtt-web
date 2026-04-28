@@ -136,42 +136,6 @@ const websiteDetails: PlanDetails = {
 
 const plans = [
   {
-    name: "맞춤형 어플 제작",
-    description: "병원 행정 및 진료 워크플로우에 최적화된 고성능 애플리케이션",
-    price: 30,
-    subPrice: "유지비 월 20만원",
-    priceLabel: "셋팅",
-    buttonText: "상담 신청",
-    buttonVariant: "outline" as const,
-    details: appDetails,
-    includes: [
-      "포함 사항:",
-      "인사 및 근태 관리 시스템",
-      "전자 결재 및 문서 행정",
-      "실시간 의료 소모품 및 재고 관리",
-      "병원 전용 실시간 소통 채널",
-      "한눈에 보는 병원 DB 데이터",
-      "스마트 직무 및 R&R 관리",
-    ],
-  },
-  {
-    name: "프리미엄 홈페이지 구축",
-    description: "압도적인 속도와 검색엔진 최적화(SEO)를 갖춘 병원 특화 프리미엄 웹사이트",
-    price: 500,
-    subPrice: "매월 유지·관리비 10만원",
-    buttonText: "상담 신청",
-    buttonVariant: "outline" as const,
-    details: websiteDetails,
-    includes: [
-      "포함 사항:",
-      "검색 포털 상위노출(SEO) 최적화",
-      "맞춤형 기능 개발",
-      "홈페이지 사진,영상 촬영",
-      "전 기기 완벽 대응 반응형 웹",
-      "직관적인 진료 예약 및 상담 UI/UX",
-    ],
-  },
-  {
     name: "시그니처 패키지",
     description: "성공적인 비즈니스의 시작을 위한 핵심 솔루션",
     price: 350,
@@ -205,6 +169,42 @@ const plans = [
       "드론 항공 촬영",
       "병원 홍보영상 제작",
       "전략적 광고 운영 및 DB 최적화",
+    ],
+  },
+  {
+    name: "맞춤형 어플 제작",
+    description: "병원 행정 및 진료 워크플로우에 최적화된 고성능 애플리케이션",
+    price: 30,
+    subPrice: "유지비 월 20만원",
+    priceLabel: "셋팅",
+    buttonText: "상담 신청",
+    buttonVariant: "outline" as const,
+    details: appDetails,
+    includes: [
+      "포함 사항:",
+      "인사 및 근태 관리 시스템",
+      "전자 결재 및 문서 행정",
+      "실시간 의료 소모품 및 재고 관리",
+      "병원 전용 실시간 소통 채널",
+      "한눈에 보는 병원 DB 데이터",
+      "스마트 직무 및 R&R 관리",
+    ],
+  },
+  {
+    name: "프리미엄 홈페이지 구축",
+    description: "압도적인 속도와 검색엔진 최적화(SEO)를 갖춘 병원 특화 프리미엄 웹사이트",
+    price: 500,
+    subPrice: "매월 유지·관리비 10만원",
+    buttonText: "상담 신청",
+    buttonVariant: "outline" as const,
+    details: websiteDetails,
+    includes: [
+      "포함 사항:",
+      "검색 포털 상위노출(SEO) 최적화",
+      "맞춤형 기능 개발",
+      "홈페이지 사진,영상 촬영",
+      "전 기기 완벽 대응 반응형 웹",
+      "직관적인 진료 예약 및 상담 UI/UX",
     ],
   },
 ];
@@ -280,12 +280,13 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
 
       </article>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 max-w-7xl gap-4 pt-6 pb-6 mx-auto px-6">
+      <div className="flex items-start overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pt-6 pb-6 px-6 scroll-pl-6 md:grid md:items-stretch md:grid-cols-2 lg:grid-cols-4 md:max-w-7xl md:mx-auto">
         {plans.map((plan, index) => (
           <TimelineContent
             key={plan.name}
             animationNum={2 + index}
             timelineRef={pricingRef}
+            className="snap-start flex-none w-[46vw] md:w-auto"
           >
             <motion.div
               whileHover={{
@@ -296,10 +297,10 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
                   : "0 0 40px rgba(255,87,51,0.2), 0 24px 48px rgba(0,0,0,0.6)",
               }}
               transition={{ type: "spring", stiffness: 350, damping: 22 }}
-              className="h-full"
+              className="h-auto md:h-full"
             >
             <Card
-              className={`relative text-white h-full flex flex-col transition-colors duration-300 ${
+              className={`relative text-white h-auto md:h-full flex flex-col transition-colors duration-300 ${
                 plan.popular
                   ? "border-[#FF5733]/60 bg-gradient-to-b from-neutral-900 via-neutral-800 to-neutral-900 z-20"
                   : "border-neutral-800 hover:border-[#FF5733]/30 bg-gradient-to-b from-neutral-900 via-neutral-800 to-neutral-900 z-10"
@@ -310,11 +311,11 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
                   인기
                 </div>
               )}
-              <CardHeader className="text-left">
+              <CardHeader className="text-left p-3 md:p-6">
                 <div className="flex justify-between">
-                  <h3 className="text-2xl mb-2 min-h-[64px] flex items-center leading-tight">{plan.name}</h3>
+                  <h3 className="text-base md:text-2xl mb-2 min-h-[40px] md:min-h-[64px] flex items-center leading-tight">{plan.name}</h3>
                 </div>
-                <div className="flex flex-col gap-1 h-[72px] justify-center">
+                <div className="flex flex-col gap-1 h-auto md:h-[72px] justify-center">
                   <div className="flex items-baseline gap-2">
                     {"originalPrice" in plan && (
                       <span className="text-lg text-gray-500 line-through">{plan.originalPrice}만원</span>
@@ -323,8 +324,8 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
                       {"priceLabel" in plan && (
                         <span className="text-sm text-gray-400 mr-1">{plan.priceLabel} </span>
                       )}
-                      <span className="text-4xl font-semibold">
-                        <NumberFlow value={plan.price} className="text-4xl font-semibold" />
+                      <span className="text-2xl md:text-4xl font-semibold">
+                        <NumberFlow value={plan.price} className="text-2xl md:text-4xl font-semibold" />
                       </span>
                       <span className="text-gray-400 ml-1 text-sm">만원</span>
                       <span className="text-xs text-gray-600 ml-1.5">VAT 별도</span>
@@ -334,13 +335,13 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
                     <p className="text-sm text-[#FF5733]">{plan.subPrice}</p>
                   )}
                 </div>
-                <p className="text-sm text-gray-400 mb-4 line-clamp-2 h-10">{plan.description}</p>
+                <p className="text-xs md:text-sm text-gray-400 mb-2 md:mb-4 line-clamp-2">{plan.description}</p>
               </CardHeader>
 
-              <CardContent className="pt-0 flex flex-col flex-1">
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0 flex flex-col flex-1">
                 <button
                   onClick={() => onSelect?.(plan.name)}
-                  className={`w-full mb-6 p-4 text-base font-semibold rounded-xl transition-all ${
+                  className={`hidden md:block w-full mb-3 md:mb-6 p-2 md:p-4 text-sm md:text-base font-semibold rounded-xl transition-all ${
                     plan.popular
                       ? "bg-gradient-to-t from-[#cc3a1f] to-[#FF5733] shadow-lg shadow-[#FF5733]/30 border border-[#FF5733]/60 text-white hover:opacity-90"
                       : "bg-gradient-to-t from-neutral-950 to-neutral-700 shadow-lg shadow-neutral-900 border border-neutral-700 text-white hover:border-[#FF5733]/40 transition-colors"

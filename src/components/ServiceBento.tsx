@@ -569,7 +569,7 @@ export default function ServiceBento() {
                 )}
 
                 {service.id === "news" && (
-                  <div className="mt-auto flex justify-end relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                  <div className="mt-auto hidden md:flex justify-end relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
                     <img
                       src="https://cdn.kormedi.com/wp-content/uploads/2025/08/kakaotalk-20250827-112337595-06.jpg"
                       alt="News Article"
@@ -621,39 +621,41 @@ export default function ServiceBento() {
               onClick={() => setSelectedId(null)}
               className="fixed inset-0 bg-[#121212]/30 backdrop-blur-xl z-[100]"
             />
-            <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-[101] px-6">
+            <div className="fixed inset-0 flex items-end md:items-center justify-center pointer-events-none z-[101] px-4 md:px-6 pb-0 md:pb-0">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 10 }}
                 transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
-                className="bg-white rounded-[3rem] p-8 md:p-12 w-full max-w-4xl shadow-[0_32px_128px_rgba(0,0,0,0.1)] pointer-events-auto relative overflow-hidden"
+                className="bg-white rounded-t-[2rem] md:rounded-[3rem] p-6 md:p-12 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-[0_32px_128px_rgba(0,0,0,0.1)] pointer-events-auto relative"
               >
                 <button
                   onClick={() => setSelectedId(null)}
-                  className="absolute top-8 right-8 w-12 h-12 rounded-full border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                  className="absolute top-5 right-5 md:top-8 md:right-8 w-9 h-9 md:w-12 md:h-12 rounded-full border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-colors"
                 >
-                  <X className="text-gray-400" />
+                  <X size={18} className="text-gray-400 md:hidden" />
+                  <X className="text-gray-400 hidden md:block" />
                 </button>
 
                 {(() => {
                   const service = services.find(s => s.id === selectedId);
                   if (!service) return null;
                   return (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                      <div className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
+                      <div className="space-y-4 md:space-y-8">
                         <div
-                          className="w-16 h-16 rounded-[2rem] flex items-center justify-center text-white"
+                          className="w-10 h-10 md:w-16 md:h-16 rounded-2xl md:rounded-[2rem] flex items-center justify-center text-white"
                           style={{ backgroundColor: service.color }}
                         >
-                          <service.icon size={32} />
+                          <service.icon size={20} className="md:hidden" />
+                          <service.icon size={32} className="hidden md:block" />
                         </div>
-                        <div className="space-y-4">
-                          <h2 className="text-4xl md:text-5xl font-black text-[#121212] tracking-tight">{service.title}</h2>
-                          <p className="text-[#FF5733] font-bold text-lg">{service.description}</p>
-                          <p className="text-gray-500 text-xl leading-relaxed">{service.detail}</p>
+                        <div className="space-y-2 md:space-y-4">
+                          <h2 className="text-2xl md:text-5xl font-black text-[#121212] tracking-tight">{service.title}</h2>
+                          <p className="text-[#FF5733] font-bold text-sm md:text-lg">{service.description}</p>
+                          <p className="text-gray-500 text-sm md:text-xl leading-relaxed">{service.detail}</p>
                         </div>
-                        <div className="pt-8">
+                        <div className="pt-2 md:pt-8">
                           {/* Button removed as requested */}
                         </div>
                       </div>
@@ -728,6 +730,17 @@ export default function ServiceBento() {
                               alt="SNS 광고/운영"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                             />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col gap-4">
+                              <a
+                                href="https://ad-cheock.vercel.app/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-2 bg-[#FF5733] text-white py-3 px-6 rounded-xl font-bold hover:bg-[#e64a2e] transition-colors shadow-lg self-start mt-2"
+                              >
+                                광고 사례 보기 <ChevronRight size={18} />
+                              </a>
+                            </div>
                           </div>
                         ) : service.id === "hospital-photo" ? (
                           <div className="relative w-full aspect-[4/3] rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden">
@@ -750,13 +763,16 @@ export default function ServiceBento() {
                             />
                           </div>
                         ) : service.isApp ? (
-                          <div className="relative w-full aspect-[9/16] bg-[#121212] rounded-[1.5rem] border-[8px] border-gray-900 shadow-3xl overflow-hidden">
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#121212] rounded-b-2xl z-20" />
-                            <iframe
-                              src="https://yonsei-cheok-patient.vercel.app/"
-                              className="w-full h-full border-none"
-                              title="Full App View"
-                            />
+                          <div className="relative w-full flex justify-center">
+                            <div className="relative w-56 h-[420px] bg-[#121212] rounded-[1.5rem] border-[6px] border-gray-900 shadow-2xl overflow-hidden">
+                              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-[#121212] rounded-b-2xl z-20" />
+                              <iframe
+                                src="https://yonsei-cheok-patient.vercel.app/"
+                                className="w-full h-full border-none"
+                                title="Full App View"
+                              />
+                            </div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#3385ff]/20 blur-[80px] rounded-full pointer-events-none" />
                           </div>
                         ) : service.id === "youtube" ? (
                           <YoutubeSlider />

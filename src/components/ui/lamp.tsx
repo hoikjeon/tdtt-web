@@ -17,7 +17,8 @@ export const LampContainer = ({
         className
       )}
     >
-      <div className="relative flex w-full flex-1 scale-y-125 items-center justify-center isolate z-0 -translate-y-[23vh]">
+      <div className="absolute top-0 left-0 w-full h-32 md:h-40 bg-gradient-to-b from-black via-black/80 to-transparent z-[60] pointer-events-none" />
+      <div className="relative flex w-full flex-1 scale-y-125 items-center justify-center isolate z-0 -translate-y-[14vh]">
         {/* 왼쪽 빔 */}
         <motion.div
           initial={{ opacity: 0, width: "15rem" }}

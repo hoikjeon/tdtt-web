@@ -20,6 +20,7 @@ const CountUp = ({ value }: { value: number }) => {
 
 export default function CostComparison() {
   const [numPeople, setNumPeople] = useState(1);
+  const [activeTab, setActiveTab] = useState<"direct" | "other" | "tdtt">("tdtt");
   
   // Pricing constants (Monthly KRW)
   const DIRECT_HIRE_PER_PERSON = 4000000;
@@ -202,32 +203,66 @@ export default function CostComparison() {
                 </table>
               </div>
 
-              {/* Mobile Cards */}
-              <div className="pt-8 flex flex-col gap-4 md:hidden">
-                {rows.map((row, i) => (
-                  <div key={i} className="rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-                    <div className="bg-gray-50 px-4 py-3 border-b border-gray-100">
-                      <span className="text-xs font-black text-[#121212] uppercase tracking-wider">{row.category}</span>
-                    </div>
-                    <div className="divide-y divide-gray-50">
-                      <div className="flex items-start gap-3 px-4 py-3">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide w-16 shrink-0 pt-0.5">직접채용</span>
-                        <span className="text-xs text-gray-400 leading-relaxed">{row.direct}</span>
-                      </div>
-                      <div className="flex items-start gap-3 px-4 py-3">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide w-16 shrink-0 pt-0.5">일반회사</span>
-                        <span className="text-xs text-gray-400 leading-relaxed">{row.other}</span>
-                      </div>
-                      <div className="flex items-start gap-3 px-4 py-3 bg-[#FF5733]/5">
-                        <span className="text-[10px] font-black text-[#FF5733] uppercase tracking-wide w-16 shrink-0 pt-0.5">그날그때</span>
-                        <div className="flex items-start gap-1.5">
-                          <ShieldCheck size={13} fill="#FF5733" className="text-white shrink-0 mt-0.5" />
-                          <span className="text-xs font-bold text-[#FF5733] leading-relaxed">{row.tdtt}</span>
+              {/* Mobile Tabs */}
+              <div className="pt-8 md:hidden">
+                {/* Tab Header */}
+                <div className="grid grid-cols-3 gap-1 bg-gray-100 p-1 rounded-2xl mb-6">
+                  {(["direct", "other", "tdtt"] as const).map((tab) => {
+                    const label = tab === "direct" ? "직접채용" : tab === "other" ? "일반회사" : "그날그때";
+                    const isActive = activeTab === tab;
+                    const isTdtt = tab === "tdtt";
+                    return (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-200 ${
+                          isActive
+                            ? isTdtt
+                              ? "bg-[#FF5733] text-white shadow-md"
+                              : "bg-white text-[#121212] shadow-md"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Tab Content */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className={`rounded-2xl overflow-hidden border ${
+                      activeTab === "tdtt" ? "border-[#FF5733]/20 bg-[#FF5733]/5" : "border-gray-100 bg-white"
+                    } shadow-sm`}
+                  >
+                    {rows.map((row, i) => {
+                      const content = activeTab === "direct" ? row.direct : activeTab === "other" ? row.other : row.tdtt;
+                      const isTdtt = activeTab === "tdtt";
+                      return (
+                        <div
+                          key={i}
+                          className={`px-5 py-4 ${i < rows.length - 1 ? (isTdtt ? "border-b border-[#FF5733]/10" : "border-b border-gray-50") : ""}`}
+                        >
+                          <p className={`text-[10px] font-black uppercase tracking-widest mb-1.5 ${isTdtt ? "text-[#FF5733]/60" : "text-gray-400"}`}>
+                            {row.category}
+                          </p>
+                          <div className="flex items-start gap-2">
+                            {isTdtt && <ShieldCheck size={15} fill="#FF5733" className="text-white shrink-0 mt-0.5" />}
+                            <p className={`text-sm leading-relaxed font-medium ${isTdtt ? "text-[#FF5733]" : "text-gray-600"}`}>
+                              {content}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                      );
+                    })}
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </>
           );
@@ -242,16 +277,22 @@ export default function CostComparison() {
           <div className="absolute -top-24 -left-24 w-64 h-64 bg-[#FF5733]/20 blur-[100px] rounded-full" />
           <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full" />
           
-          <h3 className="text-2xl md:text-5xl font-black text-white leading-tight relative z-10 mb-8">
-            하나의 비용으로 각 분야 전문가 팀을 고용하는<br className="hidden md:block" />
-            압도적인 가성비를 <span className="text-[#FF5733]">숫자로 직접 확인하세요.</span>
+          <h3 className="text-lg md:text-5xl font-black text-white leading-tight relative z-10 mb-8">
+            하나의 비용으로 각 분야<br />
+            전문가 팀을 고용하는<br />
+            압도적인 가성비를<br />
+            <span className="text-[#FF5733]">숫자로 직접 확인하세요.</span>
           </h3>
           <div className="space-y-4 relative z-10">
-            <p className="text-gray-300 font-bold text-lg md:text-2xl tracking-tight">
-              주 1회 현장 출근 / 25가지 올인원 실무 / 부대비용 및 인쇄 마진 0원 / 자체 모니터링 앱 제공
-            </p>
-            <p className="text-[#FF5733] font-black text-xl md:text-3xl mt-4">
-              그날그때 가 병원의 진짜 성장을 책임집니다.
+            <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
+              {["주 1회 현장 출근", "25가지 올인원 실무", "부대비용·인쇄 마진 0원", "자체 모니터링 앱 제공"].map((tag) => (
+                <span key={tag} className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/70 text-xs md:text-sm font-semibold tracking-tight backdrop-blur-sm text-center">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <p className="text-[#FF5733] font-black text-base md:text-3xl mt-4">
+              그날그때가 병원의<br />진짜 성장을 책임집니다.
             </p>
           </div>
         </motion.div>

@@ -67,20 +67,20 @@ export default function SolutionSection() {
               }}
               className="max-w-4xl space-y-8"
             >
-              <h2 className="text-xl md:text-5xl font-black leading-[1.1] tracking-tighter">
+              <h2 className="text-sm md:text-5xl font-black leading-[1.1] tracking-tighter">
                 "그래서, 저희가 원장님 병원으로<br />
                 <span className="text-[#FF5733]">직접 출근하겠습니다.</span>"
               </h2>
 
               <div className="space-y-6 max-w-2xl mx-auto">
-                <p className="text-xl md:text-2xl font-medium text-white/90 leading-relaxed">
+                <p className="text-sm md:text-2xl font-medium text-white/90 leading-relaxed">
                   내부 직원의 장점인 '현장감'과 전문 에이전시의 노하우를<br />
                   완벽하게 결합했습니다.
                 </p>
                 
                 <div className="h-[1px] w-20 bg-[#FF5733] mx-auto opacity-50" />
                 
-                <p className="text-lg md:text-xl text-white/70 leading-relaxed">
+                <p className="text-xs md:text-xl text-white/70 leading-relaxed">
                   5년 이상의 병원 마케팅 실무 경험을 바탕으로,<br />
                   우리 병원 내부 사정을 누구보다 잘 아는<br />
                   <span className="text-white font-bold">'1.5인분 만능 마케팅 팀장'</span>이 되어 드립니다.

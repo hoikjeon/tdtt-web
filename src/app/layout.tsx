@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 
@@ -17,6 +17,11 @@ const notoSansKr = Noto_Sans_KR({
 export const metadata: Metadata = {
   title: "TDTT - Studio",
   description: "A creative agency",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

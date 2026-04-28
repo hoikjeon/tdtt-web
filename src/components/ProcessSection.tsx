@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef } from "react";
-import { Search, Users, Rocket, LayoutDashboard, ChevronRight } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Users, Rocket, LayoutDashboard, ChevronRight, ChevronDown } from "lucide-react";
 
 interface ProcessStep {
   id: string;
@@ -50,12 +49,12 @@ const steps: ProcessStep[] = [
 ];
 
 export default function ProcessSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
+  const [activeStep, setActiveStep] = useState<string | null>(null);
+
   return (
     <section className="relative bg-[#fbfbfb] py-24 md:py-40 px-6 md:px-16 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Header */}
         <div className="text-center space-y-4 mb-12 md:mb-24">
           <motion.p
@@ -65,8 +64,8 @@ export default function ProcessSection() {
           >
             HOW IT WORKS
           </motion.p>
-          <div className="flex justify-center">
-            {/* Mobile: 정적 텍스트 */}
+          <div className="flex justify-center overflow-hidden">
+            {/* Mobile */}
             <motion.h2
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -75,7 +74,7 @@ export default function ProcessSection() {
               계약 후, 이렇게 진행됩니다.
             </motion.h2>
             {/* Desktop: fill 애니메이션 */}
-            <div className="hidden md:block relative inline-block overflow-hidden">
+            <div className="hidden md:block relative overflow-hidden">
               <span className="text-5xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">
                 계약 후, 이렇게 진행됩니다.
               </span>
@@ -92,11 +91,82 @@ export default function ProcessSection() {
           </div>
         </div>
 
-        {/* Steps Grid */}
-        <div className="relative grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+        {/* Mobile: 1열 카드 + 탭 확장 */}
+        <div className="md:hidden">
+          <div className="grid grid-cols-4 gap-2 mb-4">
+            {steps.map((step, idx) => {
+              const isActive = activeStep === step.id;
+              return (
+                <motion.button
+                  key={step.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  viewport={{ once: true }}
+                  onClick={() => setActiveStep(isActive ? null : step.id)}
+                  className={`relative flex flex-col items-center gap-2 rounded-2xl p-3 border transition-all duration-200 ${
+                    isActive
+                      ? "bg-[#FF5733]/5 border-[#FF5733]/30 shadow-md"
+                      : "bg-white border-gray-100 shadow-sm"
+                  }`}
+                >
+                  {/* Number badge */}
+                  <div className={`absolute -top-2 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shadow text-white transition-colors ${isActive ? "bg-[#FF5733]" : "bg-gray-300"}`}>
+                    {step.number}
+                  </div>
+                  {/* Icon */}
+                  <div className={`w-11 h-11 rounded-full flex items-center justify-center border-2 transition-all ${isActive ? "border-[#FF5733] bg-[#FF5733]/5" : "border-gray-100 bg-white"}`}>
+                    <step.icon size={18} className={isActive ? "text-[#FF5733]" : "text-gray-400"} />
+                  </div>
+                  {/* Title */}
+                  <span className={`text-[10px] font-black leading-tight text-center transition-colors ${isActive ? "text-[#FF5733]" : "text-[#121212]"}`}>
+                    {step.title}
+                  </span>
+                  {/* Expand indicator */}
+                  <ChevronDown
+                    size={10}
+                    className={`transition-transform duration-200 ${isActive ? "rotate-180 text-[#FF5733]" : "text-gray-300"}`}
+                  />
+                </motion.button>
+              );
+            })}
+          </div>
 
-          {/* Connecting Line (Desktop only) */}
-          <div className="hidden md:block absolute top-[74px] left-[10%] right-[10%] h-[2px] bg-gray-100 z-0">
+          {/* Expanded detail panel */}
+          <AnimatePresence mode="wait">
+            {activeStep && (() => {
+              const step = steps.find(s => s.id === activeStep)!;
+              return (
+                <motion.div
+                  key={activeStep}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="overflow-hidden"
+                >
+                  <div className="bg-white rounded-2xl border border-[#FF5733]/15 p-5 shadow-md flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#FF5733]/5 border-2 border-[#FF5733]/20 flex items-center justify-center shrink-0">
+                      <step.icon size={22} className="text-[#FF5733]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-base font-black text-[#121212]">{step.title}</span>
+                        <span className="text-[10px] font-bold text-gray-400 tracking-widest">({step.labelEn})</span>
+                      </div>
+                      <p className="text-sm text-gray-500 font-medium leading-relaxed">{step.description}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })()}
+          </AnimatePresence>
+        </div>
+
+        {/* Desktop: 기존 4열 레이아웃 */}
+        <div className="relative hidden md:grid grid-cols-4 gap-8">
+          {/* Connecting Line */}
+          <div className="absolute top-[74px] left-[10%] right-[10%] h-[2px] bg-gray-100 z-0">
             <motion.div
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
@@ -113,43 +183,36 @@ export default function ProcessSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.15 }}
               viewport={{ once: true }}
-              className="relative z-10 flex flex-col items-center text-center group bg-white md:bg-transparent rounded-2xl md:rounded-none p-4 md:p-0 border border-gray-100 md:border-none shadow-sm md:shadow-none"
+              className="relative z-10 flex flex-col items-center text-center group"
             >
-              {/* Step Icon with Glow */}
-              <div className="relative pt-4 md:pt-6">
-                <div className="absolute top-3 md:top-4 right-0 translate-x-1/4 w-6 h-6 md:w-12 md:h-12 bg-[#FF5733] text-white rounded-full flex items-center justify-center text-[10px] md:text-base font-black shadow-lg z-20 border-2 md:border-4 border-[#fbfbfb] md:border-white">
+              <div className="relative pt-6">
+                <div className="absolute top-4 right-0 translate-x-1/4 w-12 h-12 bg-[#FF5733] text-white rounded-full flex items-center justify-center text-base font-black shadow-lg z-20 border-4 border-white">
                   {step.number}
                 </div>
                 <motion.div
                   initial={{ boxShadow: "0 0 0px rgba(255, 87, 51, 0)" }}
                   whileInView={{ boxShadow: "0 0 30px rgba(255, 87, 51, 0.4)" }}
                   transition={{ delay: idx * 0.2 + 0.5, duration: 1 }}
-                  className="w-14 h-14 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center border-2 border-gray-100 relative z-10 transition-colors group-hover:border-[#FF5733]"
+                  className="w-28 h-28 bg-white rounded-full flex items-center justify-center border-2 border-gray-100 relative z-10 transition-colors group-hover:border-[#FF5733]"
                 >
-                  <step.icon size={20} className="md:hidden text-gray-400 group-hover:text-[#FF5733] transition-colors" />
-                  <step.icon size={36} className="hidden md:block text-gray-400 group-hover:text-[#FF5733] transition-colors" />
+                  <step.icon size={36} className="text-gray-400 group-hover:text-[#FF5733] transition-colors" />
                 </motion.div>
               </div>
 
-              {/* Step Text */}
-              <div className="space-y-1 md:space-y-4 mt-3 md:mt-8 px-1 md:px-4">
-                <h4 className="text-sm md:text-3xl font-black text-[#121212] group-hover:text-[#FF5733] transition-colors uppercase tracking-tight leading-tight">
+              <div className="space-y-4 mt-8 px-4">
+                <h4 className="text-3xl font-black text-[#121212] group-hover:text-[#FF5733] transition-colors uppercase tracking-tight leading-tight">
                   {step.title}
-                  <span className="text-[10px] md:text-lg font-medium text-gray-400 block mt-0.5 md:mt-1 tracking-widest normal-case">
+                  <span className="text-lg font-medium text-gray-400 block mt-1 tracking-widest normal-case">
                     ({step.labelEn})
                   </span>
                 </h4>
-                <p className="hidden md:block text-gray-500 text-lg font-medium leading-relaxed max-w-[280px] mx-auto">
-                  {step.description}
-                </p>
-                <p className="md:hidden text-gray-400 text-[10px] font-medium leading-relaxed">
+                <p className="text-gray-500 text-lg font-medium leading-relaxed max-w-[280px] mx-auto">
                   {step.description}
                 </p>
               </div>
 
-              {/* Progress Arrow (Desktop, hide for last item) */}
               {idx < steps.length - 1 && (
-                <div className="hidden md:flex absolute top-[78px] -right-4 translate-x-1/2 text-gray-100">
+                <div className="absolute top-[78px] -right-4 translate-x-1/2 text-gray-100">
                   <ChevronRight size={32} />
                 </div>
               )}
@@ -157,11 +220,11 @@ export default function ProcessSection() {
           ))}
         </div>
 
-        {/* Final CTA/Info */}
-        <motion.div 
+        {/* Final CTA */}
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          className="mt-32 p-8 md:p-12 bg-white rounded-[3rem] border border-gray-100 shadow-xl text-center space-y-6"
+          className="mt-24 md:mt-32 p-8 md:p-12 bg-white rounded-[3rem] border border-gray-100 shadow-xl text-center space-y-6"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#FF5733]/5 text-[#FF5733] rounded-full text-sm font-bold">
             <span className="w-2 h-2 bg-[#FF5733] rounded-full animate-pulse" />

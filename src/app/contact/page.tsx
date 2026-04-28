@@ -34,7 +34,7 @@ export default function ContactPage() {
             duration: 1.2,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="-mt-[88vh] relative z-10"
+          className="-mt-[80vh] relative z-10"
         >
           <PricingSection onSelect={handlePlanSelect} />
           <div ref={contactRef}>
