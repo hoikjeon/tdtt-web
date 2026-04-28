@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   Video,
   Newspaper,
@@ -16,6 +16,7 @@ import {
   Target,
   Smartphone,
   ChevronRight,
+  ChevronLeft,
   X
 } from "lucide-react";
 
@@ -142,6 +143,226 @@ const services: ServiceItem[] = [
   },
 ];
 
+const YOUTUBE_VIDEOS = [
+  "LHI25R8Eneg",
+  "BDvD7xLaaAI",
+  "dCfU78X4sNU",
+  "ZkBQ9Yac768",
+  "I-fyZehCIMA",
+];
+
+function YoutubeSlider() {
+  const [idx, setIdx] = useState(0);
+
+  const go = (dir: number) => {
+    setIdx(i => (i + dir + YOUTUBE_VIDEOS.length) % YOUTUBE_VIDEOS.length);
+  };
+
+  const videoId = YOUTUBE_VIDEOS[idx];
+
+  return (
+    <div className="relative w-full flex flex-col gap-3">
+      <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl">
+        <iframe
+          key={videoId}
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1`}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          title={`YouTube Video ${idx + 1}`}
+        />
+        {/* transparent overlay to block YouTube hover UI */}
+        <div className="absolute inset-0 z-10" />
+      </div>
+      <div className="flex items-center justify-between px-1">
+        <button
+          onClick={() => go(-1)}
+          className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition-colors"
+        >
+          <ChevronLeft size={18} className="text-gray-600" />
+        </button>
+        <div className="flex gap-2">
+          {YOUTUBE_VIDEOS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIdx(i)}
+              className="w-2 h-2 rounded-full transition-all duration-300"
+              style={{ backgroundColor: i === idx ? "#FF5733" : "#d1d5db" }}
+            />
+          ))}
+        </div>
+        <button
+          onClick={() => go(1)}
+          className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition-colors"
+        >
+          <ChevronRight size={18} className="text-gray-600" />
+        </button>
+      </div>
+      <p className="text-center text-xs text-gray-400">{idx + 1} / {YOUTUBE_VIDEOS.length}</p>
+    </div>
+  );
+}
+
+const HOSPITAL_PHOTOS = [
+  { src: "/images/doctor1.jpg", label: "의료진 프로필" },
+  { src: "/images/doctor2.jpg", label: "원내 촬영" },
+];
+
+function HospitalPhotoSlider({ className }: { className?: string }) {
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIdx(i => (i + 1) % HOSPITAL_PHOTOS.length);
+    }, 3800);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      <AnimatePresence mode="sync">
+        <motion.div
+          key={idx}
+          initial={{ opacity: 0, scale: 1.08 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.96 }}
+          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+          className="absolute inset-0"
+        >
+          <motion.img
+            src={HOSPITAL_PHOTOS[idx].src}
+            alt={HOSPITAL_PHOTOS[idx].label}
+            animate={{ scale: [1, 1.06] }}
+            transition={{ duration: 3.8, ease: "linear" }}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </motion.div>
+      </AnimatePresence>
+      {/* Label overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`label-${idx}`}
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.5 }}
+          className="absolute bottom-4 left-3 z-10"
+        >
+          <span className="text-white text-[9px] font-semibold">{HOSPITAL_PHOTOS[idx].label}</span>
+        </motion.div>
+      </AnimatePresence>
+      {/* Slide dots */}
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+        {HOSPITAL_PHOTOS.map((_, i) => (
+          <div
+            key={i}
+            className="w-1 h-1 rounded-full transition-all duration-500"
+            style={{ backgroundColor: i === idx ? "#fff" : "rgba(255,255,255,0.4)" }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const DB_BASE = [
+  { label: "30대 여성", short: "30대", base: 28, color: "#f472b6" },
+  { label: "40대 여성", short: "40대", base: 22, color: "#f472b6" },
+  { label: "60대 여성", short: "60대", base: 14, color: "#f472b6" },
+  { label: "30대 남성", short: "30대", base: 18, color: "#60a5fa" },
+  { label: "50대 남성", short: "50대", base: 12, color: "#60a5fa" },
+  { label: "60대 남성", short: "60대", base: 6,  color: "#60a5fa" },
+];
+
+function DbAnalytics({ compact }: { compact?: boolean }) {
+  const [vals, setVals] = useState(DB_BASE.map(d => d.base));
+  const [total, setTotal] = useState(247);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setVals(DB_BASE.map(d => {
+        const delta = (Math.random() - 0.5) * 10;
+        return Math.round(Math.max(2, Math.min(55, d.base + delta)));
+      }));
+      setTotal(v => v + Math.floor((Math.random() - 0.3) * 5));
+    }, 1800);
+    return () => clearInterval(id);
+  }, []);
+
+  const female = DB_BASE.slice(0, 3);
+  const male   = DB_BASE.slice(3);
+
+  if (compact) return (
+    <div className="px-2 pt-2 flex-1 overflow-hidden">
+      <div className="flex justify-between items-center mb-1.5">
+        <span className="text-[8px] text-gray-300 font-bold">DB 유입 분석</span>
+        <span className="text-[7px] text-gray-600">이번 달</span>
+      </div>
+      <div className="space-y-1">
+        <p className="text-[7px] text-pink-400 font-semibold mb-0.5">여성</p>
+        {female.map((d, i) => (
+          <div key={d.label} className="flex items-center gap-1">
+            <span className="text-[7px] text-gray-500 w-7 flex-shrink-0">{d.short}</span>
+            <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+              <div className="h-full rounded-full" style={{ width: `${vals[i]}%`, backgroundColor: d.color, transition: "width 1.2s ease-in-out" }} />
+            </div>
+            <span className="text-[7px] text-gray-500 w-5 text-right">{vals[i]}%</span>
+          </div>
+        ))}
+        <p className="text-[7px] text-blue-400 font-semibold mt-1 mb-0.5">남성</p>
+        {male.map((d, i) => (
+          <div key={d.label} className="flex items-center gap-1">
+            <span className="text-[7px] text-gray-500 w-7 flex-shrink-0">{d.short}</span>
+            <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+              <div className="h-full rounded-full" style={{ width: `${vals[i + 3]}%`, backgroundColor: d.color, transition: "width 1.2s ease-in-out" }} />
+            </div>
+            <span className="text-[7px] text-gray-500 w-5 text-right">{vals[i + 3]}%</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 border-t border-gray-800 pt-1.5 flex justify-between">
+        <span className="text-[7px] text-gray-600">총 유입 DB</span>
+        <span className="text-[8px] text-white font-bold">{total}건</span>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="px-3 pt-3 flex-1 overflow-hidden">
+      <div className="flex justify-between items-center mb-3">
+        <span className="text-xs text-gray-300 font-bold">DB 유입 데이터 분석</span>
+        <span className="text-[9px] text-gray-600">이번 달</span>
+      </div>
+      <div className="space-y-1.5">
+        <p className="text-[9px] text-pink-400 font-semibold mb-1">여성</p>
+        {female.map((d, i) => (
+          <div key={d.label} className="flex items-center gap-2">
+            <span className="text-[9px] text-gray-400 w-14 flex-shrink-0">{d.label}</span>
+            <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div className="h-full rounded-full" style={{ width: `${vals[i]}%`, backgroundColor: d.color, transition: "width 1.2s ease-in-out" }} />
+            </div>
+            <span className="text-[9px] text-gray-400 w-7 text-right">{vals[i]}%</span>
+          </div>
+        ))}
+        <p className="text-[9px] text-blue-400 font-semibold mt-2 mb-1">남성</p>
+        {male.map((d, i) => (
+          <div key={d.label} className="flex items-center gap-2">
+            <span className="text-[9px] text-gray-400 w-14 flex-shrink-0">{d.label}</span>
+            <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div className="h-full rounded-full" style={{ width: `${vals[i + 3]}%`, backgroundColor: d.color, transition: "width 1.2s ease-in-out" }} />
+            </div>
+            <span className="text-[9px] text-gray-400 w-7 text-right">{vals[i + 3]}%</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 border-t border-gray-800 pt-3 flex justify-between items-center">
+        <span className="text-[10px] text-gray-500">총 유입 DB</span>
+        <span className="text-sm text-white font-bold">{total}건</span>
+      </div>
+    </div>
+  );
+}
+
 export default function ServiceBento() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -251,6 +472,23 @@ export default function ServiceBento() {
                   </div>
                 </div>
 
+                {service.id === "db-ad" && (
+                  <div className="mt-auto flex justify-center relative h-64 w-full">
+                    <div className="relative w-40 h-[300px] bg-[#0f0f0f] rounded-[1.25rem] border-[4px] border-gray-800 shadow-2xl overflow-hidden self-start flex flex-col">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-5 bg-[#0f0f0f] rounded-b-xl z-20" />
+                      <div className="h-5 flex-shrink-0" />
+                      <video
+                        src="/video/motionvideo2.mp4"
+                        autoPlay muted loop playsInline
+                        className="w-full flex-shrink-0 pointer-events-none"
+                        style={{ aspectRatio: "16/9" }}
+                      />
+                      <DbAnalytics compact />
+                    </div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#f56565]/20 blur-[60px] rounded-full pointer-events-none" />
+                  </div>
+                )}
+
                 {service.isApp && (
                   <div className="mt-auto flex justify-center relative h-64 w-full">
                     {/* Simplified Phone Mockup */}
@@ -267,8 +505,71 @@ export default function ServiceBento() {
                   </div>
                 )}
 
+                {service.id === "program" && (
+                  <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                    <img
+                      src="/images/monitor.jpg"
+                      alt="전용 모니터링 앱"
+                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                )}
+
+                {service.id === "drone" && (
+                  <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                    <video
+                      src="/video/dron-shot.mp4"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                )}
+
+                {service.id === "ai-search" && (
+                  <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                    <img
+                      src="/images/ai-image.png"
+                      alt="AI 검색 최적화"
+                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                )}
+
+                {service.id === "sns" && (
+                  <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                    <img
+                      src="/images/sns.png"
+                      alt="SNS 광고/운영"
+                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                )}
+
+                {service.id === "blog" && (
+                  <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                    <img
+                      src="/images/blog.png"
+                      alt="지역 타겟 블로그"
+                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                )}
+
+                {service.id === "review" && (
+                  <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                    <img
+                      src="/images/review.png"
+                      alt="리뷰 관리 솔루션"
+                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                )}
+
                 {service.id === "news" && (
-                  <div className="mt-4 md:mt-6 mt-auto flex justify-end relative w-full h-24 md:h-32 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                  <div className="mt-auto flex justify-end relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
                     <img
                       src="https://cdn.kormedi.com/wp-content/uploads/2025/08/kakaotalk-20250827-112337595-06.jpg"
                       alt="News Article"
@@ -299,7 +600,7 @@ export default function ServiceBento() {
                   <div className="w-24 h-1.5 bg-[#121212] rounded-full" />
                 </div>
               )}
-              {(service.id === "youtube" || service.id === "hospital-photo") && (
+              {service.id === "youtube" && (
                 <div className="absolute -bottom-4 -right-4 w-32 h-32 opacity-[0.05] group-hover:scale-110 transition-transform duration-700">
                   <service.icon size={128} />
                 </div>
@@ -358,7 +659,22 @@ export default function ServiceBento() {
                       </div>
 
                       <div className="relative">
-                        {service.id === "news" ? (
+                        {service.id === "db-ad" ? (
+                          <div className="relative w-full flex justify-center">
+                            <div className="relative w-56 h-[420px] bg-[#0f0f0f] rounded-[1.5rem] border-[6px] border-gray-900 shadow-2xl overflow-hidden flex flex-col">
+                              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-[#0f0f0f] rounded-b-2xl z-20" />
+                              <div className="h-6 flex-shrink-0" />
+                              <video
+                                src="/video/motionvideo2.mp4"
+                                autoPlay muted loop playsInline
+                                className="w-full flex-shrink-0"
+                                style={{ aspectRatio: "16/9" }}
+                              />
+                              <DbAnalytics />
+                            </div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#f56565]/20 blur-[80px] rounded-full pointer-events-none" />
+                          </div>
+                        ) : service.id === "news" ? (
                           <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
                            <img 
                              src="https://cdn.kormedi.com/wp-content/uploads/2025/08/kakaotalk-20250827-112337595-06.jpg"
@@ -378,6 +694,61 @@ export default function ServiceBento() {
                              </a>
                            </div>
                           </div>
+                        ) : service.id === "drone" ? (
+                          <div className="relative w-full aspect-[4/3] bg-black rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden">
+                            <video
+                              src="/video/dron-shot.mp4"
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ) : service.id === "program" ? (
+                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
+                            <img
+                              src="/images/monitor.jpg"
+                              alt="전용 모니터링 앱"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                          </div>
+                        ) : service.id === "ai-search" ? (
+                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
+                            <img
+                              src="/images/ai-image.png"
+                              alt="AI 검색 최적화"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                          </div>
+                        ) : service.id === "sns" ? (
+                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
+                            <img
+                              src="/images/sns.png"
+                              alt="SNS 광고/운영"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                          </div>
+                        ) : service.id === "hospital-photo" ? (
+                          <div className="relative w-full aspect-[4/3] rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden">
+                            <HospitalPhotoSlider className="w-full h-full" />
+                          </div>
+                        ) : service.id === "blog" ? (
+                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
+                            <img
+                              src="/images/blog.png"
+                              alt="지역 타겟 블로그"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                          </div>
+                        ) : service.id === "review" ? (
+                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
+                            <img
+                              src="/images/review.png"
+                              alt="리뷰 관리 솔루션"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                          </div>
                         ) : service.isApp ? (
                           <div className="relative w-full aspect-[9/16] bg-[#121212] rounded-[1.5rem] border-[8px] border-gray-900 shadow-3xl overflow-hidden">
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#121212] rounded-b-2xl z-20" />
@@ -388,15 +759,7 @@ export default function ServiceBento() {
                             />
                           </div>
                         ) : service.id === "youtube" ? (
-                          <div className="relative w-full aspect-[4/3] bg-black rounded-[3rem] overflow-hidden shadow-2xl">
-                            <iframe
-                              src="https://www.youtube.com/embed/LHI25R8Eneg?autoplay=1&mute=1&loop=1&playlist=LHI25R8Eneg&controls=0&modestbranding=1&rel=0&iv_load_policy=3"
-                              className="absolute top-0 h-full pointer-events-none"
-                              style={{ width: "133.34%", left: "-16.67%" }}
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              title="YouTube Video"
-                            />
-                          </div>
+                          <YoutubeSlider />
                         ) : (
                           <div className="relative aspect-square rounded-[3rem] bg-gray-50 flex items-center justify-center overflow-hidden">
                             {/* Decorative graphics */}
