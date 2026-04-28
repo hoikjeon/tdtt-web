@@ -139,7 +139,6 @@ const plans = [
     name: "시그니처 패키지",
     description: "성공적인 비즈니스의 시작을 위한 핵심 솔루션",
     price: 350,
-    originalPrice: 400,
     popular: true,
     buttonText: "시작하기",
     buttonVariant: "default" as const,
@@ -362,12 +361,12 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
                   </ul>
                 </div>
                 {"details" in plan && (
-                  <div className="mt-auto pt-5">
+                  <div className="mt-auto pt-6">
                     <button
                       onClick={() => setActiveModal(plan.name)}
-                      className="w-full text-sm text-[#FF5733] hover:text-[#ff7a5c] transition-colors text-center py-2 border border-[#FF5733]/30 hover:border-[#FF5733]/60 rounded-lg"
+                      className="w-full text-[13px] md:text-sm text-[#FF5733] hover:text-[#ff7a5c] transition-all text-center py-2.5 border border-[#FF5733]/30 hover:border-[#FF5733]/60 rounded-lg flex items-center justify-center gap-1.5"
                     >
-                      상세 내용 보기 →
+                      상세 내용 보기 <span className="text-lg">→</span>
                     </button>
                   </div>
                 )}
