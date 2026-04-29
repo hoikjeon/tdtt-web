@@ -531,7 +531,7 @@ export default function ServiceBento() {
                 {service.id === "ai-search" && (
                   <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
                     <img
-                      src="/images/ai-image.png"
+                      src="/images/ai-image.jpg"
                       alt="AI 검색 최적화"
                       className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     />
@@ -541,7 +541,7 @@ export default function ServiceBento() {
                 {service.id === "sns" && (
                   <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
                     <img
-                      src="/images/sns.png"
+                      src="/images/sns.jpg"
                       alt="SNS 광고/운영"
                       className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     />
@@ -551,7 +551,7 @@ export default function ServiceBento() {
                 {service.id === "blog" && (
                   <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
                     <img
-                      src="/images/blog.png"
+                      src="/images/blog.jpg"
                       alt="지역 타겟 블로그"
                       className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     />
@@ -561,7 +561,7 @@ export default function ServiceBento() {
                 {service.id === "review" && (
                   <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
                     <img
-                      src="/images/review.png"
+                      src="/images/review.jpg"
                       alt="리뷰 관리 솔루션"
                       className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     />
@@ -718,7 +718,7 @@ export default function ServiceBento() {
                         ) : service.id === "ai-search" ? (
                           <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
                             <img
-                              src="/images/ai-image.png"
+                              src="/images/ai-image.jpg"
                               alt="AI 검색 최적화"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                             />
@@ -726,7 +726,7 @@ export default function ServiceBento() {
                         ) : service.id === "sns" ? (
                           <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
                             <img
-                              src="/images/sns.png"
+                              src="/images/sns.jpg"
                               alt="SNS 광고/운영"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                             />
@@ -749,7 +749,7 @@ export default function ServiceBento() {
                         ) : service.id === "blog" ? (
                           <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
                             <img
-                              src="/images/blog.png"
+                              src="/images/blog.jpg"
                               alt="지역 타겟 블로그"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                             />
@@ -757,7 +757,7 @@ export default function ServiceBento() {
                         ) : service.id === "review" ? (
                           <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
                             <img
-                              src="/images/review.png"
+                              src="/images/review.jpg"
                               alt="리뷰 관리 솔루션"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                             />

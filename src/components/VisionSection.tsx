@@ -123,7 +123,7 @@ export default function VisionSection() {
         >
           <p className="text-gray-500 text-base md:text-2xl font-bold leading-relaxed px-4">
             단순한 마케팅 대행을 넘어,<br />
-            <span className="text-[#121212]">&lt;Medical EU&gt;와 함께하는</span><br />
+            <span className="text-[#121212]">&lt;Medical EU&gt;와 함께하는</span> <br className="md:hidden" />
             <span className="text-[#121212]">부울경 지역 우수 병원 간의</span><br />
             <span className="bg-[#FF5733]/5 px-2 text-[#FF5733]">양방향 환자 크로스 프로모션(네트워크)</span><br />
             혜택까지 독보적으로 누리실 수 있습니다.

@@ -278,22 +278,17 @@ export default function CostComparison() {
           <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full" />
           
           <h3 className="text-lg md:text-5xl font-black text-white leading-tight relative z-10 mb-8">
-            하나의 비용으로 각 분야<br />
-            전문가 팀을 고용하는<br />
-            압도적인 가성비를<br />
-            <span className="text-[#FF5733]">숫자로 직접 확인하세요.</span>
+            하나의 비용으로 각 분야 <br className="md:hidden" /> 전문가 팀을 고용하는 <br />
+            압도적인 가성비를 <br className="md:hidden" /> <span className="text-[#FF5733]">숫자로 직접 확인하세요.</span>
           </h3>
           <div className="space-y-4 relative z-10">
-            <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
+            <div className="flex flex-wrap justify-center gap-2 md:gap-4 max-w-sm md:max-w-4xl mx-auto">
               {["주 1회 현장 출근", "25가지 올인원 실무", "부대비용·인쇄 마진 0원", "자체 모니터링 앱 제공"].map((tag) => (
-                <span key={tag} className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/70 text-xs md:text-sm font-semibold tracking-tight backdrop-blur-sm text-center">
+                <span key={tag} className="px-3 md:px-6 py-1.5 md:py-3 rounded-full border border-white/10 bg-white/5 text-white/70 text-xs md:text-xl font-semibold tracking-tight backdrop-blur-sm text-center">
                   {tag}
                 </span>
               ))}
             </div>
-            <p className="text-[#FF5733] font-black text-base md:text-3xl mt-4">
-              그날그때가 병원의<br />진짜 성장을 책임집니다.
-            </p>
           </div>
         </motion.div>
 

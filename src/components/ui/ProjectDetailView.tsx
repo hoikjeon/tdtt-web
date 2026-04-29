@@ -431,7 +431,7 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
         <div className="relative z-30 w-full bg-white flex flex-col items-center justify-center py-48 md:py-64 px-6">
            <div className="max-w-2xl w-full flex flex-col items-center text-center mx-auto">
              <h2 className="scroll-title-container text-[3.5rem] md:text-[5rem] font-bold mb-8 leading-[1.1] tracking-tighter text-center">
-               {(isMedical ? "수백만 원\n광고,\n닿았나요?" : isLanding ? "전환을\n만드는\n랜딩페이지" : "600여개의\n화면\n디자인").split('\n').map((line, idx) => (
+               {(isMedical ? "수백만 원\n광고,\n닿았나요?" : isLanding ? "전환을\n만드는\n랜딩페이지" : "모션그래픽\n제작").split('\n').map((line, idx) => (
                  <span 
                    key={idx}
                    className="scroll-fill-text block w-fit mx-auto"
@@ -470,7 +470,7 @@ export default function ProjectDetailView({ src, images = [], subtitle, onClose 
         <div className="last-pinned-section relative w-full bg-white flex flex-col items-center justify-center py-20 md:py-28 px-6">
            <div className="max-w-2xl w-full flex flex-col items-center text-center mx-auto">
              <h2 className="scroll-title-container text-[3.5rem] md:text-[5rem] font-bold mb-8 leading-[1.1] tracking-tighter text-center">
-               {(isMedical ? "기획부터\n광고까지\n한 번에" : isLanding ? "클릭이\n환자로\n이어지다" : "영상으로\n여는\n새로운\n경험").split('\n').map((line, idx) => (
+               {(isMedical ? "기획부터\n광고까지\n한 번에" : isLanding ? "클릭이\n환자로\n이어지다" : "영상으로 여는\n새로운 경험").split('\n').map((line, idx) => (
                  <span 
                    key={idx}
                    className="scroll-fill-text block w-fit mx-auto"

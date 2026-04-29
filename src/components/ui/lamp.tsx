@@ -49,23 +49,23 @@ export const LampContainer = ({
 
         <div className="absolute top-1/2 h-48 w-full translate-y-12 scale-x-150 bg-black blur-2xl" />
         <div className="absolute top-1/2 z-50 h-48 w-full bg-transparent opacity-10 backdrop-blur-md" />
-        <div className="absolute inset-auto z-50 h-36 w-[28rem] -translate-y-1/2 rounded-full bg-[#FF5733] opacity-25 blur-3xl" />
+        <div className="absolute inset-auto z-50 h-36 w-[28rem] -translate-y-1/2 md:-translate-y-[9rem] rounded-full bg-[#FF5733] opacity-25 blur-3xl" />
 
         <motion.div
           initial={{ width: "8rem", opacity: 0 }}
           animate={{ width: "16rem", opacity: 1 }}
           transition={{ delay: 0.6, duration: 1.2, ease: "easeInOut" }}
-          className="absolute inset-auto z-30 h-36 w-64 -translate-y-[6rem] rounded-full bg-[#ff6b4a] blur-2xl"
+          className="absolute inset-auto z-30 h-36 w-64 -translate-y-[6rem] md:-translate-y-[8rem] rounded-full bg-[#ff6b4a] blur-2xl"
         />
 
         <motion.div
           initial={{ width: "15rem", opacity: 0 }}
           animate={{ width: "30rem", opacity: 1 }}
           transition={{ delay: 0.6, duration: 1.2, ease: "easeInOut" }}
-          className="absolute inset-auto z-50 h-0.5 w-[30rem] -translate-y-[7rem] bg-[#FF5733]"
+          className="absolute inset-auto z-50 h-0.5 w-[30rem] -translate-y-[7rem] md:-translate-y-[9rem] bg-[#FF5733]"
         />
 
-        <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] bg-black" />
+        <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] md:-translate-y-[14.5rem] bg-black" />
       </div>
 
       {children && (

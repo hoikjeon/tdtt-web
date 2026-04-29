@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { MoveDown } from "lucide-react";
 import Projects, { Project } from "@/components/Projects";
 
 interface WorksClientProps {
@@ -25,7 +24,7 @@ export default function WorksClient({ projectData }: WorksClientProps) {
           className="absolute inset-0 z-0"
         >
           <img
-            src="/Fractal Glass.jpg"
+            src="/Fractal Glass.webp"
             alt="Fractal Glass Background"
             className="w-full h-full object-cover grayscale-[30%] brightness-[0.7]"
           />
