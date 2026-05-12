@@ -17,10 +17,10 @@ export default function SolutionSection() {
   // 1. Scale from 0.8 to 1.0 (filling the screen)
   // 2. Grayscale from 100% to 0% (turning into color)
   // 3. Border radius from 40px to 0px
-  const scale = useTransform(scrollYProgress, [0.1, 0.4], [0.8, 1.2]);
-  const grayscale = useTransform(scrollYProgress, [0.1, 0.4], ["grayscale(100%)", "grayscale(0%)"]);
-  const borderRadius = useTransform(scrollYProgress, [0.1, 0.4], ["40px", "0px"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
+  const scale = useTransform(scrollYProgress, [0, 0.35], [0.8, 1.2]);
+  const grayscale = useTransform(scrollYProgress, [0, 0.35], ["grayscale(100%)", "grayscale(0%)"]);
+  const borderRadius = useTransform(scrollYProgress, [0, 0.35], ["40px", "0px"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
 
   // Headline Animation: Expands from center
   // Headline Animation: Expands from center (increased range to 1.2)
@@ -104,7 +104,7 @@ export default function SolutionSection() {
       </div>
       
       {/* Spacer to allow for scroll room for the sticky effect */}
-      <div className="h-[50vh]" />
+      <div className="h-[150vh]" />
     </section>
   );
 }

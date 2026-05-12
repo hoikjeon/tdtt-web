@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Projects, { Project } from "@/components/Projects";
+import { ShaderAnimation } from "@/components/ui/shader-animation";
 
 interface WorksClientProps {
   projectData: Project[];
@@ -16,18 +17,14 @@ export default function WorksClient({ projectData }: WorksClientProps) {
       
       {/* Hero Section */}
       <section data-header-theme="dark" className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
-        {/* Background Image with Entrance Effect */}
+        {/* Shader Animation Background */}
         <motion.div
-          initial={{ scale: 1.2, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.6 }}
-          transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] as any }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] as any }}
           className="absolute inset-0 z-0"
         >
-          <img
-            src="/Fractal Glass.webp"
-            alt="Fractal Glass Background"
-            className="w-full h-full object-cover grayscale-[30%] brightness-[0.7]"
-          />
+          <ShaderAnimation />
         </motion.div>
 
         {/* Overlay Content */}

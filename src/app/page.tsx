@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import Intro from "@/components/Intro";
 import ProblemSection from "@/components/ProblemSection";
 import AgitationSection from "@/components/AgitationSection";
-import SolutionSection from "@/components/SolutionSection";
 import ScrollMarquee from "@/components/ScrollMarquee";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
@@ -14,6 +13,7 @@ const CostComparison = dynamic(() => import("@/components/CostComparison"));
 const VisionSection = dynamic(() => import("@/components/VisionSection"));
 const ProcessSection = dynamic(() => import("@/components/ProcessSection"));
 const PromotionSection = dynamic(() => import("@/components/PromotionSection"));
+const ShowcaseSection = dynamic(() => import("@/components/ShowcaseSection"));
 
 export default async function Home() {
   return (
@@ -26,7 +26,7 @@ export default async function Home() {
           <ProblemSection />
           <AgitationSection />
         </div>
-        <div className="relative" data-header-theme="dark"><SolutionSection /></div>
+        <div className="relative" data-header-theme="dark"><ShowcaseSection /></div>
         <div className="relative" data-header-theme="light">
           <ServiceBento />
           <CostComparison />
