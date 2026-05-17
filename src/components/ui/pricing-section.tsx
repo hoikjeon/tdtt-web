@@ -14,6 +14,19 @@ type PlanDetails = {
   intro?: DetailItem;
   sections: DetailSection[];
 };
+type Plan = {
+  name: string;
+  description: string;
+  price: number;
+  popular?: boolean;
+  buttonText: string;
+  buttonVariant: "default" | "outline";
+  details: PlanDetails;
+  includes: string[];
+  subPrice?: string;
+  priceLabel?: string;
+  originalPrice?: number;
+};
 
 const signatureDetails: PlanDetails = {
   intro: {
@@ -134,7 +147,7 @@ const websiteDetails: PlanDetails = {
   ],
 };
 
-const plans = [
+const plans: Plan[] = [
   {
     name: "시그니처 패키지",
     description: "성공적인 비즈니스의 시작을 위한 핵심 솔루션",
