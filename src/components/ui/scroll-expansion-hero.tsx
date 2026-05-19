@@ -27,6 +27,7 @@ const ScrollExpandMedia = ({
   textBlend,
   children,
 }: ScrollExpandMediaProps) => {
+  const RELEASE_THRESHOLD = 1.4; // animation ends at 1.0, holds until 1.4 before releasing
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [showContent, setShowContent] = useState<boolean>(false);
   const [isMobileState, setIsMobileState] = useState<boolean>(false);
@@ -55,7 +56,7 @@ const ScrollExpandMedia = ({
 
   useEffect(() => {
     const updateProgress = (delta: number) => {
-      const newProg = Math.max(0, Math.min(1, progressRef.current + delta));
+      const newProg = Math.max(0, Math.min(RELEASE_THRESHOLD, progressRef.current + delta));
       progressRef.current = newProg;
       setScrollProgress(newProg);
       setShowContent(newProg >= 0.65);
@@ -67,8 +68,8 @@ const ScrollExpandMedia = ({
 
       // 섹션이 아직 뷰포트 아래에 있으면 무시
       if (rect.top > window.innerHeight * 0.2) return;
-      // 효과 완료 후 아래로 스크롤은 통과
-      if (progressRef.current >= 1 && e.deltaY > 0) return;
+      // hold 구간 이후 아래로 스크롤은 통과
+      if (progressRef.current >= RELEASE_THRESHOLD && e.deltaY > 0) return;
       // 효과 시작 전 위로 스크롤은 통과
       if (progressRef.current <= 0 && e.deltaY < 0) return;
 
@@ -94,7 +95,7 @@ const ScrollExpandMedia = ({
 
       const deltaY = touchStartY - e.touches[0].clientY;
 
-      if (progressRef.current >= 1 && deltaY > 0) return;
+      if (progressRef.current >= RELEASE_THRESHOLD && deltaY > 0) return;
       if (progressRef.current <= 0 && deltaY < 0) return;
 
       e.preventDefault();
@@ -116,7 +117,7 @@ const ScrollExpandMedia = ({
     };
   }, []);
 
-  const p = scrollProgress;
+  const p = Math.min(1, scrollProgress);
   const mediaWidth = 300 + p * (isMobileState ? 650 : 1250);
   const mediaHeight = 400 + p * (isMobileState ? 200 : 400);
 

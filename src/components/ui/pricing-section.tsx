@@ -290,6 +290,19 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
           </div>
         </TimelineContent>
 
+        <TimelineContent
+          animationNum={1}
+          timelineRef={pricingRef}
+          className="flex justify-center"
+        >
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FF5733] shrink-0" />
+            <p className="text-sm text-white/60 font-medium">
+              외주 단가에 거품 0%, 중간 마진 0원. 그래서 가능한 가격입니다.
+            </p>
+          </div>
+        </TimelineContent>
+
       </article>
 
       <div className="flex items-start overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pt-6 pb-6 px-6 scroll-pl-6 md:grid md:items-stretch md:grid-cols-2 lg:grid-cols-4 md:max-w-7xl md:mx-auto">

@@ -232,7 +232,6 @@ function ReactiveLine({
 
 // 4 lines of Korean text with justified alignment
 const heroLines = [
-  { text: "단순한 외주 대행 그 이상", color: "#b5b5b5" },
   { text: "병원으로 직접 출근합니다", color: "#e6e6e6" },
   { text: "직원 1명의 인건비로 누리는", color: "#e6e6e6" },
   { text: "가장 완벽한 올인원 마케팅 팀", color: "#b5b5b5" },
@@ -273,7 +272,7 @@ function JustifiedTextBlock() {
   // Compute the max natural width to use as target for all lines
   const maxWidth = Math.max(...heroLines.map(l => getLineNaturalWidth(l.text, fontSize)));
 
-  const yPositions = [ySep * 1.5, ySep * 0.5, ySep * -0.5, ySep * -1.5];
+  const yPositions = [ySep * 1.0, ySep * 0.0, ySep * -1.0];
 
   return (
     <group position={[0, 0, -2]}>

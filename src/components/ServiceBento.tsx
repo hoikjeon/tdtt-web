@@ -17,7 +17,6 @@ import {
   Smartphone,
   ChevronRight,
   ChevronLeft,
-  X
 } from "lucide-react";
 
 interface ServiceItem {
@@ -206,6 +205,415 @@ const HOSPITAL_PHOTOS = [
   { src: "/images/doctor1.jpg", label: "의료진 프로필" },
   { src: "/images/doctor2.jpg", label: "원내 촬영" },
 ];
+
+function AISearchMockup() {
+  const messages = [
+    {
+      role: "user",
+      text: "강남에서 허리디스크 잘 치료하는 병원 추천해줘",
+    },
+    {
+      role: "ai",
+      text: null,
+      recommendation: {
+        name: "연세 정형외과의원",
+        tags: ["비수술 치료", "척추 전문", "당일 예약"],
+        reason: "AI 학습 데이터 기준 강남구 척추·관절 분야 상위 추천 병원입니다. 환자 후기 분석 결과 치료 만족도 97%, 재방문율 82%로 집계됩니다.",
+        rating: 4.9,
+        reviews: 324,
+      },
+    },
+    {
+      role: "user",
+      text: "비수술로도 치료 가능해?",
+    },
+    {
+      role: "ai",
+      text: "네, 연세 정형외과는 도수치료·체외충격파·신경차단술 등 비수술 치료를 전문으로 합니다. 초진 환자의 91%가 수술 없이 호전됩니다.",
+    },
+  ];
+
+  return (
+    <div className="w-full h-full flex flex-col bg-[#0f0f13] overflow-hidden rounded-[2rem] md:rounded-[3rem]">
+      {/* Header */}
+      <div className="flex items-center gap-2 px-4 md:px-5 py-3 border-b border-white/10 flex-shrink-0 bg-[#1a1a24]">
+        <div className="w-5 h-5 md:w-6 md:h-6 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+          <span className="text-white font-black text-[8px] md:text-[9px]">AI</span>
+        </div>
+        <span className="text-white font-bold text-[10px] md:text-xs">ChatGPT · AI 검색 최적화</span>
+        <div className="ml-auto flex items-center gap-1">
+          <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+          <span className="text-green-400 text-[8px]">학습됨</span>
+        </div>
+      </div>
+
+      {/* Chat messages */}
+      <div className="flex-1 overflow-y-auto px-3 md:px-4 py-3 space-y-3">
+        {messages.map((msg, i) => (
+          <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+            {msg.role === "ai" && (
+              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0 mr-2 mt-0.5 self-start">
+                <span className="text-white font-black text-[6px]">AI</span>
+              </div>
+            )}
+            <div className={`max-w-[80%] rounded-2xl px-3 py-2 ${msg.role === "user" ? "bg-indigo-600 rounded-tr-sm" : "bg-[#1e1e2e] rounded-tl-sm"}`}>
+              {msg.text && (
+                <p className={`text-[9px] md:text-[10px] leading-relaxed ${msg.role === "user" ? "text-white" : "text-gray-200"}`}>{msg.text}</p>
+              )}
+              {msg.recommendation && (
+                <div className="space-y-2">
+                  <p className="text-gray-300 text-[9px] md:text-[10px] leading-relaxed">강남 허리디스크 치료 추천 병원입니다.</p>
+                  {/* Hospital card */}
+                  <div className="bg-[#12121c] border border-violet-500/30 rounded-xl p-2.5">
+                    <div className="flex items-start justify-between gap-2 mb-1.5">
+                      <div>
+                        <div className="flex items-center gap-1 mb-0.5">
+                          <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+                          <span className="text-[8px] text-violet-300 font-bold uppercase tracking-wide">AI 최우선 추천</span>
+                        </div>
+                        <p className="text-white font-black text-[10px] md:text-[11px]">{msg.recommendation.name}</p>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <p className="text-yellow-400 font-black text-[10px]">★ {msg.recommendation.rating}</p>
+                        <p className="text-gray-500 text-[7px]">{msg.recommendation.reviews}건</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {msg.recommendation.tags.map((tag) => (
+                        <span key={tag} className="bg-violet-500/20 text-violet-300 text-[7px] font-semibold px-1.5 py-0.5 rounded-full border border-violet-500/30">{tag}</span>
+                      ))}
+                    </div>
+                    <p className="text-gray-400 text-[8px] md:text-[9px] leading-relaxed">{msg.recommendation.reason}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* AI platforms row */}
+      <div className="flex-shrink-0 bg-[#1a1a24] border-t border-white/10 px-3 md:px-4 py-2.5">
+        <p className="text-gray-500 text-[7px] mb-1.5">최적화된 AI 플랫폼</p>
+        <div className="flex items-center gap-2">
+          {[
+            { name: "ChatGPT", color: "bg-[#10a37f]" },
+            { name: "Perplexity", color: "bg-[#1e90ff]" },
+            { name: "Gemini", color: "bg-[#4285F4]" },
+            { name: "네이버 AI", color: "bg-[#03C75A]" },
+          ].map((p) => (
+            <div key={p.name} className={`${p.color} px-2 py-0.5 rounded-full flex items-center gap-1`}>
+              <div className="w-1 h-1 rounded-full bg-white/70" />
+              <span className="text-white text-[6px] md:text-[7px] font-bold">{p.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReviewMockup() {
+  const reviews = [
+    { name: "이○○ 님", date: "2일 전", rating: 5, text: "원장님이 너무 친절하게 설명해주셔서 걱정이 없어졌어요. 치료 효과도 정말 빠르게 나타났습니다!", platform: "네이버" },
+    { name: "박○○ 님", date: "4일 전", rating: 5, text: "허리 디스크로 오래 고생했는데 3회 만에 통증이 확 줄었어요. 강력 추천드립니다!", platform: "구글" },
+    { name: "김○○ 님", date: "6일 전", rating: 4, text: "대기 시간이 좀 있었지만 진료는 매우 만족스러웠습니다. 재방문 의사 있어요.", platform: "카카오" },
+    { name: "최○○ 님", date: "8일 전", rating: 5, text: "무릎 수술 걱정했는데 비수술 치료로 완쾌됐습니다. 정말 감사해요!", platform: "네이버" },
+  ];
+
+  const platformColor: Record<string, string> = {
+    "네이버": "#03C75A",
+    "구글": "#4285F4",
+    "카카오": "#FEE500",
+  };
+  const platformText: Record<string, string> = {
+    "네이버": "text-white",
+    "구글": "text-white",
+    "카카오": "text-gray-800",
+  };
+
+  return (
+    <div className="w-full h-full flex flex-col bg-[#fffbf0] overflow-hidden rounded-[2rem] md:rounded-[3rem]">
+      {/* Header */}
+      <div className="bg-[#1a1a2e] px-4 md:px-6 py-4 flex-shrink-0">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <p className="text-yellow-400 text-[9px] md:text-[10px] font-bold uppercase tracking-widest mb-0.5">Review Management</p>
+            <h3 className="text-white font-black text-sm md:text-base leading-tight">리뷰 관리 현황</h3>
+          </div>
+          <div className="text-right">
+            <p className="text-yellow-400 font-black text-2xl md:text-3xl leading-none">4.9</p>
+            <div className="flex gap-0.5 justify-end mt-0.5">
+              {[1,2,3,4,5].map(i => (
+                <svg key={i} className="w-2.5 h-2.5 md:w-3 md:h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p className="text-gray-400 text-[8px] md:text-[9px] mt-0.5">리뷰 324건</p>
+          </div>
+        </div>
+        {/* Platform tabs */}
+        <div className="flex gap-1.5">
+          {[
+            { name: "전체", count: 324, active: true },
+            { name: "네이버", count: 187, active: false },
+            { name: "구글", count: 89, active: false },
+            { name: "카카오", count: 48, active: false },
+          ].map((p) => (
+            <button key={p.name} className={`text-[8px] md:text-[9px] font-bold px-2 py-0.5 rounded-full transition-colors ${p.active ? "bg-yellow-400 text-gray-900" : "bg-white/10 text-gray-300"}`}>
+              {p.name} {p.count}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Reviews list */}
+      <div className="flex-1 overflow-y-auto px-3 md:px-4 py-3 space-y-2">
+        {reviews.map((r) => (
+          <div key={r.name} className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0 text-[10px] font-black text-yellow-600">
+                  {r.name[0]}
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[9px] md:text-[10px] font-bold text-gray-800">{r.name}</span>
+                    <span className="text-[7px] md:text-[8px] px-1 py-0.5 rounded font-bold text-[8px]"
+                      style={{ backgroundColor: platformColor[r.platform], color: platformText[r.platform] === "text-white" ? "#fff" : "#1a1a2e" }}>
+                      {r.platform}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    {Array.from({ length: r.rating }).map((_, i) => (
+                      <svg key={i} className="w-2 h-2 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                    <span className="text-[7px] text-gray-400">{r.date}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-shrink-0 bg-green-50 text-green-600 text-[7px] font-bold px-1.5 py-0.5 rounded-full border border-green-100">답변완료</div>
+            </div>
+            <p className="text-[9px] md:text-[10px] text-gray-600 leading-relaxed mt-2 line-clamp-2">{r.text}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Stats bar */}
+      <div className="flex-shrink-0 bg-[#1a1a2e] px-4 md:px-5 py-3 grid grid-cols-3 gap-2">
+        {[
+          { label: "총 리뷰", value: "324건" },
+          { label: "답변율", value: "100%" },
+          { label: "평균 별점", value: "4.9★" },
+        ].map((s) => (
+          <div key={s.label} className="text-center">
+            <p className="text-yellow-400 font-black text-sm md:text-base">{s.value}</p>
+            <p className="text-gray-400 text-[8px] md:text-[9px]">{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BlogSearchMockup() {
+  const results = [
+    { rank: 1, title: "강남 허리디스크 수술 없이 치료하는법 [연세정형외과]", views: "12,847", days: "1일 전", highlight: true },
+    { rank: 2, title: "목 디스크 증상과 치료, 전문의가 알려드립니다", views: "8,321", days: "3일 전", highlight: false },
+    { rank: 3, title: "무릎 연골 손상 조기 치료가 중요한 이유", views: "6,104", days: "5일 전", highlight: false },
+    { rank: 4, title: "도수치료 vs 물리치료, 무엇이 다를까요?", views: "4,892", days: "7일 전", highlight: false },
+  ];
+
+  return (
+    <div className="w-full h-full flex flex-col bg-[#f9fafb] overflow-hidden rounded-[2rem] md:rounded-[3rem]">
+      {/* Naver Header */}
+      <div className="bg-[#03C75A] px-4 md:px-6 pt-5 pb-4 flex-shrink-0">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-white font-black text-xl md:text-2xl tracking-tighter">N</span>
+          <div className="flex-1 bg-white rounded-xl px-3 py-2 flex items-center gap-2 shadow-sm">
+            <span className="text-gray-500 text-[10px] md:text-sm flex-1">강남 허리디스크 잘하는 병원</span>
+            <Search size={14} className="text-gray-400 flex-shrink-0" />
+          </div>
+        </div>
+        <div className="flex gap-2">
+          {["통합", "블로그", "카페", "뉴스"].map((tab, i) => (
+            <button key={tab} className={`text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full transition-colors ${i === 1 ? "bg-white text-[#03C75A]" : "text-white/80"}`}>{tab}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Results area */}
+      <div className="flex-1 overflow-y-auto bg-white px-4 md:px-5 py-3 space-y-2">
+        {/* Top badge */}
+        <div className="flex items-center gap-2 mb-1">
+          <div className="bg-[#03C75A]/10 text-[#03C75A] text-[9px] md:text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#03C75A]/20">블로그 검색결과</div>
+          <span className="text-[9px] text-gray-400">약 124,000개</span>
+        </div>
+
+        {results.map((r) => (
+          <div
+            key={r.rank}
+            className={`relative rounded-xl p-3 border transition-all ${r.highlight ? "bg-[#f0fdf8] border-[#03C75A]/40 shadow-sm" : "bg-white border-gray-100"}`}
+          >
+            {r.highlight && (
+              <div className="absolute -top-2 -right-1 bg-[#FF5733] text-white text-[8px] md:text-[9px] font-black px-2 py-0.5 rounded-full shadow-md">
+                🏆 1위
+              </div>
+            )}
+            <div className="flex items-start gap-2">
+              <div className={`w-5 h-5 md:w-6 md:h-6 rounded-md flex items-center justify-center flex-shrink-0 text-[9px] md:text-[10px] font-black ${r.highlight ? "bg-[#03C75A] text-white" : "bg-gray-100 text-gray-500"}`}>
+                {r.rank}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className={`text-[10px] md:text-xs font-bold leading-snug ${r.highlight ? "text-[#0a5c3a]" : "text-gray-700"}`}>{r.title}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-[8px] md:text-[9px] text-[#03C75A] font-semibold">blog.naver.com/yonsei_ortho</span>
+                </div>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-[8px] text-gray-400">조회 {r.views}</span>
+                  <span className="text-[8px] text-gray-300">•</span>
+                  <span className="text-[8px] text-gray-400">{r.days}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Stats bar */}
+      <div className="flex-shrink-0 bg-[#0d9488] px-4 md:px-5 py-3 grid grid-cols-3 gap-2">
+        {[
+          { label: "월 발행량", value: "24건" },
+          { label: "상단 노출률", value: "75%" },
+          { label: "유입 증가", value: "↑47%" },
+        ].map((s) => (
+          <div key={s.label} className="text-center">
+            <p className="text-white font-black text-sm md:text-base">{s.value}</p>
+            <p className="text-teal-100 text-[8px] md:text-[9px]">{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HospitalWebMockup() {
+  return (
+    <div className="w-full h-full overflow-y-auto overflow-x-hidden bg-white text-[#1a1a2e]" style={{ fontFamily: "sans-serif" }}>
+      {/* Header */}
+      <div className="bg-[#0d9488] px-2 py-1.5 flex items-center justify-between sticky top-0 z-10">
+        <div className="flex items-center gap-1">
+          <div className="w-3.5 h-3.5 bg-white rounded-full flex items-center justify-center">
+            <div className="w-1.5 h-1.5 bg-[#0d9488] rounded-full" />
+          </div>
+          <span className="text-white font-black text-[7px] tracking-tight">연세 정형외과</span>
+        </div>
+        <div className="flex gap-1.5">
+          <span className="text-white/80 text-[5px]">진료안내</span>
+          <span className="text-white/80 text-[5px]">의료진</span>
+          <span className="text-white/80 text-[5px]">예약</span>
+        </div>
+      </div>
+      {/* Hero */}
+      <div className="relative bg-gradient-to-br from-[#0d9488] to-[#134e4a] px-3 py-3 overflow-hidden">
+        <div className="relative z-10 text-white">
+          <p className="text-[5px] text-teal-200 mb-0.5 font-medium">빠른 회복, 정확한 진단</p>
+          <h1 className="text-[9px] font-black leading-tight mb-1.5">척추·관절 전문<br/>정형외과의원</h1>
+          <button className="bg-white text-[#0d9488] text-[6px] font-bold px-2 py-0.5 rounded-full shadow">
+            온라인 예약하기
+          </button>
+        </div>
+        <div className="absolute right-2 bottom-0 w-12 h-12 bg-white/10 rounded-full" />
+        <div className="absolute right-6 top-1 w-6 h-6 bg-white/15 rounded-full" />
+      </div>
+      {/* Notice */}
+      <div className="bg-[#f0fdf4] px-2 py-1 border-b border-green-100 flex items-center gap-1">
+        <div className="w-1 h-1 rounded-full bg-green-500 flex-shrink-0" />
+        <p className="text-[5px] text-green-700 font-medium">토요일 오전 진료 운영 (09:00~13:00)</p>
+      </div>
+      {/* Quick Links */}
+      <div className="grid grid-cols-4 border-b border-gray-100">
+        {[
+          { icon: "📅", label: "진료예약" },
+          { icon: "🏥", label: "진료안내" },
+          { icon: "👨‍⚕️", label: "의료진" },
+          { icon: "📍", label: "오시는길" },
+        ].map((item, i) => (
+          <div key={item.label} className={`flex flex-col items-center py-1.5 gap-0.5 ${i < 3 ? "border-r border-gray-100" : ""}`}>
+            <span className="text-[9px]">{item.icon}</span>
+            <span className="text-[5px] text-gray-600 font-medium">{item.label}</span>
+          </div>
+        ))}
+      </div>
+      {/* Services */}
+      <div className="px-2 py-2">
+        <h2 className="text-[7px] font-bold text-gray-800 mb-1.5">진료 분야</h2>
+        <div className="grid grid-cols-2 gap-1">
+          {[
+            { name: "척추클리닉", bg: "bg-teal-50", bd: "border-teal-100", dot: "bg-teal-400" },
+            { name: "관절클리닉", bg: "bg-blue-50", bd: "border-blue-100", dot: "bg-blue-400" },
+            { name: "도수치료", bg: "bg-purple-50", bd: "border-purple-100", dot: "bg-purple-400" },
+            { name: "통증클리닉", bg: "bg-orange-50", bd: "border-orange-100", dot: "bg-orange-400" },
+          ].map((s) => (
+            <div key={s.name} className={`${s.bg} border ${s.bd} rounded-md p-1.5`}>
+              <div className="flex items-center gap-1 mb-0.5">
+                <div className={`w-1 h-1 rounded-full ${s.dot}`} />
+                <p className="text-[6px] font-semibold text-gray-700">{s.name}</p>
+              </div>
+              <p className="text-[5px] text-gray-400">자세히 보기 →</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Doctor */}
+      <div className="px-2 py-2 bg-gray-50 border-t border-gray-100">
+        <h2 className="text-[7px] font-bold text-gray-800 mb-1.5">의료진 소개</h2>
+        <div className="flex gap-2 items-start">
+          <div className="w-9 h-10 bg-[#0d9488]/15 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span className="text-sm">👨‍⚕️</span>
+          </div>
+          <div>
+            <p className="text-[6px] font-black text-gray-800">김정형 원장</p>
+            <p className="text-[5px] text-teal-600 font-semibold mt-0.5">척추·관절 전문의</p>
+            <p className="text-[5px] text-gray-400 mt-0.5">연세대학교 의과대학 졸업</p>
+            <p className="text-[5px] text-gray-400">정형외과 전문의 취득</p>
+          </div>
+        </div>
+      </div>
+      {/* Before/After */}
+      <div className="px-2 py-2 border-t border-gray-100">
+        <h2 className="text-[7px] font-bold text-gray-800 mb-1.5">치료 후기</h2>
+        {[
+          { name: "이○○ 님", text: "허리 디스크로 6개월 고생했는데 3회 만에 완쾌됐어요!", stars: 5 },
+          { name: "박○○ 님", text: "무릎 통증 완전히 사라졌습니다. 강력 추천해요!", stars: 5 },
+        ].map((r) => (
+          <div key={r.name} className="bg-white border border-gray-100 rounded-md p-1.5 mb-1 shadow-sm">
+            <div className="flex items-center gap-1 mb-0.5">
+              <span className="text-[5px] font-bold text-gray-700">{r.name}</span>
+              <span className="text-[8px]">{"⭐".repeat(r.stars)}</span>
+            </div>
+            <p className="text-[5px] text-gray-500 leading-relaxed">{r.text}</p>
+          </div>
+        ))}
+      </div>
+      {/* CTA */}
+      <div className="px-2 py-2.5 bg-[#0d9488]">
+        <p className="text-white text-[6px] font-black mb-0.5">지금 바로 예약하세요</p>
+        <p className="text-teal-100 text-[5px] mb-1.5">평일 09:00~18:00 / 토 09:00~13:00</p>
+        <div className="w-full bg-white text-[#0d9488] text-[6px] font-bold py-1 rounded-md text-center">
+          📞 02-1234-5678
+        </div>
+      </div>
+      {/* Footer */}
+      <div className="px-2 py-2 bg-gray-800">
+        <p className="text-[5px] text-gray-400 leading-relaxed">서울시 강남구 테헤란로 123<br/>연세 정형외과의원 © 2025</p>
+      </div>
+    </div>
+  );
+}
 
 function HospitalPhotoSlider({ className }: { className?: string }) {
   const [idx, setIdx] = useState(0);
@@ -402,6 +810,15 @@ export default function ServiceBento() {
           >
             OUR ALL-IN-ONE OFFER
           </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="text-[#121212] font-black text-lg md:text-2xl leading-snug tracking-tight"
+          >
+            디자이너 + 영상감독 + 마케터 + 개발자 + 사진작가.<br />
+            5명의 전문가팀을 매주 출근시킵니다.
+          </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -495,7 +912,7 @@ export default function ServiceBento() {
                     <div className="relative w-40 h-[300px] bg-[#121212] rounded-[1.25rem] border-[4px] border-gray-800 shadow-2xl overflow-hidden self-start">
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-5 bg-[#121212] rounded-b-xl z-20" />
                       <iframe
-                        src="https://yonsei-cheok-patient.vercel.app/"
+                        src="https://meals-rosy.vercel.app/"
                         className="w-full h-full border-none pointer-events-none"
                         title="App Mockup"
                       />
@@ -530,11 +947,40 @@ export default function ServiceBento() {
 
                 {service.id === "ai-search" && (
                   <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
-                    <img
-                      src="/images/ai-image.jpg"
-                      alt="AI 검색 최적화"
-                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                    />
+                    <div className="w-full h-full bg-[#0f0f13] flex flex-col px-2 py-1.5">
+                      {/* Mini AI chat */}
+                      <div className="flex items-center gap-1 mb-1.5">
+                        <div className="w-3 h-3 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                          <span className="text-white font-black" style={{ fontSize: "4px" }}>AI</span>
+                        </div>
+                        <span className="text-gray-300 font-bold text-[6px]">AI 검색 최적화</span>
+                        <div className="ml-auto flex items-center gap-0.5">
+                          <div className="w-1 h-1 rounded-full bg-green-400" />
+                          <span className="text-green-400 text-[5px]">학습됨</span>
+                        </div>
+                      </div>
+                      {/* User bubble */}
+                      <div className="flex justify-end mb-1">
+                        <div className="bg-indigo-600 rounded-xl rounded-tr-sm px-1.5 py-0.5 max-w-[80%]">
+                          <p className="text-white text-[5px]">강남 허리디스크 병원 추천해줘</p>
+                        </div>
+                      </div>
+                      {/* AI response */}
+                      <div className="flex gap-1">
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-white font-black" style={{ fontSize: "4px" }}>AI</span>
+                        </div>
+                        <div className="bg-[#1e1e2e] rounded-xl rounded-tl-sm px-1.5 py-1 flex-1">
+                          <p className="text-violet-300 font-bold text-[5px] mb-0.5">★ AI 최우선 추천</p>
+                          <p className="text-white font-black text-[5px]">연세 정형외과의원</p>
+                          <div className="flex gap-1 mt-0.5">
+                            {["비수술", "척추 전문"].map(t => (
+                              <span key={t} className="bg-violet-500/30 text-violet-300 rounded-full px-1" style={{ fontSize: "4px" }}>{t}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -550,21 +996,107 @@ export default function ServiceBento() {
 
                 {service.id === "blog" && (
                   <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
-                    <img
-                      src="/images/blog.jpg"
-                      alt="지역 타겟 블로그"
-                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                    />
+                    {/* Mini Naver search result preview */}
+                    <div className="w-full h-full flex flex-col bg-white">
+                      <div className="bg-[#03C75A] px-2 py-1 flex items-center gap-1.5 flex-shrink-0">
+                        <span className="text-white font-black text-[9px]">N</span>
+                        <div className="flex-1 bg-white/90 rounded px-1.5 py-0.5 flex items-center justify-between">
+                          <span className="text-gray-500 text-[6px]">강남 허리디스크 병원</span>
+                          <Search size={7} className="text-gray-400" />
+                        </div>
+                      </div>
+                      <div className="flex-1 px-2 py-1 space-y-1 overflow-hidden">
+                        {[
+                          { rank: "1위", title: "강남 허리디스크 수술 없이 치료하는법", highlight: true },
+                          { rank: "2위", title: "목 디스크 증상과 치료", highlight: false },
+                          { rank: "3위", title: "무릎 연골 손상 조기 치료", highlight: false },
+                        ].map((r) => (
+                          <div key={r.rank} className={`flex items-center gap-1 rounded px-1 py-0.5 ${r.highlight ? "bg-[#f0fdf8]" : ""}`}>
+                            <span className={`text-[5px] font-black px-0.5 rounded flex-shrink-0 ${r.highlight ? "text-[#03C75A]" : "text-gray-400"}`}>{r.rank}</span>
+                            <p className={`text-[5px] leading-tight truncate ${r.highlight ? "font-bold text-gray-800" : "text-gray-500"}`}>{r.title}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
 
                 {service.id === "review" && (
                   <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
-                    <img
-                      src="/images/review.jpg"
-                      alt="리뷰 관리 솔루션"
-                      className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                    />
+                    <div className="w-full h-full flex flex-col bg-[#1a1a2e]">
+                      {/* Mini header */}
+                      <div className="flex items-center justify-between px-2 py-1.5 flex-shrink-0">
+                        <div className="flex items-center gap-1">
+                          <span className="text-yellow-400 font-black text-[8px]">4.9</span>
+                          <div className="flex gap-0.5">
+                            {[1,2,3,4,5].map(i => (
+                              <svg key={i} className="w-1.5 h-1.5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                              </svg>
+                            ))}
+                          </div>
+                        </div>
+                        <span className="text-gray-400 text-[6px]">리뷰 324건</span>
+                      </div>
+                      {/* Mini reviews */}
+                      <div className="flex-1 px-2 space-y-1 overflow-hidden">
+                        {[
+                          { name: "이○○", text: "허리 디스크 3회 만에 완쾌!", rating: 5 },
+                          { name: "박○○", text: "원장님 너무 친절해요 추천!", rating: 5 },
+                          { name: "김○○", text: "비수술로 무릎 완쾌됐어요", rating: 5 },
+                        ].map((r) => (
+                          <div key={r.name} className="flex items-center gap-1">
+                            <div className="w-3 h-3 rounded-full bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
+                              <span className="text-yellow-400 text-[5px] font-black">{r.name[0]}</span>
+                            </div>
+                            <p className="text-gray-300 text-[5px] truncate flex-1">{r.text}</p>
+                            <div className="flex gap-0.5 flex-shrink-0">
+                              {Array.from({ length: r.rating }).map((_, i) => (
+                                <svg key={i} className="w-1.5 h-1.5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {service.id === "web" && (
+                  <div className="mt-auto hidden md:block relative w-full h-24 overflow-hidden rounded-xl shadow-md border border-gray-100 group-hover:shadow-xl transition-all duration-300">
+                    {/* Browser chrome */}
+                    <div className="w-full h-4 bg-[#0d9488] flex items-center px-1.5 gap-1 flex-shrink-0">
+                      <div className="flex gap-0.5">
+                        <div className="w-1 h-1 rounded-full bg-white/40" />
+                        <div className="w-1 h-1 rounded-full bg-white/40" />
+                        <div className="w-1 h-1 rounded-full bg-white/40" />
+                      </div>
+                      <div className="flex-1 h-1.5 bg-white/20 rounded-full mx-1 flex items-center px-1">
+                        <span className="text-white/60" style={{ fontSize: "4px" }}>yonsei-hospital.co.kr</span>
+                      </div>
+                    </div>
+                    {/* Hero section */}
+                    <div className="w-full bg-gradient-to-br from-[#0d9488] to-[#134e4a] px-2 py-1.5 flex items-center justify-between">
+                      <div>
+                        <p className="text-white font-black leading-tight" style={{ fontSize: "7px" }}>척추·관절 전문</p>
+                        <p className="text-white font-black leading-tight" style={{ fontSize: "7px" }}>정형외과의원</p>
+                        <div className="mt-1 bg-white text-[#0d9488] font-bold rounded-full px-1.5 py-0.5 inline-block" style={{ fontSize: "5px" }}>온라인 예약</div>
+                      </div>
+                      <div className="relative w-10 h-10 flex-shrink-0">
+                        <div className="absolute inset-0 bg-white/10 rounded-full" />
+                        <div className="absolute inset-2 bg-white/15 rounded-full" />
+                      </div>
+                    </div>
+                    {/* Quick links row */}
+                    <div className="w-full bg-white grid grid-cols-4 border-t border-gray-100">
+                      {["진료예약", "진료안내", "의료진", "오시는길"].map((label, i) => (
+                        <div key={label} className={`flex items-center justify-center py-1 ${i < 3 ? "border-r border-gray-100" : ""}`}>
+                          <span className="text-gray-500 font-medium" style={{ fontSize: "5px" }}>{label}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
@@ -577,7 +1109,7 @@ export default function ServiceBento() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/10 to-transparent" />
                     <div className="absolute bottom-2 left-3 pr-2 text-left">
-                       <p className="text-white text-[11px] md:text-xs font-semibold leading-relaxed drop-shadow-md line-clamp-2">연세척병원, “부산 펜싱선수들 척추 관절 책임지겠다”</p>
+                       <p className="text-white text-[11px] md:text-xs font-semibold leading-relaxed drop-shadow-md line-clamp-2">연세척병원, "부산 펜싱선수들 척추 관절 책임지겠다"</p>
                     </div>
                   </div>
                 )}
@@ -621,21 +1153,15 @@ export default function ServiceBento() {
               onClick={() => setSelectedId(null)}
               className="fixed inset-0 bg-[#121212]/30 backdrop-blur-xl z-[100]"
             />
+
             <div className="fixed inset-0 flex items-end md:items-center justify-center pointer-events-none z-[101] px-4 md:px-6 pb-0 md:pb-0">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 10 }}
                 transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
-                className="bg-white rounded-t-[2rem] md:rounded-[3rem] p-6 md:p-12 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-[0_32px_128px_rgba(0,0,0,0.1)] pointer-events-auto relative"
+                className="bg-white rounded-t-[2rem] md:rounded-[3rem] p-6 md:p-14 w-full max-w-5xl max-h-[92vh] overflow-y-auto shadow-[0_32px_128px_rgba(0,0,0,0.1)] pointer-events-auto relative"
               >
-                <button
-                  onClick={() => setSelectedId(null)}
-                  className="absolute top-5 right-5 md:top-8 md:right-8 w-9 h-9 md:w-12 md:h-12 rounded-full border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                >
-                  <X size={18} className="text-gray-400 md:hidden" />
-                  <X className="text-gray-400 hidden md:block" />
-                </button>
 
                 {(() => {
                   const service = services.find(s => s.id === selectedId);
@@ -662,8 +1188,8 @@ export default function ServiceBento() {
 
                       <div className="relative">
                         {service.id === "db-ad" ? (
-                          <div className="relative w-full flex justify-center">
-                            <div className="relative w-56 h-[420px] bg-[#0f0f0f] rounded-[1.5rem] border-[6px] border-gray-900 shadow-2xl overflow-hidden flex flex-col">
+                          <div className="relative w-full flex justify-center items-center py-4">
+                            <div className="relative w-[200px] md:w-[240px] h-[380px] md:h-[460px] bg-[#0f0f0f] rounded-[2.5rem] border-[6px] border-gray-800 shadow-[0_32px_80px_rgba(245,101,101,0.35)] overflow-hidden flex flex-col flex-shrink-0">
                               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-[#0f0f0f] rounded-b-2xl z-20" />
                               <div className="h-6 flex-shrink-0" />
                               <video
@@ -674,22 +1200,22 @@ export default function ServiceBento() {
                               />
                               <DbAnalytics />
                             </div>
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#f56565]/20 blur-[80px] rounded-full pointer-events-none" />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#f56565]/20 blur-[80px] rounded-full pointer-events-none" />
                           </div>
                         ) : service.id === "news" ? (
-                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
-                           <img 
+                          <div className="relative w-full h-[380px] md:h-[460px] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
+                           <img
                              src="https://cdn.kormedi.com/wp-content/uploads/2025/08/kakaotalk-20250827-112337595-06.jpg"
                              alt="뉴스 기사"
                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                            />
                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col gap-4">
-                             <h3 className="text-white text-xl md:text-2xl font-bold leading-snug drop-shadow-md">연세척병원, “부산 펜싱선수들 척추 관절 책임지겠다”</h3>
-                             <a 
-                               href="https://kormedi.com/2744007/" 
-                               target="_blank" 
-                               rel="noopener noreferrer" 
+                             <h3 className="text-white text-xl md:text-2xl font-bold leading-snug drop-shadow-md">연세척병원, "부산 펜싱선수들 척추 관절 책임지겠다"</h3>
+                             <a
+                               href="https://kormedi.com/2744007/"
+                               target="_blank"
+                               rel="noopener noreferrer"
                                className="inline-flex items-center justify-center gap-2 bg-[#FF5733] text-white py-3 px-6 rounded-xl font-bold hover:bg-[#e64a2e] transition-colors shadow-lg self-start mt-2"
                              >
                                기사 원문 보기 <ChevronRight size={18} />
@@ -697,7 +1223,7 @@ export default function ServiceBento() {
                            </div>
                           </div>
                         ) : service.id === "drone" ? (
-                          <div className="relative w-full aspect-[4/3] bg-black rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden">
+                          <div className="relative w-full h-[380px] md:h-[460px] bg-black rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden">
                             <video
                               src="/video/dron-shot.mp4"
                               autoPlay
@@ -708,7 +1234,7 @@ export default function ServiceBento() {
                             />
                           </div>
                         ) : service.id === "program" ? (
-                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
+                          <div className="relative w-full h-[380px] md:h-[460px] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
                             <img
                               src="/images/monitor.jpg"
                               alt="전용 모니터링 앱"
@@ -716,66 +1242,59 @@ export default function ServiceBento() {
                             />
                           </div>
                         ) : service.id === "ai-search" ? (
-                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
-                            <img
-                              src="/images/ai-image.jpg"
-                              alt="AI 검색 최적화"
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
+                          <div className="relative w-full h-[380px] md:h-[460px] shadow-xl overflow-hidden">
+                            <AISearchMockup />
                           </div>
                         ) : service.id === "sns" ? (
-                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
-                            <img
-                              src="/images/sns.jpg"
-                              alt="SNS 광고/운영"
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col gap-4">
-                              <a
-                                href="https://ad-cheock.vercel.app/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2 bg-[#FF5733] text-white py-3 px-6 rounded-xl font-bold hover:bg-[#e64a2e] transition-colors shadow-lg self-start mt-2"
-                              >
-                                광고 사례 보기 <ChevronRight size={18} />
-                              </a>
+                          <div className="relative w-full flex justify-center items-center py-4">
+                            <div className="relative w-[200px] md:w-[240px] h-[380px] md:h-[460px] bg-[#0f0f0f] rounded-[2.5rem] border-[6px] border-gray-800 shadow-[0_32px_80px_rgba(225,48,108,0.35)] overflow-hidden flex-shrink-0">
+                              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-[#0f0f0f] rounded-b-2xl z-20" />
+                              <iframe
+                                src="https://ad-cheock.vercel.app/orthopedic"
+                                className="w-full h-full border-none"
+                                title="SNS Ad Full View"
+                              />
                             </div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#e1306c]/20 blur-[80px] rounded-full pointer-events-none" />
                           </div>
                         ) : service.id === "hospital-photo" ? (
-                          <div className="relative w-full aspect-[4/3] rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden">
+                          <div className="relative w-full h-[380px] md:h-[460px] rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden">
                             <HospitalPhotoSlider className="w-full h-full" />
                           </div>
                         ) : service.id === "blog" ? (
-                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
-                            <img
-                              src="/images/blog.jpg"
-                              alt="지역 타겟 블로그"
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
+                          <div className="relative w-full h-[380px] md:h-[460px] shadow-xl overflow-hidden">
+                            <BlogSearchMockup />
                           </div>
                         ) : service.id === "review" ? (
-                          <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden group">
-                            <img
-                              src="/images/review.jpg"
-                              alt="리뷰 관리 솔루션"
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
+                          <div className="relative w-full h-[380px] md:h-[460px] shadow-xl overflow-hidden">
+                            <ReviewMockup />
                           </div>
                         ) : service.isApp ? (
-                          <div className="relative w-full flex justify-center">
-                            <div className="relative w-56 h-[420px] bg-[#121212] rounded-[1.5rem] border-[6px] border-gray-900 shadow-2xl overflow-hidden">
-                              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-[#121212] rounded-b-2xl z-20" />
+                          <div className="relative w-full flex justify-center items-center py-4">
+                            <div className="relative w-[200px] md:w-[240px] h-[380px] md:h-[460px] bg-[#0f0f0f] rounded-[2.5rem] border-[6px] border-gray-800 shadow-[0_32px_80px_rgba(51,133,255,0.35)] overflow-hidden flex-shrink-0">
+                              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-[#0f0f0f] rounded-b-2xl z-20" />
                               <iframe
-                                src="https://yonsei-cheok-patient.vercel.app/"
+                                src="https://meals-rosy.vercel.app/"
                                 className="w-full h-full border-none"
                                 title="Full App View"
                               />
                             </div>
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#3385ff]/20 blur-[80px] rounded-full pointer-events-none" />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#3385ff]/20 blur-[80px] rounded-full pointer-events-none" />
+                          </div>
+                        ) : service.id === "web" ? (
+                          <div className="relative w-full flex justify-center items-center py-4">
+                            <div className="relative w-[200px] md:w-[240px] h-[380px] md:h-[460px] bg-[#0f0f0f] rounded-[2.5rem] border-[6px] border-gray-800 shadow-[0_32px_80px_rgba(13,148,136,0.4)] overflow-hidden flex-shrink-0 flex flex-col">
+                              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-[#0f0f0f] rounded-b-2xl z-20" />
+                              <div className="pt-6 flex-1 overflow-hidden">
+                                <HospitalWebMockup />
+                              </div>
+                            </div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#0d9488]/20 blur-[80px] rounded-full pointer-events-none" />
                           </div>
                         ) : service.id === "youtube" ? (
-                          <YoutubeSlider />
+                          <div className="w-full h-[380px] md:h-[460px] flex items-center">
+                            <YoutubeSlider />
+                          </div>
                         ) : (
                           <div className="relative aspect-square rounded-[3rem] bg-gray-50 flex items-center justify-center overflow-hidden">
                             {/* Decorative graphics */}

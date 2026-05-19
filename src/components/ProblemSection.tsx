@@ -10,23 +10,14 @@ const Highlight = ({ children, color = "#FF5733" }: { children: React.ReactNode;
 
   return (
     <span className="relative inline-block whitespace-nowrap" ref={ref}>
+      <motion.span
+        className="absolute inset-0 z-0 rounded-[3px]"
+        style={{ backgroundColor: color, originX: 0 }}
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={isInView ? { scaleX: 1, opacity: 0.22 } : {}}
+        transition={{ duration: 0.55, ease: "easeOut", delay: 0.3 }}
+      />
       <span className="relative z-10">{children}</span>
-      <motion.svg
-        viewBox="0 0 100 20"
-        className="absolute -bottom-1 left-0 w-full h-3 z-0 overflow-visible"
-        preserveAspectRatio="none"
-      >
-        <motion.path
-          d="M0 10 Q 50 15 100 10"
-          stroke={color}
-          strokeWidth="8"
-          strokeLinecap="round"
-          fill="none"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={isInView ? { pathLength: 1, opacity: 0.7 } : {}}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
-        />
-      </motion.svg>
     </span>
   );
 };

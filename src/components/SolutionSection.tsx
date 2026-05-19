@@ -86,15 +86,19 @@ export default function SolutionSection() {
                 </p>
               </div>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 1 }}
-                className="pt-12"
+                className="pt-12 space-y-3 text-left"
               >
-                <div className="inline-block px-5 py-2.5 border border-white/20 rounded-full backdrop-blur-md bg-white/5 text-[10px] md:text-xs tracking-[0.2em] font-light uppercase">
-                  ThatDayTime : On-Site Partner
-                </div>
+                <p className="text-white font-black text-base md:text-2xl tracking-tight">
+                  정직원처럼 출근합니다. 에이전시처럼 결과 냅니다.
+                </p>
+                <p className="text-white/60 text-xs md:text-sm font-medium leading-relaxed">
+                  출근하지 않는 마케팅 회사는 결국 '남의 회사'입니다.<br />
+                  우리는 매주 원장님 병원으로 갑니다.
+                </p>
               </motion.div>
             </motion.div>
 

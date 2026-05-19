@@ -24,3 +24,20 @@ body {
     display: none;
   }
 }
+
+@keyframes scrollUp {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+@utility scroll-col-slow {
+  animation: scrollUp 30s linear infinite;
+}
+
+@utility scroll-col-medium {
+  animation: scrollUp 22s linear infinite;
+}
+
+@utility scroll-col-fast {
+  animation: scrollUp 16s linear infinite;
+}

@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Projects, { Project } from "@/components/Projects";
 import { ShaderAnimation } from "@/components/ui/shader-animation";
+import PatientInquirySection from "@/components/PatientInquirySection";
 
 interface WorksClientProps {
   projectData: Project[];
@@ -106,6 +107,8 @@ export default function WorksClient({ projectData }: WorksClientProps) {
       <div data-header-theme="light">
         <Projects data={projectData} />
       </div>
+
+      <PatientInquirySection />
 
       {/* Full Width Quote Section */}
       <section data-header-theme="dark" className="py-20 border-y border-white/10 overflow-hidden">

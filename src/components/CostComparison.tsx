@@ -19,7 +19,7 @@ const CountUp = ({ value }: { value: number }) => {
 };
 
 export default function CostComparison() {
-  const [numPeople, setNumPeople] = useState(1);
+  const [numPeople] = useState(2);
   const [activeTab, setActiveTab] = useState<"direct" | "other" | "tdtt">("tdtt");
   
   // Pricing constants (Monthly KRW)
@@ -72,22 +72,13 @@ export default function CostComparison() {
               </div>
             </div>
           </div>
-          <div className="bg-gray-50 p-6 rounded-3xl border border-gray-100 flex items-center gap-6">
-            <div className="space-y-1">
-              <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">채용 인원 설정 (비교군)</p>
-              <div className="flex items-center gap-4">
-                <input 
-                  type="range" 
-                  min="1" 
-                  max="5" 
-                  value={numPeople} 
-                  onChange={(e) => setNumPeople(parseInt(e.target.value))}
-                  className="accent-[#FF5733] w-32 md:w-48"
-                />
-                <span className="text-2xl font-black text-[#121212] w-14 shrink-0">{numPeople}명</span>
-              </div>
-            </div>
-          </div>
+        </div>
+
+        {/* Pre-chart Conclusion */}
+        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-8">
+          <p className="text-xl md:text-3xl font-black text-[#121212] leading-tight tracking-tighter">
+            직원 1명 채용비용으로,<br className="md:hidden" /> 전문가 5명을 고용하는 유일한 방법.
+          </p>
         </div>
 
         {/* Comparison Chart */}
@@ -143,33 +134,43 @@ export default function CostComparison() {
           const rows = [
             {
               category: "업무 범위",
-              direct: "개인 역량에 따라 매우 제한적",
-              other: "계약된 특정 플랫폼(블로그 등) 한정",
-              tdtt: "디자인, 기획, 영상, 앱, 마케팅 분야 총괄",
+              direct: "개인 역량에 한정",
+              directBad: true,
+              other: "계약 플랫폼만 한정",
+              otherBad: true,
+              tdtt: "디자인·기획·영상·마케팅 총괄",
             },
             {
               category: "현장 이해도",
-              direct: "100% 파악 가능",
-              other: "원격 관리, 병원 현장 소통 단절",
-              tdtt: "주 1회 이상 방문으로 원내 상황 100% 파악",
+              direct: "담당자 1명에 한정",
+              directBad: true,
+              other: "원격 관리, 소통 단절",
+              otherBad: true,
+              tdtt: "주 1회 방문, 원내 상황 100% 파악",
             },
             {
               category: "인건비/리스크",
-              direct: "4대보험, 퇴직금, 휴가 공백, 장비 구매 필수",
-              other: "월 400이상 + 추가 옵션 시 비용 기하급수적으로 증가",
-              tdtt: "월 350~400 (추가 비용 및 퇴사 리스크 제로)",
+              direct: "4대보험·퇴직금·장비 추가",
+              directBad: true,
+              other: "추가 옵션 시 비용 급증",
+              otherBad: true,
+              tdtt: "월 정액, 추가비용·퇴사 리스크 0",
             },
             {
               category: "디자인발주비",
-              direct: "가능하나 인쇄소 등 핸들링 경험 부족",
-              other: "통상 1.3배 ~ 1.5배의 중간 마진 발생",
-              tdtt: "거품 없는 실비 진행 (추가 마진 없음)",
+              direct: "인쇄소 핸들링 경험 부족",
+              directBad: true,
+              other: "1.3~1.5배 중간 마진 발생",
+              otherBad: true,
+              tdtt: "실비 진행, 마진 없음",
             },
             {
               category: "AI 및 트렌드",
-              direct: "트렌드 스터디 및 적용 현실적 불가",
+              direct: "트렌드 적용 현실적 불가",
+              directBad: true,
               other: "기존 매뉴얼 방식 고수",
-              tdtt: "AI 툴 활용 및 데이터 기반 추적 시스템 구축",
+              otherBad: true,
+              tdtt: "AI 툴 + 데이터 기반 시스템",
             },
           ];
           return (
@@ -188,12 +189,22 @@ export default function CostComparison() {
                   <tbody className="text-gray-500 font-medium">
                     {rows.map((row, i) => (
                       <tr key={i} className="border-b border-gray-50 group transition-colors hover:bg-gray-50/50">
-                        <td className="py-6 px-6 font-bold text-[#121212] bg-gray-50/10">{row.category}</td>
-                        <td className="py-6 px-6 text-sm leading-relaxed">{row.direct}</td>
-                        <td className="py-6 px-6 text-sm leading-relaxed">{row.other}</td>
+                        <td className="py-6 px-6 font-bold text-base text-[#121212]">{row.category}</td>
+                        <td className="py-6 px-6 text-sm leading-relaxed text-gray-400">
+                          <div className="flex items-center gap-2">
+                            {row.directBad && <X size={14} className="text-red-400 shrink-0" />}
+                            <span>{row.direct}</span>
+                          </div>
+                        </td>
+                        <td className="py-6 px-6 text-sm leading-relaxed text-gray-400">
+                          <div className="flex items-center gap-2">
+                            {row.otherBad && <X size={14} className="text-red-400 shrink-0" />}
+                            <span>{row.other}</span>
+                          </div>
+                        </td>
                         <td className="py-6 px-6 font-bold text-gray-900 bg-[#FF5733]/5 border-x border-[#FF5733]/5">
-                          <div className="flex items-start gap-2 text-[#FF5733]">
-                            <ShieldCheck size={18} fill="#FF5733" className="text-white shrink-0 mt-1" />
+                          <div className="flex items-center gap-2 text-[#FF5733]">
+                            <ShieldCheck size={16} fill="#FF5733" className="text-white shrink-0" />
                             <span>{row.tdtt}</span>
                           </div>
                         </td>
@@ -243,6 +254,7 @@ export default function CostComparison() {
                   >
                     {rows.map((row, i) => {
                       const content = activeTab === "direct" ? row.direct : activeTab === "other" ? row.other : row.tdtt;
+                      const isBad = activeTab === "direct" ? row.directBad : activeTab === "other" ? row.otherBad : false;
                       const isTdtt = activeTab === "tdtt";
                       return (
                         <div
@@ -252,9 +264,10 @@ export default function CostComparison() {
                           <p className={`text-[10px] font-black uppercase tracking-widest mb-1.5 ${isTdtt ? "text-[#FF5733]/60" : "text-gray-400"}`}>
                             {row.category}
                           </p>
-                          <div className="flex items-start gap-2">
-                            {isTdtt && <ShieldCheck size={15} fill="#FF5733" className="text-white shrink-0 mt-0.5" />}
-                            <p className={`text-sm leading-relaxed font-medium ${isTdtt ? "text-[#FF5733]" : "text-gray-600"}`}>
+                          <div className="flex items-center gap-2">
+                            {isTdtt && <ShieldCheck size={15} fill="#FF5733" className="text-white shrink-0" />}
+                            {isBad && <X size={14} className="text-red-400 shrink-0" />}
+                            <p className={`text-sm leading-relaxed font-medium ${isTdtt ? "text-[#FF5733]" : "text-gray-500"}`}>
                               {content}
                             </p>
                           </div>
