@@ -1,25 +1,28 @@
 "use client";
 
-import { motion, AnimatePresence, animate } from "framer-motion";
-import { useState, useEffect } from "react";
+import { motion, AnimatePresence, animate, useInView } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import { X, AlertCircle, TrendingDown, ShieldCheck } from "lucide-react";
 
 const CountUp = ({ value }: { value: number }) => {
   const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   useEffect(() => {
+    if (!isInView) return;
     const controls = animate(displayValue, value, {
       duration: 1,
       onUpdate: (latest) => setDisplayValue(Math.floor(latest)),
     });
     return () => controls.stop();
-  }, [value]);
+  }, [value, isInView]);
 
-  return <span>{displayValue.toLocaleString()}</span>;
+  return <span ref={ref}>{displayValue.toLocaleString()}</span>;
 };
 
 export default function CostComparison() {
-  const [numPeople] = useState(2);
+  const [numPeople, setNumPeople] = useState(2);
   const [activeTab, setActiveTab] = useState<"direct" | "other" | "tdtt">("tdtt");
   
   // Pricing constants (Monthly KRW)
@@ -44,7 +47,7 @@ export default function CostComparison() {
       <div className="max-w-7xl mx-auto space-y-20">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
           <div className="space-y-6 max-w-2xl">
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
@@ -65,11 +68,36 @@ export default function CostComparison() {
                 <motion.span 
                   initial={{ width: 0 }}
                   whileInView={{ width: "100%" }}
-                  viewport={{ once: false, amount: 0.8 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
-                  className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] leading-[1.3] tracking-tighter overflow-hidden block whitespace-nowrap"
+                  className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] leading-[1.3] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
                 >진짜 비용을 아시나요?</motion.span>
               </div>
+            </div>
+          </div>
+
+          {/* 채용 인원 설정 탭/버튼 UI */}
+          <div className="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 flex flex-col gap-3 shrink-0">
+            <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">채용 인원 설정 (직접 채용 비교군)</p>
+            <div className="flex items-center gap-2">
+              {[1, 2].map((num) => {
+                const isActive = numPeople === num;
+                return (
+                  <motion.button
+                    key={num}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setNumPeople(num)}
+                    className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl font-black text-sm md:text-base flex items-center justify-center transition-all ${
+                      isActive 
+                        ? "bg-[#FF5733] text-white shadow-lg shadow-[#FF5733]/30" 
+                        : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                    }`}
+                  >
+                    {num}명
+                  </motion.button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -88,6 +116,8 @@ export default function CostComparison() {
               <div className="flex flex-col items-center">
                 <motion.div
                    initial={{ height: 0 }}
+                   whileInView={{ height: `${(item.cost / maxCost) * 300}px` }}
+                   viewport={{ once: true, amount: 0.2 }}
                    animate={{ height: `${(item.cost / maxCost) * 300}px` }}
                    transition={{ type: "spring", damping: 20, stiffness: 100 }}
                   className="w-full max-w-[60px] md:max-w-[120px] rounded-xl md:rounded-2xl relative overflow-hidden shadow-lg group-hover:shadow-2xl transition-all"
