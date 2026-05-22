@@ -150,7 +150,7 @@ export default function CostComparison() {
                         <span className="hidden md:inline">월 {((maxCost - item.cost) / 10000).toLocaleString()}만원 절감</span>
                         <span className="md:hidden">{((maxCost - item.cost) / 10000).toLocaleString()}만원↓</span>
                       </div>
-                      <span className="hidden md:inline text-[10px] opacity-70">추가 비용 및 퇴사 리스크 제로</span>
+                      <span className="hidden md:inline text-[10px] opacity-70">추가 비용 및 퇴사 리스크 없음</span>
                     </motion.div>
                   )}
                 </div>
@@ -184,7 +184,7 @@ export default function CostComparison() {
               directBad: true,
               other: "추가 옵션 시 비용 급증",
               otherBad: true,
-              tdtt: "월 정액, 추가비용·퇴사 리스크 0",
+              tdtt: "월 정액, 추가비용·퇴사 리스크 없음",
             },
             {
               category: "디자인발주비",
