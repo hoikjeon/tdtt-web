@@ -22,7 +22,7 @@ const CountUp = ({ value }: { value: number }) => {
 };
 
 export default function CostComparison() {
-  const [numPeople, setNumPeople] = useState(2);
+  const [numPeople, setNumPeople] = useState(1);
   const [activeTab, setActiveTab] = useState<"direct" | "other" | "tdtt">("tdtt");
   
   // Pricing constants (Monthly KRW)
