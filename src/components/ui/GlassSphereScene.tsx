@@ -4,7 +4,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Text, Lightformer, Html, PerformanceMonitor } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { LiquidSphere } from "./LiquidSphere";
-import { Suspense, useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useState, useRef, useCallback } from "react";
 import * as THREE from "three";
 
 // Character width map – Latin chars have individual widths; Korean (Hangul) chars default to 0.95 (full-width)
@@ -16,6 +16,16 @@ const charWidthMap: Record<string, number> = {
   "1": 0.55
 };
 
+interface CharRefData {
+  ref: any;
+  originX: number;
+  originY: number;
+  delay: number;
+  isReady: boolean;
+  pushFactor: number;
+  scaleFactor: number;
+}
+
 function ReactiveChar({ 
   char, 
   originX, 
@@ -23,9 +33,10 @@ function ReactiveChar({
   fontSize, 
   color, 
   baseOutlineColor,
-  maxDist = 2.0,
+  delay,
   pushFactor = 0.26,
-  scaleFactor = 0.15
+  scaleFactor = 0.15,
+  registerChar
 }: { 
   char: string, 
   originX: number, 
@@ -33,81 +44,26 @@ function ReactiveChar({
   fontSize: number, 
   color: string, 
   baseOutlineColor: string,
-  maxDist?: number,
+  delay: number,
   pushFactor?: number,
-  scaleFactor?: number
+  scaleFactor?: number,
+  registerChar: (
+    ref: any,
+    originX: number,
+    originY: number,
+    delay: number,
+    pushFactor: number,
+    scaleFactor: number
+  ) => () => void
 }) {
   const ref = useRef<any>(null); 
-  const isReady = useRef(false);
 
-  // Bottom-to-Top Stagger: Lower lines appear first, cascading upwards
-  const delay = 0.3 + (1.8 - originY) * 0.15;
-
-  useFrame((state) => {
-    if (!ref.current) return;
-    
-    const time = state.clock.elapsedTime;
-    
-    // --- PHASE 1: FADE-UP FROM BOTTOM ---
-    if (!isReady.current) {
-      if (time < delay) {
-        return;
-      }
-      
-      const elapsed = time - delay;
-      const progress = Math.min(elapsed / 1.2, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      
-      ref.current.position.y = originY - 1.5 * (1 - ease);
-      ref.current.position.x = originX;
-      ref.current.position.z = 0;
-      
-      if (ref.current.material) {
-        ref.current.material.opacity = ease;
-      }
-      ref.current.fillOpacity = ease;
-      
-      if (progress >= 1) {
-        ref.current.position.set(originX, originY, 0);
-        if (ref.current.material) ref.current.material.opacity = 1;
-        ref.current.fillOpacity = 1;
-        isReady.current = true;
-      }
-      return;
+  useEffect(() => {
+    if (ref.current) {
+      const unregister = registerChar(ref.current, originX, originY, delay, pushFactor, scaleFactor);
+      return unregister;
     }
-
-    // --- PHASE 2: INTERACTIVE HOVER BEHAVIOR ---
-    const mouseX = state.pointer.x * (state.viewport.width / 2.5);
-    const mouseY = state.pointer.y * (state.viewport.height / 2.5);
-    
-    const orgDistX = mouseX - originX; 
-    const orgDistY = mouseY - originY;
-    const distance = Math.sqrt(orgDistX * orgDistX + orgDistY * orgDistY);
-
-    const maxDist = 2.0;
-
-    if (distance < maxDist && distance > 0.01) {
-      const force = Math.pow((maxDist - distance) / maxDist, 2);
-      
-      const pushX = (orgDistX / distance) * -pushFactor * force; 
-      const pushY = (orgDistY / distance) * -pushFactor * force; 
-
-      ref.current.position.x = THREE.MathUtils.lerp(ref.current.position.x, originX + pushX, 0.15);
-      ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, originY + pushY, 0.15);
-      
-      const targetScale = 1.0 + force * scaleFactor;
-      ref.current.scale.setScalar(THREE.MathUtils.lerp(ref.current.scale.x, targetScale, 0.15));
-      
-      const targetRotation = Math.sin(originX * 10) * force * scaleFactor;
-      ref.current.rotation.z = THREE.MathUtils.lerp(ref.current.rotation.z, targetRotation, 0.15);
-
-    } else {
-      ref.current.position.x = THREE.MathUtils.lerp(ref.current.position.x, originX, 0.1);
-      ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, originY, 0.1);
-      ref.current.scale.setScalar(THREE.MathUtils.lerp(ref.current.scale.x, 1, 0.1));
-      ref.current.rotation.z = THREE.MathUtils.lerp(ref.current.rotation.z, 0, 0.1);
-    }
-  });
+  }, [registerChar, originX, originY, delay, pushFactor, scaleFactor]);
 
   return (
     <Text 
@@ -146,7 +102,8 @@ function ReactiveLine({
   targetWidth,
   maxDist,
   pushFactor,
-  scaleFactor
+  scaleFactor,
+  registerChar
 }: { 
   text: string, 
   y: number, 
@@ -156,7 +113,15 @@ function ReactiveLine({
   targetWidth?: number,
   maxDist?: number,
   pushFactor?: number,
-  scaleFactor?: number
+  scaleFactor?: number,
+  registerChar: (
+    ref: any,
+    originX: number,
+    originY: number,
+    delay: number,
+    pushFactor: number,
+    scaleFactor: number
+  ) => () => void
 }) {
   const chars = text.split("");
   if (chars.length === 0) return null;
@@ -170,23 +135,16 @@ function ReactiveLine({
     naturalWidth += w;
   }
 
-  // If targetWidth is specified, we achieve perfect justification by locking 
-  // the first character to the left edge and the last character to the right edge.
-  const totalWidth = targetWidth || naturalWidth;
   const positions: number[] = [];
   
   if (chars.length > 1 && targetWidth) {
-    // Distance between the CENTER of the first char and the CENTER of the last char
     const edgeToEdgeCenter = targetWidth - (charWidths[0] / 2) - (charWidths[chars.length - 1] / 2);
     
-    // Sum of widths of middle characters and gaps
-    // Wait, the natural distance between first and last center is:
     let naturalDistBetweenCenters = 0;
     for (let i = 0; i < chars.length - 1; i++) {
       naturalDistBetweenCenters += (charWidths[i]/2 + charWidths[i+1]/2);
     }
     
-    // We scale the gaps (the space between centers) to fit the target edgeToEdgeCenter
     const scaleFactor = edgeToEdgeCenter / naturalDistBetweenCenters;
     
     let currentX = -targetWidth / 2 + charWidths[0] / 2;
@@ -198,7 +156,6 @@ function ReactiveLine({
       positions.push(currentX);
     }
   } else {
-    // Default natural spacing
     let currentX = -naturalWidth / 2;
     for (let i = 0; i < chars.length; i++) {
       positions.push(currentX + charWidths[i] / 2);
@@ -211,6 +168,8 @@ function ReactiveLine({
       {chars.map((char, i) => {
         if (char === " ") return null;
         const originX = positions[i];
+        // Bottom-to-Top Stagger: Lower lines appear first, cascading upwards
+        const delay = 0.3 + (1.8 - y) * 0.15;
         return (
           <ReactiveChar 
             key={`${i}-${char}`} 
@@ -220,9 +179,10 @@ function ReactiveLine({
             fontSize={fontSize} 
             color={color} 
             baseOutlineColor={baseOutlineColor} 
-            maxDist={maxDist}
+            delay={delay}
             pushFactor={pushFactor}
             scaleFactor={scaleFactor}
+            registerChar={registerChar}
           />
         );
       })}
@@ -236,11 +196,37 @@ const heroLines = [
   { text: "직원 1명의 인건비로 누리는", color: "#e6e6e6" },
   { text: "가장 완벽한 올인원 마케팅 팀", color: "#b5b5b5" },
 ];
-// Removed static HERO_FONT_SIZE for responsiveness
 
-function JustifiedTextBlock() {
+function JustifiedTextBlock({ isVisible }: { isVisible: boolean }) {
   const { size } = useThree();
   const width = size.width;
+  
+  const charRefs = useRef<CharRefData[]>([]);
+
+  const registerChar = useCallback((
+    ref: any,
+    originX: number,
+    originY: number,
+    delay: number,
+    pushFactor: number,
+    scaleFactor: number
+  ) => {
+    const existing = charRefs.current.find(item => item.ref === ref);
+    if (!existing) {
+      charRefs.current.push({
+        ref,
+        originX,
+        originY,
+        delay,
+        isReady: false,
+        pushFactor,
+        scaleFactor
+      });
+    }
+    return () => {
+      charRefs.current = charRefs.current.filter(item => item.ref !== ref);
+    };
+  }, []);
 
   // Responsive scaling based on window width
   let fontSize = 0.55;
@@ -269,9 +255,76 @@ function JustifiedTextBlock() {
     scaleFactor = 0.12;
   }
 
+  // Unified Frame Loop: Single useFrame updates all characters in one go
+  useFrame((state) => {
+    if (!isVisible) return;
+
+    const time = state.clock.elapsedTime;
+    const mouseX = state.pointer.x * (state.viewport.width / 2.5);
+    const mouseY = state.pointer.y * (state.viewport.height / 2.5);
+
+    charRefs.current.forEach((item) => {
+      if (!item.ref) return;
+
+      // --- PHASE 1: FADE-UP FROM BOTTOM ---
+      if (!item.isReady) {
+        if (time < item.delay) {
+          return;
+        }
+        
+        const elapsed = time - item.delay;
+        const progress = Math.min(elapsed / 1.2, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        
+        item.ref.position.y = item.originY - 1.5 * (1 - ease);
+        item.ref.position.x = item.originX;
+        item.ref.position.z = 0;
+        
+        if (item.ref.material) {
+          item.ref.material.opacity = ease;
+        }
+        item.ref.fillOpacity = ease;
+        
+        if (progress >= 1) {
+          item.ref.position.set(item.originX, item.originY, 0);
+          if (item.ref.material) item.ref.material.opacity = 1;
+          item.ref.fillOpacity = 1;
+          item.isReady = true;
+        }
+        return;
+      }
+
+      // --- PHASE 2: INTERACTIVE HOVER BEHAVIOR ---
+      const orgDistX = mouseX - item.originX; 
+      const orgDistY = mouseY - item.originY;
+      const distance = Math.sqrt(orgDistX * orgDistX + orgDistY * orgDistY);
+
+      if (distance < maxDist && distance > 0.01) {
+        const force = Math.pow((maxDist - distance) / maxDist, 2);
+        
+        const pushX = (orgDistX / distance) * -item.pushFactor * force; 
+        const pushY = (orgDistY / distance) * -item.pushFactor * force; 
+
+        item.ref.position.x = THREE.MathUtils.lerp(item.ref.position.x, item.originX + pushX, 0.15);
+        item.ref.position.y = THREE.MathUtils.lerp(item.ref.position.y, item.originY + pushY, 0.15);
+        
+        const targetScale = 1.0 + force * item.scaleFactor;
+        item.ref.scale.setScalar(THREE.MathUtils.lerp(item.ref.scale.x, targetScale, 0.15));
+        
+        const targetRotation = Math.sin(item.originX * 10) * force * item.scaleFactor;
+        item.ref.rotation.z = THREE.MathUtils.lerp(item.ref.rotation.z, targetRotation, 0.15);
+
+      } else {
+        item.ref.position.x = THREE.MathUtils.lerp(item.ref.position.x, item.originX, 0.1);
+        item.ref.position.y = THREE.MathUtils.lerp(item.ref.position.y, item.originY, 0.1);
+        item.ref.scale.setScalar(THREE.MathUtils.lerp(item.ref.scale.x, 1, 0.1));
+        item.ref.rotation.z = THREE.MathUtils.lerp(item.ref.rotation.z, 0, 0.1);
+      }
+    });
+  });
+
   // Compute the max natural width to use as target for all lines
   const maxWidth = Math.max(...heroLines.map(l => getLineNaturalWidth(l.text, fontSize)));
-
   const yPositions = [ySep * 1.0, ySep * 0.0, ySep * -1.0];
 
   return (
@@ -288,6 +341,7 @@ function JustifiedTextBlock() {
           maxDist={maxDist}
           pushFactor={pushFactor}
           scaleFactor={scaleFactor}
+          registerChar={registerChar}
         />
       ))}
     </group>
@@ -296,6 +350,21 @@ function JustifiedTextBlock() {
 
 export default function GlassSphereScene() {
   const [dpr, setDpr] = useState(1.5);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  // Monitor visibility of the 3D Canvas wrapper to suspend rendering when offscreen
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.01 }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (window.innerWidth < 768) {
@@ -311,41 +380,43 @@ export default function GlassSphereScene() {
   };
 
   return (
-    <div className="w-full h-screen bg-[#121212] overflow-hidden relative text-white select-none touch-none">
-      <Canvas
-        camera={{ position: [0, 0, 10], fov: 35 }}
-        dpr={dpr}
-        gl={{ antialias: false, powerPreference: "high-performance", alpha: false }}
-      >
-        <PerformanceMonitor onIncline={() => setDpr(1.5)} onDecline={() => setDpr(1)}>
-        <color attach="background" args={["#121212"]} />
-        <ambientLight intensity={0.2} />
-        
-        <directionalLight 
-          position={[5, 10, 5]} 
-          intensity={1} 
-          color="#ffffff" 
-        />
-        <directionalLight position={[-5, -10, -5]} intensity={0.5} color="#4f4f4f" />
-        
-        <Environment resolution={256}>
-          <group rotation={[-Math.PI / 3, 0, 0]}>
-            <Lightformer form="circle" intensity={4} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={2} color="#ffffff" />
-            <Lightformer form="circle" intensity={1} rotation-y={Math.PI / 2} position={[-5, 1, -1]} scale={2} color="#cccccc" />
-            <Lightformer form="circle" intensity={1} rotation-y={Math.PI / 2} position={[5, 1, -1]} scale={2} color="#eeeeee" />
-            <Lightformer form="rect" intensity={0.5} rotation-x={Math.PI / 2} position={[0, -5, 0]} scale={10} color="#ffffff" />
-          </group>
-        </Environment>
+    <div 
+      ref={containerRef}
+      className="w-full h-screen bg-[#121212] overflow-hidden relative text-white select-none touch-none"
+    >
+      {isVisible && (
+        <Canvas
+          camera={{ position: [0, 0, 10], fov: 35 }}
+          dpr={dpr}
+          gl={{ antialias: false, powerPreference: "high-performance", alpha: false }}
+        >
+          <PerformanceMonitor onIncline={() => setDpr(1.5)} onDecline={() => setDpr(1)}>
+            <color attach="background" args={["#121212"]} />
+            <ambientLight intensity={0.2} />
+            
+            <directionalLight 
+              position={[5, 10, 5]} 
+              intensity={1} 
+              color="#ffffff" 
+            />
+            <directionalLight position={[-5, -10, -5]} intensity={0.5} color="#4f4f4f" />
+            
+            <Environment resolution={256}>
+              <group rotation={[-Math.PI / 3, 0, 0]}>
+                <Lightformer form="circle" intensity={4} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={2} color="#ffffff" />
+                <Lightformer form="circle" intensity={1} rotation-y={Math.PI / 2} position={[-5, 1, -1]} scale={2} color="#cccccc" />
+                <Lightformer form="circle" intensity={1} rotation-y={Math.PI / 2} position={[5, 1, -1]} scale={2} color="#eeeeee" />
+                <Lightformer form="rect" intensity={0.5} rotation-x={Math.PI / 2} position={[0, -5, 0]} scale={10} color="#ffffff" />
+              </group>
+            </Environment>
 
-        <Suspense fallback={<Html center><div className="text-white/50 text-sm tracking-widest">LOADING 3D...</div></Html>}>
-
-          <JustifiedTextBlock />
-
-          <LiquidSphere />
-
-        </Suspense>
-        </PerformanceMonitor>
-      </Canvas>
+            <Suspense fallback={<Html center><div className="text-white/50 text-sm tracking-widest">LOADING 3D...</div></Html>}>
+              <JustifiedTextBlock isVisible={isVisible} />
+              <LiquidSphere />
+            </Suspense>
+          </PerformanceMonitor>
+        </Canvas>
+      )}
 
       {/* 🖱 Scroll Down Indicator (Refined Design) */}
       <motion.button
@@ -388,3 +459,4 @@ export default function GlassSphereScene() {
     </div>
   );
 }
+

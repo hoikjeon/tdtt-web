@@ -21,6 +21,55 @@ const Highlight = ({ children, color = "#FF5733" }: { children: React.ReactNode;
   );
 };
 
+const AnimatedText = ({ text, delay = 0, className = "" }: { text: string; delay?: number; className?: string }) => {
+  const letters = Array.from(text);
+
+  const container: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.03, delayChildren: delay }
+    }
+  };
+
+  const child: Variants = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 250
+      }
+    },
+    hidden: {
+      opacity: 0,
+      y: 8,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 250
+      }
+    }
+  };
+
+  return (
+    <motion.span
+      variants={container}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      className={className}
+    >
+      {letters.map((letter, index) => (
+        <motion.span key={index} variants={child} style={{ display: "inline-block" }}>
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </motion.span>
+  );
+};
+
 export default function AgitationSection() {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: "-10%" });
@@ -42,6 +91,20 @@ export default function AgitationSection() {
       x: 0,
       transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as any },
     },
+  };
+
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 20, scale: 0.97 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        delay: 1.7,
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1] as any
+      }
+    }
   };
 
   return (
@@ -132,12 +195,18 @@ export default function AgitationSection() {
                 </svg>
               </div>
               <div className="flex-1 space-y-3">
-                <p className="text-gray-200 text-sm md:text-base leading-relaxed">
-                  강남 지역에서 허리디스크 비수술 치료로 높은 평가를 받는 병원을 알려드릴게요.
+                <p className="text-gray-200 text-sm md:text-base leading-relaxed flex flex-wrap">
+                  <AnimatedText text="강남 지역에서 허리디스크 비수술 치료로 높은 평가를 받는 병원을 알려드릴게요." delay={0.5} />
                 </p>
 
                 {/* Hospital recommendation card */}
-                <div className="bg-[#2f2f2f] border border-white/10 rounded-2xl p-4 space-y-3">
+                <motion.div
+                  variants={cardVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  className="bg-[#2f2f2f] border border-white/10 rounded-2xl p-4 space-y-3 shadow-lg origin-bottom"
+                >
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex items-center gap-1.5 mb-1">
@@ -168,10 +237,12 @@ export default function AgitationSection() {
                   <p className="text-gray-400 text-xs md:text-sm leading-relaxed border-t border-white/10 pt-3">
                     초진 환자의 <span className="text-white font-semibold">91%</span>가 수술 없이 호전되었으며, 척추 전문의가 직접 비수술 맞춤 치료를 진행합니다.
                   </p>
-                </div>
+                </motion.div>
 
-                <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
-                  위 병원은 AI 학습 데이터 기준 허리디스크 <span className="text-white font-medium">비수술 치료 만족도</span> 상위 1%에 해당합니다.
+                <p className="text-gray-400 text-xs md:text-sm leading-relaxed flex flex-wrap gap-x-1">
+                  <AnimatedText text="위 병원은 AI 학습 데이터 기준 허리디스크" delay={2.3} />
+                  <AnimatedText text="비수술 치료 만족도" delay={3.05} className="text-white font-medium" />
+                  <AnimatedText text="상위 1%에 해당합니다." delay={3.35} />
                 </p>
               </div>
             </div>

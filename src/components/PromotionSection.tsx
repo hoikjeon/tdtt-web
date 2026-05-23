@@ -92,12 +92,61 @@ export default function PromotionSection() {
           <div className="bg-[#121212] rounded-[2.9rem] p-8 md:p-16 text-center space-y-8 relative overflow-hidden">
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#FF5733]/20 blur-[100px] rounded-full pointer-events-none" />
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">PROMOTION PRICE</p>
-              <h3 className="text-4xl md:text-6xl font-black text-white">
-                선착순 3개 병원 한정 <span className="text-[#FF5733]">월 350만 원</span>
-                <span className="text-base md:text-xl text-gray-500 font-bold ml-2">(VAT 별도)</span>
-              </h3>
+              <div className="flex flex-col items-center justify-center gap-3 md:gap-5">
+                <h3 className="text-3xl md:text-5xl font-black text-white leading-tight">
+                  선착순 3개 병원 한정
+                </h3>
+                
+                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5 mt-1">
+                  {/* Original price 400만원 (Strikethrough & fade-out) */}
+                  <motion.div
+                    initial={{ opacity: 0.8, scale: 1 }}
+                    whileInView={{ opacity: 0.35, scale: 0.95 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
+                    className="relative text-xl md:text-3xl text-gray-500 font-bold flex items-center justify-center flex-shrink-0"
+                  >
+                    <span>월 400만 원</span>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: "100%" }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4, duration: 0.5, ease: "easeInOut" }}
+                      className="absolute h-[3px] bg-[#FF5733] left-0 top-1/2 -translate-y-1/2"
+                    />
+                  </motion.div>
+                  
+                  {/* Arrow */}
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    whileInView={{ opacity: 0.5, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.8, duration: 0.3 }}
+                    className="text-gray-500 text-lg md:text-2xl font-bold hidden sm:inline"
+                  >
+                    ➔
+                  </motion.span>
+                  
+                  {/* Promotion price 350만원 (Spring bounce popup) */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 15, scale: 0.8 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      delay: 0.9,
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 15
+                    }}
+                    className="text-4xl md:text-7xl font-black text-[#FF5733] tracking-tight flex items-baseline gap-1"
+                  >
+                    <span>월 350만 원</span>
+                    <span className="text-base md:text-xl text-gray-500 font-bold ml-1">(VAT 별도)</span>
+                  </motion.div>
+                </div>
+              </div>
             </div>
 
             <div className="bg-white/5 border border-white/10 rounded-3xl p-6 inline-flex items-center gap-4 max-w-2xl mx-auto">

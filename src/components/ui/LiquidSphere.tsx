@@ -1,11 +1,15 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
 export function LiquidSphere() {
+  const { gl } = useThree();
+  const dpr = gl.getPixelRatio();
+  const isLowPerf = dpr <= 1.0;
+
   const mainRef = useRef<THREE.Group>(null);
   const sat1Ref = useRef<THREE.Group>(null);
   const sat2Ref = useRef<THREE.Group>(null);
@@ -65,11 +69,15 @@ export function LiquidSphere() {
 
     if (mainMatRef.current) {
       mainMatRef.current.ior = 1.5 + iorJitter;
-      mainMatRef.current.thickness = 4 + thickJitter;
+      if (!isLowPerf) {
+        mainMatRef.current.thickness = 4 + thickJitter;
+      }
     }
     if (sat1MatRef.current) {
       sat1MatRef.current.ior = 1.5 + iorJitter;
-      sat1MatRef.current.thickness = 2 + thickJitter * 0.5;
+      if (!isLowPerf) {
+        sat1MatRef.current.thickness = 2 + thickJitter * 0.5;
+      }
     }
     if (sat2MatRef.current) {
       sat2MatRef.current.ior = 1.5 + iorJitter;
@@ -81,48 +89,72 @@ export function LiquidSphere() {
 
   const materialProps = {
     transmission: 1,
-    roughness: 0,
+    roughness: 0.02,
     thickness: 3,
     ior: 1.5,
     chromaticAberration: 0.05,
     backside: true,
-    resolution: 256,
+    resolution: 128, // Reduced from 256 for performance
     color: "#ffffff",
   };
+
+  // Render optimized MeshPhysicalMaterial for low performance devices
+  const renderMaterial = (matRef: any, thicknessValue: number) => {
+    if (isLowPerf) {
+      return (
+        <meshPhysicalMaterial
+          ref={matRef}
+          transmission={1.0}
+          roughness={0.02}
+          thickness={thicknessValue}
+          ior={1.5}
+          color="#ffffff"
+          transparent
+          opacity={0.9}
+          depthWrite={false}
+        />
+      );
+    }
+    return <MeshTransmissionMaterial ref={matRef} {...materialProps} thickness={thicknessValue} />;
+  };
+
+  // Reduce geometry segments by half for low performance devices
+  const segments = (base: number) => (isLowPerf ? Math.floor(base / 2) : base);
 
   return (
     <group position={[0, 0, 1]}>
       {/* Main Large Sphere */}
       <group ref={mainRef} position={[mainPos[0], mainPos[1], mainPos[2]]}>
         <mesh>
-          <sphereGeometry args={[0.72, 48, 48]} />
-          <MeshTransmissionMaterial ref={mainMatRef} {...materialProps} thickness={4} />
+          <sphereGeometry args={[0.72, segments(48), segments(48)]} />
+          {renderMaterial(mainMatRef, 4)}
         </mesh>
       </group>
 
       {/* Medium Sphere */}
       <group ref={sat1Ref} position={[sat1Pos[0], sat1Pos[1], sat1Pos[2]]}>
         <mesh>
-          <sphereGeometry args={[0.36, 32, 32]} />
-          <MeshTransmissionMaterial ref={sat1MatRef} {...materialProps} thickness={2} />
+          <sphereGeometry args={[0.36, segments(32), segments(32)]} />
+          {renderMaterial(sat1MatRef, 2)}
         </mesh>
       </group>
 
       {/* Small Sphere */}
       <group ref={sat2Ref} position={[sat2Pos[0], sat2Pos[1], sat2Pos[2]]}>
         <mesh>
-          <sphereGeometry args={[0.26, 24, 24]} />
-          <MeshTransmissionMaterial ref={sat2MatRef} {...materialProps} thickness={1.5} />
+          <sphereGeometry args={[0.26, segments(24), segments(24)]} />
+          {renderMaterial(sat2MatRef, 1.5)}
         </mesh>
       </group>
       
       {/* Tiny Sphere */}
       <group ref={sat3Ref} position={[sat3Pos[0], sat3Pos[1], sat3Pos[2]]}>
         <mesh>
-          <sphereGeometry args={[0.1, 16, 16]} />
-          <MeshTransmissionMaterial ref={sat3MatRef} {...materialProps} thickness={1} />
+          <sphereGeometry args={[0.1, segments(16), segments(16)]} />
+          {renderMaterial(sat3MatRef, 1)}
         </mesh>
       </group>
     </group>
   );
 }
+

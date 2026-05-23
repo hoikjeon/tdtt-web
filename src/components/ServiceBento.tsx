@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   Video,
   Newspaper,
@@ -99,7 +99,7 @@ const services: ServiceItem[] = [
     id: "sns",
     title: "SNS 광고/운영",
     description: "인스타그램/페이스북 맞춤형 타겟 전략",
-    detail: "지역 타겟팅과 관심사 분석을 통해 잠재 환자에게 가장 효과적으로 브랜드를 노출합니다.",
+    detail: "지역 타겟팅 and 관심사 분석을 통해 잠재 환자에게 가장 효과적으로 브랜드를 노출합니다.",
     icon: Share2,
     color: "#e1306c",
     size: "small",
@@ -150,7 +150,7 @@ const YOUTUBE_VIDEOS = [
   "I-fyZehCIMA",
 ];
 
-function YoutubeSlider() {
+const YoutubeSlider = memo(function YoutubeSlider() {
   const [idx, setIdx] = useState(0);
 
   const go = (dir: number) => {
@@ -199,14 +199,14 @@ function YoutubeSlider() {
       <p className="text-center text-xs text-gray-400">{idx + 1} / {YOUTUBE_VIDEOS.length}</p>
     </div>
   );
-}
+});
 
 const HOSPITAL_PHOTOS = [
   { src: "/images/doctor1.jpg", label: "의료진 프로필" },
   { src: "/images/doctor2.jpg", label: "원내 촬영" },
 ];
 
-function AISearchMockup() {
+const AISearchMockup = memo(function AISearchMockup() {
   const messages = [
     {
       role: "user",
@@ -311,9 +311,9 @@ function AISearchMockup() {
       </div>
     </div>
   );
-}
+});
 
-function ReviewMockup() {
+const ReviewMockup = memo(function ReviewMockup() {
   const reviews = [
     { name: "이○○ 님", date: "2일 전", rating: 5, text: "원장님이 너무 친절하게 설명해주셔서 걱정이 없어졌어요. 치료 효과도 정말 빠르게 나타났습니다!", platform: "네이버" },
     { name: "박○○ 님", date: "4일 전", rating: 5, text: "허리 디스크로 오래 고생했는데 3회 만에 통증이 확 줄었어요. 강력 추천드립니다!", platform: "구글" },
@@ -417,9 +417,9 @@ function ReviewMockup() {
       </div>
     </div>
   );
-}
+});
 
-function BlogSearchMockup() {
+const BlogSearchMockup = memo(function BlogSearchMockup() {
   const results = [
     { rank: 1, title: "강남 허리디스크 수술 없이 치료하는법 [연세정형외과]", views: "12,847", days: "1일 전", highlight: true },
     { rank: 2, title: "목 디스크 증상과 치료, 전문의가 알려드립니다", views: "8,321", days: "3일 전", highlight: false },
@@ -498,9 +498,9 @@ function BlogSearchMockup() {
       </div>
     </div>
   );
-}
+});
 
-function HospitalWebMockup() {
+const HospitalWebMockup = memo(function HospitalWebMockup() {
   return (
     <div className="w-full h-full overflow-y-auto overflow-x-hidden bg-white text-[#1a1a2e]" style={{ fontFamily: "sans-serif" }}>
       {/* Header */}
@@ -613,20 +613,24 @@ function HospitalWebMockup() {
       </div>
     </div>
   );
-}
+});
 
 function HospitalPhotoSlider({ className }: { className?: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.1 });
   const [idx, setIdx] = useState(0);
 
   useEffect(() => {
+    if (!isInView) return; // 화면에서 안보이면 작동 중지
+
     const id = setInterval(() => {
       setIdx(i => (i + 1) % HOSPITAL_PHOTOS.length);
     }, 3800);
     return () => clearInterval(id);
-  }, []);
+  }, [isInView]);
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div ref={containerRef} className={`relative overflow-hidden ${className}`}>
       <AnimatePresence mode="sync">
         <motion.div
           key={idx}
@@ -673,6 +677,41 @@ function HospitalPhotoSlider({ className }: { className?: string }) {
   );
 }
 
+const CountUp = ({ value, duration = 600 }: { value: number; duration?: number }) => {
+  const [displayValue, setDisplayValue] = useState(value);
+
+  useEffect(() => {
+    let start = displayValue;
+    const end = value;
+    if (start === end) return;
+
+    const range = end - start;
+    const startTime = performance.now();
+    let animationFrameId: number;
+
+    const updateRating = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeProgress = progress * (2 - progress); // easeOutQuad
+      const nextValue = Math.round(start + range * easeProgress);
+      
+      setDisplayValue(nextValue);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(updateRating);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(updateRating);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [value, duration]);
+
+  return <>{displayValue}</>;
+};
+
 const DB_BASE = [
   { label: "30대 여성", short: "30대", base: 28, color: "#f472b6" },
   { label: "40대 여성", short: "40대", base: 22, color: "#f472b6" },
@@ -683,25 +722,31 @@ const DB_BASE = [
 ];
 
 function DbAnalytics({ compact }: { compact?: boolean }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.1 });
   const [vals, setVals] = useState(DB_BASE.map(d => d.base));
   const [total, setTotal] = useState(247);
 
   useEffect(() => {
+    if (!isInView) return; // 화면에서 보이지 않으면 인터벌 정지
+
     const id = setInterval(() => {
       setVals(DB_BASE.map(d => {
-        const delta = (Math.random() - 0.5) * 10;
-        return Math.round(Math.max(2, Math.min(55, d.base + delta)));
+        const delta = (Math.random() - 0.5) * 26;
+        return Math.round(Math.max(5, Math.min(65, d.base + delta)));
       }));
-      setTotal(v => v + Math.floor((Math.random() - 0.3) * 5));
-    }, 1800);
+      setTotal(v => v + Math.floor(Math.random() * 6) + 2);
+    }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [isInView]);
 
   const female = DB_BASE.slice(0, 3);
   const male   = DB_BASE.slice(3);
 
+  const barTransition = "width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
+
   if (compact) return (
-    <div className="px-2 pt-2 flex-1 overflow-hidden">
+    <div ref={containerRef} className="px-2 pt-2 flex-1 overflow-hidden">
       <div className="flex justify-between items-center mb-1.5">
         <span className="text-[8px] text-gray-300 font-bold">DB 유입 분석</span>
         <span className="text-[7px] text-gray-600">이번 달</span>
@@ -712,9 +757,9 @@ function DbAnalytics({ compact }: { compact?: boolean }) {
           <div key={d.label} className="flex items-center gap-1">
             <span className="text-[7px] text-gray-500 w-7 flex-shrink-0">{d.short}</span>
             <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${vals[i]}%`, backgroundColor: d.color, transition: "width 1.2s ease-in-out" }} />
+              <div className="h-full rounded-full" style={{ width: `${vals[i]}%`, backgroundColor: d.color, transition: barTransition }} />
             </div>
-            <span className="text-[7px] text-gray-500 w-5 text-right">{vals[i]}%</span>
+            <span className="text-[7px] text-gray-500 w-5 text-right"><CountUp value={vals[i]} />%</span>
           </div>
         ))}
         <p className="text-[7px] text-blue-400 font-semibold mt-1 mb-0.5">남성</p>
@@ -722,21 +767,21 @@ function DbAnalytics({ compact }: { compact?: boolean }) {
           <div key={d.label} className="flex items-center gap-1">
             <span className="text-[7px] text-gray-500 w-7 flex-shrink-0">{d.short}</span>
             <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${vals[i + 3]}%`, backgroundColor: d.color, transition: "width 1.2s ease-in-out" }} />
+              <div className="h-full rounded-full" style={{ width: `${vals[i + 3]}%`, backgroundColor: d.color, transition: barTransition }} />
             </div>
-            <span className="text-[7px] text-gray-500 w-5 text-right">{vals[i + 3]}%</span>
+            <span className="text-[7px] text-gray-500 w-5 text-right"><CountUp value={vals[i + 3]} />%</span>
           </div>
         ))}
       </div>
       <div className="mt-2 border-t border-gray-800 pt-1.5 flex justify-between">
         <span className="text-[7px] text-gray-600">총 유입 DB</span>
-        <span className="text-[8px] text-white font-bold">{total}건</span>
+        <span className="text-[8px] text-white font-bold"><CountUp value={total} duration={400} />건</span>
       </div>
     </div>
   );
 
   return (
-    <div className="px-3 pt-3 flex-1 overflow-hidden">
+    <div ref={containerRef} className="px-3 pt-3 flex-1 overflow-hidden">
       <div className="flex justify-between items-center mb-3">
         <span className="text-xs text-gray-300 font-bold">DB 유입 데이터 분석</span>
         <span className="text-[9px] text-gray-600">이번 달</span>
@@ -747,9 +792,9 @@ function DbAnalytics({ compact }: { compact?: boolean }) {
           <div key={d.label} className="flex items-center gap-2">
             <span className="text-[9px] text-gray-400 w-14 flex-shrink-0">{d.label}</span>
             <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${vals[i]}%`, backgroundColor: d.color, transition: "width 1.2s ease-in-out" }} />
+              <div className="h-full rounded-full" style={{ width: `${vals[i]}%`, backgroundColor: d.color, transition: barTransition }} />
             </div>
-            <span className="text-[9px] text-gray-400 w-7 text-right">{vals[i]}%</span>
+            <span className="text-[9px] text-gray-400 w-7 text-right"><CountUp value={vals[i]} />%</span>
           </div>
         ))}
         <p className="text-[9px] text-blue-400 font-semibold mt-2 mb-1">남성</p>
@@ -757,15 +802,15 @@ function DbAnalytics({ compact }: { compact?: boolean }) {
           <div key={d.label} className="flex items-center gap-2">
             <span className="text-[9px] text-gray-400 w-14 flex-shrink-0">{d.label}</span>
             <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${vals[i + 3]}%`, backgroundColor: d.color, transition: "width 1.2s ease-in-out" }} />
+              <div className="h-full rounded-full" style={{ width: `${vals[i + 3]}%`, backgroundColor: d.color, transition: barTransition }} />
             </div>
-            <span className="text-[9px] text-gray-400 w-7 text-right">{vals[i + 3]}%</span>
+            <span className="text-[9px] text-gray-400 w-7 text-right"><CountUp value={vals[i + 3]} />%</span>
           </div>
         ))}
       </div>
       <div className="mt-3 border-t border-gray-800 pt-3 flex justify-between items-center">
         <span className="text-[10px] text-gray-500">총 유입 DB</span>
-        <span className="text-sm text-white font-bold">{total}건</span>
+        <span className="text-sm text-white font-bold"><CountUp value={total} duration={400} />건</span>
       </div>
     </div>
   );

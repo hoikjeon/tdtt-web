@@ -152,6 +152,7 @@ const plans: Plan[] = [
     name: "시그니처 패키지",
     description: "성공적인 비즈니스의 시작을 위한 핵심 솔루션",
     price: 350,
+    originalPrice: 400,
     popular: true,
     buttonText: "시작하기",
     buttonVariant: "default" as const,
@@ -341,17 +342,46 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
                   <h3 className="text-base md:text-2xl mb-2 min-h-[40px] md:min-h-[64px] flex items-center leading-tight">{plan.name}</h3>
                 </div>
                 <div className="flex flex-col gap-1 h-auto md:h-[72px] justify-center">
-                  <div className="flex items-baseline gap-2">
-                    {"originalPrice" in plan && (
-                      <span className="text-lg text-gray-500 line-through">{plan.originalPrice}만원</span>
+                  <div className="flex flex-wrap items-baseline gap-x-2">
+                    {"originalPrice" in plan && plan.originalPrice && (
+                      <motion.div
+                        initial={{ opacity: 0.8, scale: 1 }}
+                        whileInView={{ opacity: 0.35, scale: 0.95 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
+                        className="relative text-base md:text-lg text-gray-500 font-bold flex-shrink-0"
+                      >
+                        <span>{plan.originalPrice}만원</span>
+                        <motion.div
+                          initial={{ width: 0 }}
+                          whileInView={{ width: "100%" }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.4, duration: 0.5, ease: "easeInOut" }}
+                          className="absolute h-[2px] bg-[#FF5733] left-0 top-1/2 -translate-y-1/2"
+                        />
+                      </motion.div>
                     )}
+                    
                     <div className="flex items-baseline">
-                      {"priceLabel" in plan && (
-                        <span className="text-sm text-gray-400 mr-1">{plan.priceLabel} </span>
+                      {"priceLabel" in plan && plan.priceLabel && (
+                        <span className="text-sm text-gray-400 mr-1">{plan.priceLabel}</span>
                       )}
-                      <span className="text-2xl md:text-4xl font-semibold">
+                      
+                      <motion.span
+                        initial={{ opacity: 0, y: 5, scale: 0.95 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          delay: 0.8,
+                          type: "spring",
+                          stiffness: 260,
+                          damping: 15
+                        }}
+                        className="text-2xl md:text-4xl font-semibold inline-flex items-center"
+                      >
                         <NumberFlow value={plan.price} className="text-2xl md:text-4xl font-semibold" />
-                      </span>
+                      </motion.span>
+                      
                       <span className="text-gray-400 ml-1 text-sm">만원</span>
                       <span className="text-xs text-gray-600 ml-1.5">VAT 별도</span>
                     </div>
