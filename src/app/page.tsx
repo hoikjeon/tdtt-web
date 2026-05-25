@@ -10,6 +10,7 @@ import GlassSphereScene from "@/components/ui/GlassSphereSceneClient";
 const ServiceBento = dynamic(() => import("@/components/ServiceBento"));
 const CostComparison = dynamic(() => import("@/components/CostComparison"));
 const VisionSection = dynamic(() => import("@/components/VisionSection"));
+const FAQSection = dynamic(() => import("@/components/FAQSection"));
 const ProcessSection = dynamic(() => import("@/components/ProcessSection"));
 const PromotionSection = dynamic(() => import("@/components/PromotionSection"));
 const ShowcaseSection = dynamic(() => import("@/components/ShowcaseSection"));
@@ -33,6 +34,7 @@ export default async function Home() {
           <ProcessSection />
         </div>
         <div className="relative" data-header-theme="light"><VisionSection /></div>
+        <div className="relative" data-header-theme="light"><FAQSection /></div>
         <div className="relative" data-header-theme="dark"><PromotionSection /></div>
         <div className="relative" data-header-theme="dark">
           <PricingContactWrapper />
