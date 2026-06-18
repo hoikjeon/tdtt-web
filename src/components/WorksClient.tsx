@@ -42,9 +42,13 @@ export default function WorksClient({ projectData }: WorksClientProps) {
               CRAFTED<br/>
               <span className="italic font-light opacity-80 text-gray-300">WORKS.</span>
             </h1>
-            <p className="text-gray-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed font-light px-4">
-              정교한 마케팅 전략과 신뢰감을 주는 시각적 디자인의 시너지.<br />
-              환자의 발걸음을 이끌어내고 병원의 가치를 증명해 낸 확실한 작업물들을<br />소개합니다.
+            <p className="text-gray-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed font-light px-4 break-keep">
+              정교한 마케팅 전략과 <br className="md:hidden" />신뢰감을 주는 시각적 디자인의 시너지.
+              <br className="hidden md:block" />
+              <span className="mt-2 md:mt-0 block md:inline">
+                환자의 발걸음을 이끌어내고 <br className="md:hidden" />병원의 가치를 증명해 낸 확실한 작업물들을
+                <br className="hidden md:block" />소개합니다.
+              </span>
             </p>
           </motion.div>
         </div>
@@ -81,7 +85,7 @@ export default function WorksClient({ projectData }: WorksClientProps) {
           >
             <div className="w-12 h-px bg-white/30" />
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">VISUAL &<br/>WEB DESIGN</h2>
-            <p className="text-gray-400 leading-relaxed font-light">
+            <p className="text-gray-400 leading-relaxed font-light break-keep">
               포토샵과 일러스트레이터를 활용해 병원만의 세련된 브랜드 아이덴티티를 구축합니다. 단순한 미적 아름다움을 넘어, 환자의 편의성과 마케팅 전환율까지 고려한 최적화된 웹디자인으로 신뢰감을 주는 첫인상을 설계합니다.
             </p>
           </motion.div>
@@ -96,7 +100,7 @@ export default function WorksClient({ projectData }: WorksClientProps) {
           >
             <div className="w-12 h-px bg-white/30" />
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">CINEMATIC<br/>PRODUCTION</h2>
-            <p className="text-gray-400 leading-relaxed font-light">
+            <p className="text-gray-400 leading-relaxed font-light break-keep">
               드론과 전문 장비를 활용한 생생한 현장 촬영부터, 프리미어 프로와 에프터 이펙트를 거치는 정교한 후반 작업까지. 퀄리티 높은 모션 그래픽이 더해진 하이엔드 영상으로 병원의 전문성과 가치를 시각적으로 증명합니다.
             </p>
           </motion.div>

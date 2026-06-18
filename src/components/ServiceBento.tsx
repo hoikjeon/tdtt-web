@@ -851,36 +851,53 @@ export default function ServiceBento() {
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-[#FF5733] font-bold tracking-[.2em] text-sm uppercase"
+            className="text-[#FF5733] font-bold tracking-[.2em] text-xs md:text-sm uppercase"
           >
             OUR ALL-IN-ONE OFFER
           </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="text-[#121212] font-black text-lg md:text-2xl leading-snug tracking-tight"
-          >
-            디자이너 + 영상감독 + 마케터 + 개발자 + 사진작가.<br />
-            5명의 전문가팀을 매주 출근시킵니다.
-          </motion.p>
+          <div className="space-y-1">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[#121212] font-black text-base md:text-2xl leading-snug tracking-tight"
+            >
+              <span>디자이너</span>
+              <span className="text-[#FF5733] font-bold">+</span>
+              <span>영상감독</span>
+              <span className="text-[#FF5733] font-bold">+</span>
+              <span>마케터</span>
+              <span className="text-[#FF5733] font-bold">+</span>
+              <span>개발자</span>
+              <span className="text-[#FF5733] font-bold">+</span>
+              <span>사진작가.</span>
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.08 }}
+              className="text-[#121212] font-black text-base md:text-2xl leading-snug tracking-tight"
+            >
+              5명의 전문가팀을 매주 출근시킵니다.
+            </motion.p>
+          </div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-3xl md:text-6xl font-black text-[#121212] tracking-tighter flex flex-col gap-4"
+            className="text-[21px] xs:text-2xl sm:text-3xl md:text-6xl font-black text-[#121212] tracking-tighter flex flex-col gap-2 md:gap-4"
           >
             <span>현장 밀착형 병원 전담</span>
 
             {/* Scroll Triggered Fill Text */}
             <div className="relative inline-block overflow-hidden">
-              <span className="text-3xl md:text-6xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">All-in-One 파트너, 그날그때</span>
+              <span className="text-[21px] xs:text-2xl sm:text-3xl md:text-6xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">All-in-One 파트너, 그날그때</span>
               <motion.span
                 initial={{ width: 0 }}
                 whileInView={{ width: "100%" }}
                 viewport={{ once: false, amount: 0.8 }}
                 transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
-                className="absolute top-0 left-0 text-3xl md:text-6xl font-black text-[#121212] tracking-tighter overflow-hidden block whitespace-nowrap"
+                className="absolute top-0 left-0 text-[21px] xs:text-2xl sm:text-3xl md:text-6xl font-black text-[#121212] tracking-tighter overflow-hidden block whitespace-nowrap"
               >
                 All-in-One 파트너, 그날그때
               </motion.span>
@@ -890,7 +907,7 @@ export default function ServiceBento() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-gray-500 text-lg md:text-xl font-medium leading-relaxed"
+            className="text-gray-500 text-sm md:text-xl font-medium leading-relaxed break-keep"
           >
             우리 병원 전담 직원이 매주 1회 직접 출근하여 기획, 촬영, 소통을 현장에서 끝냅니다. <br className="hidden md:block" />
             외주 없이 25가지 핵심 실무를 자체적으로 대행하는 완벽한 파트너십을 경험하세요.

@@ -24,17 +24,17 @@ export default function PromotionSection() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-3xl md:text-6xl font-black text-white tracking-tighter leading-tight"
+            className="text-3xl md:text-6xl font-black text-white tracking-tighter leading-tight break-keep"
           >
-            [가장 완벽한 조건, 기회는 <span className="text-[#FF5733]">단 3곳</span> 뿐입니다]
+            [가장 완벽한 조건,<br className="md:hidden" /> 기회는 <span className="text-[#FF5733]">단 3곳</span> 뿐입니다]
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto"
+            className="text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto break-keep"
           >
-            현장 밀착 케어의 퀄리티 유지를 위해 무한정 계약을 받지 않습니다.<br className="hidden md:block" />
+            현장 밀착 케어의 퀄리티 유지를 위해 무한정 계약을 받지 않습니다.<br />
             <span className="text-white">우수한 결과물을 위해 정해진 TO 내에서만 집중합니다.</span>
           </motion.p>
         </div>
@@ -151,22 +151,25 @@ export default function PromotionSection() {
 
             <div className="bg-white/5 border border-white/10 rounded-3xl p-6 inline-flex items-center gap-4 max-w-2xl mx-auto">
               <AlertCircle className="text-[#FF5733] shrink-0" size={32} />
-              <p className="text-left text-sm md:text-lg font-bold text-white leading-snug">
-                월 400만 원으로 비용이 <span className="underline decoration-2 underline-offset-4">50만 원 즉시 인상</span>됩니다.
+              <p className="text-left text-sm md:text-lg font-bold text-white leading-snug break-keep">
+                월 400만 원으로 비용이 <br className="md:hidden" />
+                <span className="underline decoration-2 underline-offset-4">50만 원 즉시 인상</span>됩니다.
               </p>
             </div>
 
-            <p className="text-gray-400 font-medium text-lg md:text-xl">
+            <p className="text-gray-400 font-medium text-lg md:text-xl break-keep">
               가장 저렴하게, 가장 압도적인 마케팅 팀을 세팅할 마지막 기회를 놓치지 마세요.
             </p>
 
             <motion.div 
               animate={{ x: [0, 5, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
-              className="flex items-center justify-center gap-2 text-[#FF5733] font-black text-xl"
+              className="flex items-center justify-center gap-2 text-[#FF5733] font-black text-lg md:text-xl text-center"
             >
-              <TrendingUp size={24} />
-              다음 계약부터 즉시 가격 인상 예정
+              <TrendingUp size={24} className="shrink-0" />
+              <span className="break-keep">
+                다음 계약부터 <br className="md:hidden" /> 즉시 가격 인상 예정
+              </span>
             </motion.div>
           </div>
         </motion.div>

@@ -341,7 +341,7 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
                 <div className="flex justify-between">
                   <h3 className="text-base md:text-2xl mb-2 min-h-[40px] md:min-h-[64px] flex items-center leading-tight">{plan.name}</h3>
                 </div>
-                <div className="flex flex-col gap-1 h-auto md:h-[72px] justify-center">
+                <div className="flex flex-col gap-1 h-auto md:h-[72px] justify-center relative pt-4 md:pt-0">
                   <div className="flex flex-wrap items-baseline gap-x-2">
                     {"originalPrice" in plan && plan.originalPrice && (
                       <motion.div
@@ -349,7 +349,7 @@ export default function PricingSection({ onSelect }: { onSelect?: (plan: string)
                         whileInView={{ opacity: 0.35, scale: 0.95 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
-                        className="relative text-base md:text-lg text-gray-500 font-bold flex-shrink-0"
+                        className="absolute md:relative -top-2.5 md:top-0 left-0 text-xs md:text-lg text-gray-500 font-bold flex-shrink-0"
                       >
                         <span>{plan.originalPrice}만원</span>
                         <motion.div

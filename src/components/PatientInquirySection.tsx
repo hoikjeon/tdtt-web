@@ -100,12 +100,12 @@ function CountUpStat({ value, suffix, prefix, label, index }: { value: number; s
           transition: { duration: 0.7, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
         }),
       }}
-      className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 text-center"
+      className="bg-white/5 border border-white/10 rounded-xl md:rounded-2xl p-3 xs:p-5 md:p-6 text-center"
     >
-      <p className="text-3xl md:text-4xl font-black text-white tracking-tight">
+      <p className="text-[15px] xs:text-xl sm:text-2xl md:text-4xl font-black text-white tracking-tight whitespace-nowrap">
         {prefix}<span>{display.toLocaleString()}</span>{suffix}
       </p>
-      <p className="text-white/50 text-xs md:text-sm mt-2 font-medium">{label}</p>
+      <p className="text-white/50 text-[10px] xs:text-xs md:text-sm mt-1.5 md:mt-2 font-medium">{label}</p>
     </motion.div>
   );
 }
@@ -214,9 +214,9 @@ export default function PatientInquirySection() {
           {/* 부제 */}
           <motion.p
             variants={headlineItem}
-            className="text-white/50 text-base md:text-lg max-w-xl mx-auto leading-relaxed"
+            className="text-white/50 text-sm xs:text-base md:text-lg max-w-xl mx-auto leading-relaxed break-keep"
           >
-            지금 이 순간에도 광고를 클릭한 환자들이<br className="hidden md:block" />
+            지금 이 순간에도 광고를 클릭한 환자들이 <br />
             실시간으로 문의를 남기고 있습니다
           </motion.p>
         </motion.div>
