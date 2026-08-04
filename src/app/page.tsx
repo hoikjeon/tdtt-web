@@ -5,7 +5,6 @@ import ProblemSection from "@/components/ProblemSection";
 import AgitationSection from "@/components/AgitationSection";
 import ScrollMarquee from "@/components/ScrollMarquee";
 import Footer from "@/components/Footer";
-import GlassSphereScene from "@/components/ui/GlassSphereSceneClient";
 
 const ServiceBento = dynamic(() => import("@/components/ServiceBento"));
 const CostComparison = dynamic(() => import("@/components/CostComparison"));
@@ -21,7 +20,6 @@ export default async function Home() {
     <>
       <main>
         <div className="relative" data-header-theme="dark"><ShowcaseSection /></div>
-        <div className="relative hidden md:block" data-header-theme="dark"><GlassSphereScene /></div>
         <div className="relative" data-header-theme="light">
           <Intro />
           <ScrollMarquee />

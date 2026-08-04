@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Users, Rocket, LayoutDashboard, ChevronRight, ChevronDown } from "lucide-react";
+import ScrollRevealText from "@/components/ui/ScrollRevealText";
 
 interface ProcessStep {
   id: string;
@@ -57,13 +58,7 @@ export default function ProcessSection() {
 
         {/* Header */}
         <div className="text-center space-y-4 mb-12 md:mb-24">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-[#FF5733] font-bold tracking-[.3em] text-xs uppercase"
-          >
-            HOW IT WORKS
-          </motion.p>
+
           <div className="flex justify-center overflow-hidden">
             {/* Mobile */}
             <motion.h2
@@ -74,20 +69,12 @@ export default function ProcessSection() {
               계약 후, 이렇게 진행됩니다.
             </motion.h2>
             {/* Desktop: fill 애니메이션 */}
-            <div className="hidden md:block relative overflow-hidden">
-              <span className="text-5xl font-black text-gray-200 tracking-tighter block whitespace-nowrap">
-                계약 후, 이렇게 진행됩니다.
-              </span>
-              <motion.span
-                initial={{ width: 0 }}
-                whileInView={{ width: "100%" }}
-                viewport={{ once: false, amount: 0.8 }}
-                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
-                className="absolute top-0 left-0 text-5xl font-black text-[#121212] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
-              >
-                계약 후, 이렇게 진행됩니다.
-              </motion.span>
-            </div>
+            <ScrollRevealText
+              wrapperClassName="hidden md:inline-block"
+              className="text-5xl font-black tracking-tighter"
+            >
+              계약 후, 이렇게 진행됩니다.
+            </ScrollRevealText>
           </div>
         </div>
 

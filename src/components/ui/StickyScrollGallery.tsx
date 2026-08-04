@@ -18,6 +18,8 @@ export default function StickyScrollGallery({ images, fallback }: StickyScrollGa
               <img
                 src={img(i)}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="w-full h-72 object-cover"
               />
             </figure>
@@ -31,6 +33,8 @@ export default function StickyScrollGallery({ images, fallback }: StickyScrollGa
               <img
                 src={img(i)}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover"
               />
             </figure>
@@ -44,6 +48,8 @@ export default function StickyScrollGallery({ images, fallback }: StickyScrollGa
               <img
                 src={img(i)}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="w-full h-72 object-cover"
               />
             </figure>

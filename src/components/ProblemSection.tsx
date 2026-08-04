@@ -66,10 +66,9 @@ export default function ProblemSection() {
             className="absolute inset-0 z-10"
           >
             <Image
-              src="/images/hs-1.png"
+              src="/images/hs-1.webp"
               alt="Before marketing shift"
               fill
-              priority
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover transition-transform duration-1000 group-hover:scale-105"
             />
@@ -82,7 +81,7 @@ export default function ProblemSection() {
             className="absolute inset-0 z-20"
           >
             <Image
-              src="/images/hs-2.png"
+              src="/images/hs-2.webp"
               alt="After marketing shift"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -100,7 +99,6 @@ export default function ProblemSection() {
           className="flex flex-col gap-6 md:gap-8"
         >
           <motion.div variants={itemFadeRight} className="space-y-4">
-            <p className="text-[#FF5733] font-bold tracking-tight text-lg">PROBLEM & EMPATHY</p>
             <h3 className="text-3xl md:text-5xl font-extrabold text-[#121212] leading-[1.3] tracking-tight">
               아프다고 아무 병원이나<br className="hidden md:inline" /> 가는 시대는 끝났습니다.
             </h3>
@@ -125,15 +123,7 @@ export default function ProblemSection() {
             </p>
           </motion.div>
 
-          <motion.div 
-            variants={itemFadeRight}
-            className="pt-6"
-          >
-            <div className="inline-flex items-center gap-2 text-sm text-gray-400 font-semibold tracking-widest uppercase">
-              <span className="w-8 h-[1px] bg-gray-300" />
-              ThatDayTime Solution is coming
-            </div>
-          </motion.div>
+
         </motion.div>
       </div>
     </section>

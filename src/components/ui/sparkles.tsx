@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { useId } from "react";
+import Particles, { ParticlesProvider, useParticlesProvider } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
 interface SparklesProps {
@@ -20,7 +20,15 @@ interface SparklesProps {
   direction?: string;
 }
 
-export function Sparkles({
+export function Sparkles(props: SparklesProps) {
+  return (
+    <ParticlesProvider init={loadSlim}>
+      <SparklesCanvas {...props} />
+    </ParticlesProvider>
+  );
+}
+
+function SparklesCanvas({
   className,
   size = 1,
   minSize = null,
@@ -34,15 +42,7 @@ export function Sparkles({
   background = "transparent",
   options = {},
 }: SparklesProps) {
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
-      setIsReady(true);
-    });
-  }, []);
+  const { loaded } = useParticlesProvider();
 
   const id = useId();
 
@@ -85,7 +85,7 @@ export function Sparkles({
     detectRetina: true,
   };
 
-  if (!isReady) return null;
+  if (!loaded) return null;
 
   return (
     <Particles

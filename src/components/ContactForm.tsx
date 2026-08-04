@@ -53,16 +53,7 @@ export default function ContactForm({ selectedPlan }: { selectedPlan?: string })
           {/* ── Left Panel ── */}
           <div className="space-y-12 lg:sticky lg:top-32">
 
-            {/* Tag */}
-            <motion.p
-              initial={{ opacity: 0, x: -12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 text-[#FF5733] font-bold tracking-[.3em] text-xs uppercase"
-            >
-              <span className="w-4 h-px bg-[#FF5733] inline-block" />
-              GET IN TOUCH
-            </motion.p>
+
 
             {/* Headline */}
             <div className="space-y-4">

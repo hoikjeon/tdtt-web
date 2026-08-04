@@ -1,331 +1,335 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  ArrowDown,
+  CheckCircle2,
+  Hospital,
+  Megaphone,
+  Share2,
+  Stethoscope,
+  Users,
+} from "lucide-react";
+import ScrollRevealText from "@/components/ui/ScrollRevealText";
 
-// Desktop nodes (landscape layout)
-const mapNodes = [
-  { id: 1, x: 700, y: 400, label: "신경외과" },
-  { id: 2, x: 800, y: 250, label: "정형외과" },
-  { id: 3, x: 300, y: 400, label: "내과" },
-  { id: 4, x: 500, y: 300, label: "산부인과" },
-  { id: 5, x: 350, y: 520, label: "외과" },
-  { id: 6, x: 650, y: 180, label: "안과" },
-  { id: 7, x: 850, y: 450, label: "피부과" },
-  { id: 8, x: 150, y: 350, label: "화상외과" },
-  { id: 9, x: 550, y: 500, label: "치과" },
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const partners = [
+  {
+    name: "척추·관절",
+    category: "정형외과 파트너",
+    position: "left-[9%] top-[9%]",
+  },
+  {
+    name: "안과 진료",
+    category: "안과 파트너",
+    position: "right-[9%] top-[9%]",
+  },
+  {
+    name: "뇌·신경",
+    category: "신경외과 파트너",
+    position: "left-[2%] top-1/2 -translate-y-1/2",
+  },
+  {
+    name: "피부 진료",
+    category: "피부과 파트너",
+    position: "right-[2%] top-1/2 -translate-y-1/2",
+  },
+  {
+    name: "구강 진료",
+    category: "치과 파트너",
+    position: "left-[13%] bottom-[7%]",
+  },
+  {
+    name: "내과 진료",
+    category: "내과 파트너",
+    position: "right-[13%] bottom-[7%]",
+  },
 ];
 
 const connections = [
-  [1, 2], [1, 4], [2, 6], [4, 6], [4, 3], [3, 8], [3, 5], [5, 9], [9, 1], [7, 2], [7, 1]
-];
+  { x: 180, y: 82, direction: "in", emphasis: false },
+  { x: 820, y: 82, direction: "out", emphasis: false },
+  { x: 105, y: 230, direction: "out", emphasis: true },
+  { x: 895, y: 230, direction: "in", emphasis: true },
+  { x: 225, y: 380, direction: "in", emphasis: false },
+  { x: 775, y: 380, direction: "out", emphasis: false },
+] as const;
 
-// Mobile nodes — circular layout, center(200,250), radius 150
-// angles: -90, -50, -10, 30, 70, 110, 150, 190, 230 degrees
-const mobileNodes = [
-  { i: 0, x: 200, y: 100, label: "정형외과" },
-  { i: 1, x: 297, y: 135, label: "안과" },
-  { i: 2, x: 348, y: 224, label: "피부과" },
-  { i: 3, x: 330, y: 325, label: "신경외과" },
-  { i: 4, x: 251, y: 391, label: "치과" },
-  { i: 5, x: 149, y: 391, label: "내과" },
-  { i: 6, x: 70,  y: 325, label: "외과" },
-  { i: 7, x: 52,  y: 224, label: "화상외과" },
-  { i: 8, x: 103, y: 135, label: "산부인과" },
-];
-
-const mobileConnections = [
-  // 외곽 링
-  [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,0],
-  // 중심 크로스 (가운데 엉킴)
-  [0,4],[0,5],[0,3],
-  [1,6],[1,5],
-  [2,6],[2,7],
-  [3,7],[3,8],
-  [4,8],
-];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.2 },
+const benefits = [
+  {
+    icon: Users,
+    title: "지역 환자 상호 의뢰",
   },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: 10 },
-  visible: {
-    opacity: 1, scale: 1, y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as any },
+  {
+    icon: Share2,
+    title: "진료과별 콘텐츠 협업",
   },
-};
+  {
+    icon: Megaphone,
+    title: "공동 브랜드 프로모션",
+  },
+];
 
 export default function VisionSection() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <section className="relative bg-white py-24 md:py-40 px-6 md:px-16 overflow-hidden">
+    <section className="relative overflow-hidden bg-[#f4f4f1] px-6 py-24 md:px-16 md:py-36">
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-white blur-[120px]" />
 
-      <div className="max-w-6xl mx-auto relative z-10 text-center">
+      <div className="relative z-10 mx-auto max-w-6xl text-center" data-header-theme="light">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: EASE }}
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white/80 px-4 py-2 shadow-sm"
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-[#FF5733]" />
+          <span className="text-[10px] font-bold tracking-[0.22em] text-[#686868] md:text-xs">
+            MEDICAL EU NETWORK
+          </span>
+        </motion.div>
 
-        {/* Main Headline */}
-        <div className="mb-12 space-y-6">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
+        <div className="flex flex-col items-center overflow-hidden">
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-[#FF5733] font-bold tracking-[.3em] text-xs uppercase"
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="px-2 text-center text-2xl font-black leading-snug tracking-tighter text-[#121212] md:hidden"
           >
-            THE REGIONAL VISION
-          </motion.p>
+            우리 병원도 지역 1등이
+            <br />될 수 있습니다.
+          </motion.h2>
 
-          <div className="flex flex-col items-center overflow-hidden">
-            {/* Mobile: 정적 헤드라인 */}
-            <motion.h2
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              className="md:hidden text-xl font-black text-[#121212] tracking-tighter leading-snug text-center px-2"
+          <ScrollRevealText
+            wrapperClassName="hidden md:inline-block"
+            className="text-5xl font-black leading-tight tracking-tighter lg:text-6xl"
+            baseClassName="text-black/[0.07]"
+            once
+          >
+            우리 병원도 지역 1등이 될 수 있습니다.
+          </ScrollRevealText>
+
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.25, duration: 0.8, ease: EASE }}
+            className="mt-4 max-w-4xl text-xl font-black leading-tight tracking-tighter text-[#FF5733] md:mt-6 md:text-4xl lg:text-5xl"
+          >
+            혼자가 아닌, 함께 성장하는 의료 네트워크로.
+          </motion.h3>
+        </div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.8, ease: EASE }}
+          className="mx-auto mt-7 max-w-2xl break-keep text-sm font-medium leading-relaxed text-[#777] md:text-xl"
+        >
+          부울경 진료과별 파트너가 환자와 콘텐츠를 서로 연결합니다.
+          <br className="hidden md:block" /> 지역 안에서 함께 성장하는 새로운 의료 협력 구조를 만듭니다.
+        </motion.p>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ delay: 0.15, duration: 1, ease: EASE }}
+        className="relative z-10 mx-auto mt-14 max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#111315] shadow-[0_40px_100px_rgba(13,15,16,0.24)] md:mt-20 md:rounded-[3rem]"
+        aria-label="Medical EU 지역 의료 파트너 네트워크"
+        data-header-theme="dark"
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_48%,rgba(255,87,51,0.17),transparent_28%),radial-gradient(circle_at_15%_20%,rgba(255,255,255,0.06),transparent_22%)]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.035] [background-image:linear-gradient(rgba(255,255,255,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.8)_1px,transparent_1px)] [background-size:42px_42px]" />
+
+        {/* Desktop hub-and-spoke network */}
+        <div className="relative z-10 hidden h-[460px] md:block">
+          <svg
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            viewBox="0 0 1000 460"
+            fill="none"
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient id="network-line" x1="0" y1="0" x2="1" y2="1">
+                <stop stopColor="#ffffff" stopOpacity="0.08" />
+                <stop offset="0.55" stopColor="#FF5733" stopOpacity="0.45" />
+                <stop offset="1" stopColor="#ffffff" stopOpacity="0.08" />
+              </linearGradient>
+              <filter id="particle-glow" x="-200%" y="-200%" width="400%" height="400%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {connections.map((connection, index) => {
+              const fromX = connection.direction === "in" ? connection.x : 500;
+              const fromY = connection.direction === "in" ? connection.y : 230;
+              const toX = connection.direction === "in" ? 500 : connection.x;
+              const toY = connection.direction === "in" ? 230 : connection.y;
+
+              return (
+                <g key={`${connection.x}-${connection.y}`}>
+                  <motion.line
+                    x1={connection.x}
+                    y1={connection.y}
+                    x2="500"
+                    y2="230"
+                    stroke={connection.emphasis ? "#FF6547" : "url(#network-line)"}
+                    strokeWidth={connection.emphasis ? 2 : 1.5}
+                    strokeOpacity={connection.emphasis ? 0.48 : 1}
+                    strokeLinecap="round"
+                    filter={connection.emphasis ? "url(#particle-glow)" : undefined}
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    whileInView={{ pathLength: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.1, delay: 0.25 + index * 0.1, ease: EASE }}
+                  />
+                  <motion.circle
+                    r="3.5"
+                    fill="#FF765A"
+                    filter="url(#particle-glow)"
+                    initial={{ cx: fromX, cy: fromY, opacity: 0 }}
+                    animate={
+                      reduceMotion
+                        ? { cx: toX, cy: toY, opacity: 0.75 }
+                        : {
+                            cx: [fromX, toX],
+                            cy: [fromY, toY],
+                            opacity: [0, 1, 0],
+                          }
+                    }
+                    transition={{
+                      duration: 3.8,
+                      repeat: reduceMotion ? 0 : Infinity,
+                      delay: index * 0.65,
+                      ease: "linear",
+                    }}
+                  />
+                </g>
+              );
+            })}
+          </svg>
+
+          {partners.map((partner, index) => (
+            <motion.div
+              key={partner.name}
+              initial={{ opacity: 0, scale: 0.9, y: 10 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.65, delay: 0.2 + index * 0.09, ease: EASE }}
+              className={`absolute w-[190px] rounded-2xl border border-white/10 bg-white/[0.055] p-3.5 shadow-[0_18px_40px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-colors duration-300 hover:border-[#FF5733]/35 hover:bg-white/[0.075] lg:w-[210px] ${partner.position}`}
             >
-              우리 병원도 지역 1등이<br />될 수 있습니다.
-            </motion.h2>
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-[#FF5733]/20 bg-[#FF5733]/10 text-[#FF765A]">
+                  <Stethoscope size={17} strokeWidth={1.8} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-black text-white lg:text-sm">{partner.name}</p>
+                  <p className="mt-0.5 truncate text-[9px] font-medium text-white/40 lg:text-[10px]">{partner.category}</p>
+                </div>
+                <CheckCircle2 size={13} className="flex-shrink-0 text-emerald-400/80" />
+              </div>
+            </motion.div>
+          ))}
 
-            {/* Desktop: fill 애니메이션 */}
-            <div className="hidden md:block relative overflow-hidden">
-              <span className="text-6xl font-black text-gray-100 tracking-tighter block leading-tight whitespace-nowrap">
-                우리 병원도 지역 1등이 될 수 있습니다.
-              </span>
-              <motion.span
-                initial={{ width: 0 }}
-                whileInView={{ width: "100%" }}
-                viewport={{ once: false, amount: 0.8 }}
-                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
-                className="absolute top-0 left-0 text-6xl font-black text-[#121212] tracking-tighter overflow-hidden block whitespace-nowrap leading-tight"
-              >
-                우리 병원도 지역 1등이 될 수 있습니다.
-              </motion.span>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, delay: 0.35, ease: EASE }}
+            className="absolute left-1/2 top-1/2 flex h-48 w-48 -translate-x-1/2 -translate-y-1/2 items-center justify-center lg:h-52 lg:w-52"
+          >
+            <motion.div
+              className="absolute inset-0 rounded-full border border-[#FF5733]/25"
+              animate={reduceMotion ? undefined : { scale: [1, 1.17, 1], opacity: [0.5, 0.12, 0.5] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <div className="absolute inset-3 rounded-full border border-white/[0.08] bg-[#161819]/90 shadow-[0_0_70px_rgba(255,87,51,0.22)] backdrop-blur-xl" />
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF765A] to-[#FF3D1F] text-white shadow-[0_10px_28px_rgba(255,87,51,0.35)]">
+                <Hospital size={23} strokeWidth={1.8} />
+              </div>
+              <p className="text-lg font-black tracking-[-0.03em] text-white lg:text-xl">MEDICAL EU</p>
             </div>
+          </motion.div>
+        </div>
 
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-4 text-lg md:text-5xl font-black text-[#FF5733] tracking-tighter uppercase"
-            >
-              &lt;Medical EU&gt; 에 합류하세요.
-            </motion.h3>
+        {/* Mobile: readable vertical flow */}
+        <div className="relative z-10 px-4 py-6 md:hidden">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="flex items-center gap-3 rounded-2xl border border-[#FF5733]/25 bg-[#FF5733]/10 p-4"
+          >
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF765A] to-[#FF3D1F] text-white shadow-[0_10px_28px_rgba(255,87,51,0.25)]">
+              <Hospital size={23} strokeWidth={1.8} />
+            </div>
+            <div className="flex-1">
+              <p className="text-base font-black text-white">MEDICAL EU</p>
+              <p className="mt-0.5 text-[9px] font-semibold tracking-[0.14em] text-white/40">REGIONAL MEDICAL HUB</p>
+            </div>
+            <CheckCircle2 size={17} className="text-emerald-400" />
+          </motion.div>
+
+          <div className="flex h-14 flex-col items-center justify-center">
+            <div className="h-5 w-px bg-gradient-to-b from-[#FF5733]/70 to-white/15" />
+            <div className="flex items-center gap-2 text-[9px] font-bold text-white/45">
+              <ArrowDown size={11} className="text-[#FF765A]" />
+              양방향 진료 연계
+            </div>
+            <div className="h-5 w-px bg-gradient-to-b from-white/15 to-[#FF5733]/70" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            {partners.map((partner, index) => (
+              <motion.div
+                key={partner.name}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, delay: index * 0.06, ease: EASE }}
+                className="rounded-xl border border-white/[0.08] bg-white/[0.05] p-3"
+              >
+                <div className="mb-2 flex h-7 w-7 items-center justify-center rounded-lg bg-[#FF5733]/10 text-[#FF765A]">
+                  <Stethoscope size={14} />
+                </div>
+                <p className="text-[11px] font-black text-white">{partner.name}</p>
+                <p className="mt-0.5 truncate text-[8px] text-white/35">{partner.category}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
 
-        {/* Vision Narrative */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="max-w-3xl mx-auto mb-20 space-y-12"
-        >
-          <p className="text-gray-500 text-base md:text-2xl font-bold leading-relaxed px-4">
-            단순한 마케팅 대행을 넘어,<br />
-            <span className="text-[#121212]">&lt;Medical EU&gt;와 함께하는</span> <br className="md:hidden" />
-            <span className="text-[#121212]">부울경 지역 우수 병원 간의</span><br />
-            <span className="bg-[#FF5733]/5 px-2 text-[#FF5733]">양방향 환자 크로스 프로모션(네트워크)</span><br />
-            혜택까지 독보적으로 누리실 수 있습니다.
-          </p>
-        </motion.div>
-      </div>
-
-      {/* Network Visualization Card */}
-      <div className="relative w-full max-w-6xl mx-auto mt-12 group">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.05 }}
-          className="relative w-full bg-white/60 backdrop-blur-xl rounded-2xl md:rounded-[4rem] border border-gray-100 shadow-[0_40px_100px_rgba(0,0,0,0.04)] overflow-hidden"
-        >
-          {/* Background Grid Pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.03] pointer-events-none"
-            style={{ backgroundImage: "radial-gradient(#FF5733 1px, transparent 1px)", backgroundSize: "30px 30px" }}
-          />
-
-          {/* Map Title Badge */}
-          <div className="absolute top-4 md:top-8 left-4 md:left-12 flex items-center gap-2 md:gap-3 z-10">
-            <div className="w-3 h-3 bg-[#FF5733] rounded-full animate-ping" />
-            <span className="text-[#121212] font-black text-sm tracking-widest uppercase opacity-40">Regional Network Live</span>
-          </div>
-
-          {/* Mobile: 원형 SVG 네트워크 */}
-          <div className="md:hidden relative z-10 py-12 px-4">
-            <svg
-              className="w-full drop-shadow-xl"
-              viewBox="-10 70 420 390"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+        <div className="relative z-20 grid border-t border-white/[0.08] md:grid-cols-3">
+          {benefits.map((benefit, index) => (
+            <motion.div
+              key={benefit.title}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1, ease: EASE }}
+              className="flex items-center gap-3 border-b border-white/[0.08] px-5 py-5 last:border-b-0 md:border-b-0 md:border-r md:px-7 md:py-6 md:last:border-r-0"
             >
-              {/* Connection lines */}
-              {mobileConnections.map(([si, ei], idx) => {
-                const s = mobileNodes[si];
-                const e = mobileNodes[ei];
-                return (
-                  <g key={`m-edge-${idx}`}>
-                    <motion.line
-                      x1={s.x} y1={s.y} x2={e.x} y2={e.y}
-                      stroke="#FF5733" strokeWidth="1.5" strokeOpacity="0.12"
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      whileInView={{ pathLength: 1, opacity: 1 }}
-                      viewport={{ once: true, amount: 0.1 }}
-                      transition={{ duration: 0.8, delay: idx * 0.06 }}
-                    />
-                    <motion.circle
-                      r="3" fill="#FF5733"
-                      animate={{
-                        cx: [s.x, e.x],
-                        cy: [s.y, e.y],
-                        opacity: [0, 1, 0],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        delay: idx * 0.5,
-                        ease: "linear",
-                      }}
-                    />
-                  </g>
-                );
-              })}
-
-              {/* Hospital nodes */}
-              {mobileNodes.map((node, i) => (
-                <motion.g
-                  key={`m-node-${i}`}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                  transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ transformOrigin: `${node.x}px ${node.y}px`, transformBox: "fill-box" }}
-                >
-                  {/* Pulse */}
-                  <motion.circle
-                    cx={node.x} cy={node.y} r="24"
-                    fill="#FF5733" fillOpacity="0.06"
-                    animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0.1, 0.4] }}
-                    transition={{ repeat: Infinity, duration: 3, delay: i * 0.3 }}
-                  />
-                  {/* Main circle */}
-                  <circle
-                    cx={node.x} cy={node.y} r="22"
-                    fill="white"
-                    stroke="#FF5733" strokeWidth="1" strokeOpacity="0.3"
-                  />
-                  {/* Hospital icon */}
-                  <g transform={`translate(${node.x}, ${node.y})`}>
-                    <rect x="-6" y="-8" width="12" height="16" rx="1.5" fill="#FF5733" fillOpacity="0.15" stroke="#FF5733" strokeWidth="1.5" />
-                    <path d="M-3,0 h6 M0,-3 v6" stroke="#FF5733" strokeWidth="2" strokeLinecap="round" />
-                  </g>
-                  {/* Label */}
-                  <rect
-                    x={node.x - 34} y={node.y + 28} width="68" height="20" rx="10"
-                    fill="white" stroke="#FF5733" strokeWidth="1.5" strokeOpacity="0.15"
-                  />
-                  <text
-                    x={node.x} y={node.y + 43}
-                    textAnchor="middle"
-                    fill="#121212"
-                    fontSize="10"
-                    fontWeight="900"
-                  >
-                    {node.label}
-                  </text>
-                </motion.g>
-              ))}
-            </svg>
-          </div>
-
-          {/* Desktop: SVG 네트워크 맵 */}
-          <div className="hidden md:flex items-center justify-center h-[700px] p-12">
-            <svg className="w-full h-full drop-shadow-2xl relative z-10" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Region border */}
-              <motion.path
-                d="M150,300 L350,80 L700,40 L950,150 L980,450 L850,580 L500,580 L250,520 Z"
-                stroke="#FF5733"
-                strokeWidth="1.5"
-                strokeOpacity="0.1"
-                strokeDasharray="10,10"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 3, delay: 0.5 }}
-              />
-
-              {/* Connection lines */}
-              {connections.map(([startId, endId], i) => {
-                const start = mapNodes.find(n => n.id === startId)!;
-                const end = mapNodes.find(n => n.id === endId)!;
-                return (
-                  <g key={`edge-${i}`}>
-                    <line
-                      x1={start.x} y1={start.y} x2={end.x} y2={end.y}
-                      stroke="#FF5733" strokeWidth="2" strokeOpacity="0.1"
-                    />
-                    <motion.circle
-                      r="4" fill="#FF5733"
-                      className="blur-[2px]"
-                      animate={{
-                        cx: [start.x, end.x],
-                        cy: [start.y, end.y],
-                        opacity: [0, 1, 0],
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        delay: i * 0.7,
-                        ease: "linear",
-                      }}
-                    />
-                  </g>
-                );
-              })}
-
-              {/* Hospital nodes */}
-              <g>
-                {mapNodes.map((node, i) => (
-                  <motion.g key={`node-${i}`} variants={itemVariants} className="cursor-default">
-                    <motion.circle
-                      cx={node.x} cy={node.y} r="32"
-                      fill="#FF5733" fillOpacity="0.05"
-                      animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.1, 0.3] }}
-                      transition={{ repeat: Infinity, duration: 3, delay: i * 0.3 }}
-                    />
-                    <circle
-                      cx={node.x} cy={node.y} r="30"
-                      fill="white"
-                      stroke="#FF5733" strokeWidth="1" strokeOpacity="0.3"
-                    />
-                    <g transform={`translate(${node.x}, ${node.y})`}>
-                      <rect x="-8" y="-10" width="16" height="20" rx="2" fill="#FF5733" fillOpacity="0.15" stroke="#FF5733" strokeWidth="1.5" />
-                      <path d="M-4,0 h8 M0,-4 v8" stroke="#FF5733" strokeWidth="3" strokeLinecap="round" />
-                    </g>
-                    <g>
-                      <rect
-                        x={node.x - 45} y={node.y + 38} width="90" height="24" rx="12"
-                        fill="white"
-                        stroke="#FF5733" strokeWidth="2" strokeOpacity="0.1"
-                      />
-                      <text
-                        x={node.x} y={node.y + 55}
-                        textAnchor="middle"
-                        fill="#121212"
-                        fontSize="13"
-                        fontWeight="900"
-                        className="tracking-tighter"
-                      >
-                        {node.label}
-                      </text>
-                    </g>
-                  </motion.g>
-                ))}
-              </g>
-            </svg>
-          </div>
-        </motion.div>
-      </div>
+              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.06] text-[#FF765A]">
+                <benefit.icon size={17} strokeWidth={1.8} />
+              </div>
+              <p className="text-xs font-black text-white md:text-sm">{benefit.title}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
     </section>
   );
 }

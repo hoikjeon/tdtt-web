@@ -47,7 +47,7 @@ export default function SolutionSection() {
         >
           {/* POV Image */}
           <Image
-            src="/images/solution_pov.png"
+            src="/images/solution_pov.webp"
             alt="Entering hospital POV"
             fill
             className="object-cover"

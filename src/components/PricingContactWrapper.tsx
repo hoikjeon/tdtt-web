@@ -2,9 +2,9 @@
 
 import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
-import ContactForm from "@/components/ContactForm";
 
 const PricingSection = dynamic(() => import("@/components/ui/pricing-section"));
+const ContactForm = dynamic(() => import("@/components/ContactForm"));
 
 export default function PricingContactWrapper() {
   const [selectedPlan, setSelectedPlan] = useState("");

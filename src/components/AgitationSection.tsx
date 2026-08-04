@@ -120,7 +120,6 @@ export default function AgitationSection() {
           className="flex flex-col gap-6 md:gap-8 order-2 lg:order-1"
         >
           <motion.div variants={itemFadeRight} className="space-y-4">
-            <p className="text-[#FF5733] font-bold tracking-tight text-lg">THE DIGITAL SHIFT</p>
             <h3 className="text-3xl md:text-5xl font-extrabold text-[#121212] leading-[1.2] tracking-tight">
               "아프다고 아무 병원이나<br />
               가는 시대는 끝났습니다."

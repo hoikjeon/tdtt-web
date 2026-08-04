@@ -3,6 +3,7 @@
 import { motion, AnimatePresence, animate, useInView } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { X, AlertCircle, TrendingDown, ShieldCheck } from "lucide-react";
+import ScrollRevealText from "@/components/ui/ScrollRevealText";
 
 const CountUp = ({ value }: { value: number }) => {
   const [displayValue, setDisplayValue] = useState(0);
@@ -49,13 +50,7 @@ export default function CostComparison() {
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
           <div className="space-y-6 max-w-2xl">
-            <motion.p 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              className="text-[#FF5733] font-bold tracking-[.4em] text-xs uppercase"
-            >
-              EFFICIENCY & ROI
-            </motion.p>
+
             
             <div className="space-y-2">
               <h2 className="text-3xl md:text-5xl font-black text-[#121212] leading-[1.3] tracking-tighter">
@@ -63,16 +58,13 @@ export default function CostComparison() {
               </h2>
               
               {/* Scroll Triggered Fill Text */}
-              <div className="relative inline-block overflow-hidden">
-                <span className="text-3xl md:text-5xl font-black text-gray-200 leading-[1.3] tracking-tighter block whitespace-nowrap">진짜 비용을 아시나요?</span>
-                <motion.span 
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "100%" }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] as any }}
-                  className="absolute top-0 left-0 text-3xl md:text-5xl font-black text-[#121212] leading-[1.3] tracking-tighter overflow-hidden block border-r-[3px] border-[#FF5733] pr-[2px] whitespace-nowrap"
-                >진짜 비용을 아시나요?</motion.span>
-              </div>
+              <ScrollRevealText
+                className="text-3xl md:text-5xl font-black leading-[1.3] tracking-tighter"
+                once
+                amount={0.3}
+              >
+                진짜 비용을 아시나요?
+              </ScrollRevealText>
             </div>
           </div>
 

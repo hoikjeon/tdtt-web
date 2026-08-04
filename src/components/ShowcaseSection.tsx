@@ -76,7 +76,7 @@ export default function ShowcaseSection() {
       <ScrollExpandMedia
         mediaType="video"
         mediaSrc="/video/hospital.mp4"
-        bgImageSrc="/images/hospital1"
+        bgImageSrc="/images/hospital1.webp"
         title="원장님 병원으로|직접 출근하겠습니다"
         date="병원 전담 마케팅"
         scrollToExpand="스크롤하여 확인하기"

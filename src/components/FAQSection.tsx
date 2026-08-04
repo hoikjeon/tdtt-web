@@ -141,15 +141,7 @@ export default function FAQSection() {
 
         {/* Header */}
         <div className="text-center space-y-4 mb-12 md:mb-20">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: EASE }}
-            viewport={{ once: true }}
-            className="text-[#FF5733] font-bold tracking-[.3em] text-xs uppercase"
-          >
-            FREQUENTLY ASKED
-          </motion.p>
+
 
           <motion.h2
             initial={{ opacity: 0, y: 14 }}
