@@ -1,6 +1,5 @@
 import WorksClient from "@/components/WorksClient";
 import { Project } from "@/components/Projects";
-import { supabase } from "@/lib/supabase";
 
 // 하드코딩된 예시 데이터 (DB 연결 전 초기 상태 또는 오류 시 사용)
 const fallbackProjects: Project[] = [
@@ -75,16 +74,31 @@ const fallbackProjects: Project[] = [
     ],
   },
   {
-    src: "/project4.png",
-    year: "2025",
-    subtitle: "AURA Fashion Collection",
-    title: "Aura\nE-comm\nPlatform",
+    id: "yeonsei-cheok-responsive-website",
+    src: "/works/yeonsei-cheok/desktop-hero.webp",
+    year: "2026",
+    subtitle: "연세척병원 공식 홈페이지",
+    title: "병원 홈페이지\n반응형 제작",
     parallaxOffset: 120,
+    accentColor: "#284aa5",
+    alwaysShowInfo: true,
+    detail: {
+      kind: "responsive-website",
+      url: "https://yeonsei-cheok-web.vercel.app/",
+      doctorsUrl: "https://yeonsei-cheok-web.vercel.app/doctors#doctors-lineup",
+      screenshots: {
+        desktop: "/works/yeonsei-cheok/desktop-hero.webp",
+        tablet: "/works/yeonsei-cheok/tablet-hero.webp",
+        mobile: "/works/yeonsei-cheok/mobile-hero.webp",
+        trainingSpecialty: "/works/yeonsei-cheok/training-specialty.webp",
+        consultation: "/works/yeonsei-cheok/consultation.webp",
+      },
+    },
   },
 ];
 
 export default async function WorksPage() {
-  let projectData: Project[] = fallbackProjects;
+  const projectData: Project[] = fallbackProjects;
 
   /* Supabase 임시 비활성화 (모든 프로젝트를 보여주기 위함)
   try {

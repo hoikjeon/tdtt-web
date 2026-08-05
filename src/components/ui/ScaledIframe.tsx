@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/** 임베드된 사이트가 기준으로 삼을 뷰포트 (iPhone 14 기준) */
-const VIEWPORT_WIDTH = 390;
-const VIEWPORT_HEIGHT = 844;
+/** 기본 임베드 뷰포트 (iPhone 14 기준) */
+const DEFAULT_VIEWPORT_WIDTH = 390;
+const DEFAULT_VIEWPORT_HEIGHT = 844;
 
 type ScaledIframeProps = {
   src: string;
@@ -13,6 +13,9 @@ type ScaledIframeProps = {
   className?: string;
   /** false면 스크롤·클릭을 막아 목업처럼 보이게 한다 */
   interactive?: boolean;
+  /** 임베드된 사이트가 기준으로 삼을 가상 화면 크기 */
+  viewportWidth?: number;
+  viewportHeight?: number;
 };
 
 /**
@@ -25,6 +28,8 @@ export default function ScaledIframe({
   title,
   className,
   interactive = false,
+  viewportWidth = DEFAULT_VIEWPORT_WIDTH,
+  viewportHeight = DEFAULT_VIEWPORT_HEIGHT,
 }: ScaledIframeProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0);
@@ -34,11 +39,11 @@ export default function ScaledIframe({
     if (!el) return;
 
     const ro = new ResizeObserver(([entry]) => {
-      setScale(entry.contentRect.width / VIEWPORT_WIDTH);
+      setScale(entry.contentRect.width / viewportWidth);
     });
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [viewportWidth]);
 
   return (
     <div ref={hostRef} className={`relative overflow-hidden ${className ?? ""}`}>
@@ -49,8 +54,8 @@ export default function ScaledIframe({
         scrolling={interactive ? undefined : "no"}
         className={`absolute top-0 left-0 border-none ${interactive ? "" : "pointer-events-none"}`}
         style={{
-          width: VIEWPORT_WIDTH,
-          height: VIEWPORT_HEIGHT,
+          width: viewportWidth,
+          height: viewportHeight,
           transform: `scale(${scale})`,
           transformOrigin: "top left",
           visibility: scale ? "visible" : "hidden",
