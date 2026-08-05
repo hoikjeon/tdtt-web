@@ -24,8 +24,8 @@ export default async function Home() {
           <Intro />
           <ScrollMarquee />
           <ProblemSection />
-          <AgitationSection />
         </div>
+        <div className="relative" data-header-theme="dark"><AgitationSection /></div>
         <div className="relative" data-header-theme="light">
           <ServiceBento />
           <CostComparison />

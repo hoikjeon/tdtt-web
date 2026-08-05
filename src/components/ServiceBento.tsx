@@ -128,8 +128,9 @@ export default function ServiceBento() {
                     <service.icon size={24} className="hidden md:block" />
                   </div>
                   <div>
-                    <h4 className="text-xs md:text-2xl font-bold text-[#121212] leading-snug">{service.title}</h4>
-                    <p className="hidden md:block text-gray-500 font-medium text-sm mt-1">{service.description}</p>
+                    <h4 className="text-xs md:text-2xl font-bold text-[#121212] leading-snug text-balance">{service.title}</h4>
+                    {/* 좁은 컬럼에서 4줄까지 늘어나 썸네일을 밀어내던 곳. 2줄로 고정한다 */}
+                    <p className="hidden md:line-clamp-2 text-gray-500 font-medium text-sm mt-1 [word-break:keep-all]">{service.description}</p>
                   </div>
                 </div>
 

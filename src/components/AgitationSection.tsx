@@ -1,264 +1,155 @@
 "use client";
 
-import { motion, useInView, Variants } from "framer-motion";
-import { useRef } from "react";
+import { ArrowUpRight, Search, ShieldCheck } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
 
-const Highlight = ({ children, color = "#FF5733" }: { children: React.ReactNode; color?: string }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20%" });
+const journey = [
+  {
+    number: "01",
+    title: "발견",
+    description: "지역과 증상 검색에서",
+    icon: Search,
+  },
+  {
+    number: "02",
+    title: "신뢰",
+    description: "일관된 정보와 콘텐츠로",
+    icon: ShieldCheck,
+  },
+  {
+    number: "03",
+    title: "선택",
+    description: "간결한 예약 동선까지",
+    icon: ArrowUpRight,
+  },
+];
 
-  return (
-    <span className="relative inline-block whitespace-nowrap" ref={ref}>
-      <motion.span
-        className="absolute inset-0 z-0 rounded-[3px]"
-        style={{ backgroundColor: color, originX: 0 }}
-        initial={{ scaleX: 0, opacity: 0 }}
-        animate={isInView ? { scaleX: 1, opacity: 0.22 } : {}}
-        transition={{ duration: 0.55, ease: "easeOut", delay: 0.3 }}
-      />
-      <span className="relative z-10">{children}</span>
-    </span>
-  );
+const copy: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
 };
 
-const AnimatedText = ({ text, delay = 0, className = "" }: { text: string; delay?: number; className?: string }) => {
-  const letters = Array.from(text);
+const reveal: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
-  const container: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.03, delayChildren: delay }
-    }
-  };
+const panel: Variants = {
+  hidden: {},
+  visible: { transition: { delayChildren: 0.18, staggerChildren: 0.13 } },
+};
 
-  const child: Variants = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 15,
-        stiffness: 250
-      }
-    },
-    hidden: {
-      opacity: 0,
-      y: 8,
-      transition: {
-        type: "spring",
-        damping: 15,
-        stiffness: 250
-      }
-    }
-  };
-
-  return (
-    <motion.span
-      variants={container}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      className={className}
-    >
-      {letters.map((letter, index) => (
-        <motion.span key={index} variants={child} style={{ display: "inline-block" }}>
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
+const panelItem: Variants = {
+  hidden: { opacity: 0, x: 18 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.58, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 export default function AgitationSection() {
-  const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: true, margin: "-10%" });
-
-  const staggerContainer: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemFadeRight: Variants = {
-    hidden: { opacity: 0, x: -30 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as any },
-    },
-  };
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 20, scale: 0.97 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        delay: 1.7,
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1] as any
-      }
-    }
-  };
-
   return (
-    <section className="relative bg-white py-24 md:py-32 px-6 md:px-16 overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        
-        {/* Left: Agitation Text (Desktop: Order 1, Mobile: Order 2) */}
+    <section className="relative overflow-hidden bg-[#171816] px-5 py-16 text-white sm:px-8 sm:py-24 lg:px-16 lg:py-32">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 xl:gap-28">
         <motion.div
-          ref={containerRef}
-          variants={staggerContainer}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="flex flex-col gap-6 md:gap-8 order-2 lg:order-1"
+          variants={copy}
+          initial={false}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.35 }}
+          className="min-w-0"
         >
-          <motion.div variants={itemFadeRight} className="space-y-4">
-            <h3 className="text-3xl md:text-5xl font-extrabold text-[#121212] leading-[1.2] tracking-tight">
-              "아프다고 아무 병원이나<br />
-              가는 시대는 끝났습니다."
-            </h3>
-          </motion.div>
+          <motion.h3
+            variants={reveal}
+            className="max-w-[11ch] text-3xl font-semibold leading-[1.15] tracking-[-0.04em] [word-break:keep-all] md:text-5xl"
+          >
+            <span className="block">찾는 순간,</span>
+            <span className="block text-white/52">선택할 이유가</span>
+            <span className="block text-white/52">보여야 합니다.</span>
+          </motion.h3>
 
-          <motion.div variants={itemFadeRight} className="space-y-6 text-gray-600 text-lg md:text-xl leading-relaxed font-medium">
-            <p>
-              환자는 더 이상 '가까운 병원'을 찾지 않습니다.<br />
-              <Highlight color="#FF5733">ChatGPT가 '추천하는 병원'</Highlight>을 찾습니다.
-            </p>
-            <p>
-              단순히 파워링크만 걸어두고, 영혼 없는 포스팅을 올리던<br />
-              과거의 방식은 더 이상 환자들의 지갑을 열지 못합니다.
-            </p>
-            <p className="pt-4 text-gray-900 font-bold text-xl md:text-2xl leading-normal">
-              현장을 모르는 외주 업체의 뻔한 마케팅으로는<br />
-              다가오는 <Highlight>생존 위기</Highlight>를 돌파할 수 없습니다.
-            </p>
-          </motion.div>
+          <motion.p
+            variants={reveal}
+            className="mt-6 max-w-lg text-pretty text-base font-medium leading-[1.75] text-white/56 sm:mt-8 sm:text-lg [word-break:keep-all]"
+          >
+            검색, 콘텐츠, 예약을 하나의 흐름으로 연결해 환자의 망설임을 줄입니다.
+          </motion.p>
 
-          <motion.div variants={itemFadeRight} className="pt-6">
-            <p className="text-sm md:text-base text-gray-500 font-semibold leading-relaxed border-l-2 border-[#FF5733] pl-4">
-              5년 뒤, 옆 병원 원장님께<br className="md:hidden" /> '거기는 어떻게 그렇게 잘 되세요?'라고<br />
-              묻고 싶지 않다면.
-            </p>
-          </motion.div>
+          <motion.ul variants={reveal} className="mt-8 flex flex-wrap gap-2 sm:mt-10">
+            {["검색 최적화", "신뢰 콘텐츠", "예약 전환"].map((tag) => (
+              <li
+                key={tag}
+                className="rounded-full border border-white/12 px-3.5 py-2 text-xs font-medium text-white/62"
+              >
+                {tag}
+              </li>
+            ))}
+          </motion.ul>
         </motion.div>
 
-        {/* Right: ChatGPT UI Mockup */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="relative aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl order-1 lg:order-2 flex flex-col bg-[#212121]"
+          variants={panel}
+          initial={false}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#20221f] p-4 shadow-[0_32px_80px_rgba(0,0,0,0.24)] sm:p-6 lg:p-8"
         >
-          {/* ChatGPT Top Bar */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center flex-shrink-0">
-                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none">
-                  <path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855l-5.843-3.372L15.115 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.403-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z" fill="#000"/>
-                </svg>
-              </div>
-              <span className="text-white font-semibold text-sm">ChatGPT</span>
-              <div className="flex items-center gap-1 bg-white/10 rounded-full px-2 py-0.5 ml-1">
-                <span className="text-gray-300 text-xs">GPT-4o</span>
-                <svg className="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-              </div>
+          <motion.header
+            variants={panelItem}
+            className="mb-3 flex items-center justify-between px-1 pb-4 sm:mb-5 sm:pb-5"
+          >
+            <div>
+              <p className="text-sm font-semibold">환자 선택 여정</p>
             </div>
-            <button className="bg-white text-[#212121] text-xs font-bold px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors">
-              새 채팅
-            </button>
-          </div>
+          </motion.header>
 
-          {/* Chat Area */}
-          <div className="flex-1 overflow-y-auto px-4 md:px-6 py-5 space-y-6">
+          <div className="overflow-hidden rounded-2xl border border-white/8 bg-black/12">
+            {journey.map((step, index) => {
+              const Icon = step.icon;
 
-            {/* User message */}
-            <div className="flex justify-end">
-              <div className="bg-[#2f2f2f] text-white rounded-3xl rounded-tr-sm px-4 py-3 max-w-[80%]">
-                <p className="text-sm md:text-base leading-relaxed">강남에서 <strong>허리디스크</strong> 치료 잘하는 병원 추천해줘. 비수술로도 가능한 곳이면 좋겠어.</p>
-              </div>
-            </div>
-
-            {/* ChatGPT response */}
-            <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-md">
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
-                  <path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855l-5.843-3.372L15.115 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.403-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z" fill="#000"/>
-                </svg>
-              </div>
-              <div className="flex-1 space-y-3">
-                <p className="text-gray-200 text-sm md:text-base leading-relaxed flex flex-wrap">
-                  <AnimatedText text="강남 지역에서 허리디스크 비수술 치료로 높은 평가를 받는 병원을 알려드릴게요." delay={0.5} />
-                </p>
-
-                {/* Hospital recommendation card */}
+              return (
                 <motion.div
-                  variants={cardVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  className="bg-[#2f2f2f] border border-white/10 rounded-2xl p-4 space-y-3 shadow-lg origin-bottom"
+                  key={step.number}
+                  variants={panelItem}
+                  className={`grid grid-cols-[2.75rem_minmax(0,1fr)] items-center gap-3 px-4 py-4 sm:grid-cols-[3.25rem_minmax(0,1fr)] sm:gap-4 sm:px-5 sm:py-5 ${
+                    index > 0 ? "border-t border-white/8" : ""
+                  }`}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <span className="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full">✦ 최우선 추천</span>
-                      </div>
-                      <p className="text-white font-bold text-base md:text-lg">연세 정형외과의원</p>
-                      <p className="text-gray-400 text-xs mt-0.5">서울 강남구 · 척추·관절 전문</p>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <p className="text-yellow-400 font-black text-lg">4.9</p>
-                      <div className="flex gap-0.5 justify-end">
-                        {[1,2,3,4,5].map(i => (
-                          <svg key={i} className="w-2.5 h-2.5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
-                      </div>
-                      <p className="text-gray-500 text-[10px] mt-0.5">리뷰 324건</p>
-                    </div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/7 text-white/70 sm:h-11 sm:w-11">
+                    <Icon size={18} strokeWidth={1.7} aria-hidden="true" />
                   </div>
-
-                  <div className="flex flex-wrap gap-1.5">
-                    {["비수술 치료", "도수치료", "체외충격파", "당일 예약 가능"].map(tag => (
-                      <span key={tag} className="text-[10px] md:text-xs text-gray-300 bg-white/10 border border-white/10 rounded-full px-2.5 py-0.5">{tag}</span>
-                    ))}
+                  <div className="min-w-0">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-[10px] font-semibold text-[#e46b50]">{step.number}</span>
+                      <h4 className="text-sm font-semibold sm:text-base">{step.title}</h4>
+                    </div>
+                    <p className="mt-1 text-xs leading-relaxed text-white/42 [word-break:keep-all] sm:text-sm">
+                      {step.description}
+                    </p>
                   </div>
-
-                  <p className="text-gray-400 text-xs md:text-sm leading-relaxed border-t border-white/10 pt-3">
-                    초진 환자의 <span className="text-white font-semibold">91%</span>가 수술 없이 호전되었으며, 척추 전문의가 직접 비수술 맞춤 치료를 진행합니다.
-                  </p>
                 </motion.div>
-
-                <p className="text-gray-400 text-xs md:text-sm leading-relaxed flex flex-wrap gap-x-1">
-                  <AnimatedText text="위 병원은 AI 학습 데이터 기준 허리디스크" delay={2.3} />
-                  <AnimatedText text="비수술 치료 만족도" delay={3.05} className="text-white font-medium" />
-                  <AnimatedText text="상위 1%에 해당합니다." delay={3.35} />
-                </p>
-              </div>
-            </div>
+              );
+            })}
           </div>
 
-          {/* Input bar */}
-          <div className="px-4 md:px-6 pb-4 flex-shrink-0">
-            <div className="bg-[#2f2f2f] rounded-2xl px-4 py-3 flex items-center gap-3 border border-white/10">
-              <p className="flex-1 text-gray-500 text-sm">메시지 ChatGPT</p>
-              <button className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-                <svg className="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" /></svg>
-              </button>
+          <motion.div
+            variants={panelItem}
+            className="mt-4 flex items-center justify-between gap-4 rounded-2xl bg-[#f4f1eb] px-4 py-4 text-[#171816] sm:mt-5 sm:px-5 sm:py-5"
+          >
+            <div className="min-w-0">
+              <p className="text-sm font-bold [word-break:keep-all] sm:text-base">
+                망설임 없는 예약
+              </p>
             </div>
-            <p className="text-center text-gray-600 text-[10px] mt-2">ChatGPT는 실수를 할 수 있습니다. 중요한 정보는 확인하세요.</p>
-          </div>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#171816] text-white">
+              <ArrowUpRight size={17} aria-hidden="true" />
+            </div>
+          </motion.div>
         </motion.div>
-
       </div>
     </section>
   );

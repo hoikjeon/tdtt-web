@@ -1,72 +1,57 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { motion, useMotionValue, useAnimationFrame } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
-const marqueeWords = [
-  "Creative Intelligence",
-  "Brand Strategy",
-  "Digital Experience",
-  "UX Innovation",
-  "Data-Driven Design",
-  "AI Solutions",
-  "Web Development",
-  "Visual Storytelling",
+const stages = [
+  { number: "01", title: "발견", description: "검색에서 보이고" },
+  { number: "02", title: "신뢰", description: "콘텐츠로 확신하고" },
+  { number: "03", title: "예약", description: "망설임 없이 선택합니다" },
 ];
 
-const marqueeText = marqueeWords.join(" · ") + " · ";
+const list: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const item: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 export default function ScrollMarquee() {
-  const baseX = useMotionValue(0);
-  const [scrollDirection, setScrollDirection] = useState(1); // 1 = down, -1 = up
-  const lastScrollY = useRef(0);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const currentY = window.scrollY;
-      if (currentY > lastScrollY.current) {
-        setScrollDirection(1);
-      } else if (currentY < lastScrollY.current) {
-        setScrollDirection(-1);
-      }
-      lastScrollY.current = currentY;
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useAnimationFrame(() => {
-    const speed = 1.5;
-    let newX = baseX.get() + speed * scrollDirection;
-
-    // 텍스트 한 세트의 폭(대략적으로 추정)을 기준으로 순환
-    const resetPoint = marqueeText.length * 14; // 글자 수 × 대략적인 폭
-    if (newX > 0) {
-      newX = -resetPoint;
-    } else if (newX < -resetPoint) {
-      newX = 0;
-    }
-
-    baseX.set(newX);
-  });
-
   return (
-    <section className="bg-white text-black overflow-hidden pt-0 pb-6">
-      <motion.div
-        className="flex whitespace-nowrap"
-        style={{ x: baseX }}
+    <section className="bg-[#f4f1eb] px-5 pb-16 text-[#171816] sm:px-8 sm:pb-24 lg:px-16">
+      <motion.ol
+        variants={list}
+        initial={false}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.45 }}
+        className="mx-auto grid max-w-7xl grid-cols-3 border-y border-black/12"
       >
-        {/* 텍스트를 4번 반복하여 끊김 없는 마퀴 효과 생성 */}
-        {[...Array(4)].map((_, i) => (
-          <span
-            key={i}
-            className="text-7xl md:text-9xl font-bold tracking-tight mr-4 select-none"
+        {stages.map((stage, index) => (
+          <motion.li
+            key={stage.number}
+            variants={item}
+            className={`min-w-0 py-5 sm:flex sm:items-center sm:gap-5 sm:py-7 ${
+              index > 0 ? "border-l border-black/12 pl-3 sm:pl-6" : "pr-3"
+            }`}
           >
-            {marqueeText}
-          </span>
+            <span className="mb-2 block text-[10px] font-semibold tracking-[0.16em] text-[#c85039] sm:mb-0 sm:text-xs">
+              {stage.number}
+            </span>
+            <div className="min-w-0">
+              <h3 className="text-sm font-bold [word-break:keep-all] sm:text-lg">{stage.title}</h3>
+              <p className="mt-1 hidden text-sm text-black/48 [word-break:keep-all] md:block">
+                {stage.description}
+              </p>
+            </div>
+          </motion.li>
         ))}
-      </motion.div>
+      </motion.ol>
     </section>
   );
 }

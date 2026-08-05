@@ -1,41 +1,57 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
+
+const container: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      delayChildren: 0.08,
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const reveal: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 export default function Intro() {
   return (
-    <section id="intro" className="relative bg-white text-black pt-24 md:pt-32 pb-4 md:pb-6 px-6 md:px-16">
-      <div className="max-w-4xl">
-
-
+    <section
+      id="intro"
+      className="relative overflow-hidden bg-[#f4f1eb] px-5 pb-12 pt-24 text-[#171816] sm:px-8 sm:pb-16 sm:pt-32 lg:px-16 lg:pt-40"
+    >
+      <motion.div
+        variants={container}
+        initial={false}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.35 }}
+        className="mx-auto max-w-7xl"
+      >
         <motion.h2
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={{
-            visible: { transition: { staggerChildren: 0.2 } }
-          }}
-          className="text-3xl md:text-5xl font-bold leading-tight"
+          variants={reveal}
+          className="max-w-[11ch] text-balance text-3xl font-semibold leading-[1.08] tracking-[-0.045em] [word-break:keep-all] md:text-5xl"
         >
-          {[
-            "AI 검색 시대의 병원 마케팅,",
-            "생존을 넘어 압도적 1위로.",
-            "미래의 환자 유입까지 선제적으로 확보하는",
-            "가장 확실한 온라인 환경 최적화 전략입니다."
-          ].map((line, i) => (
-            <motion.span
-              key={i}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as any } }
-              }}
-              className="block"
-            >
-              {line}
-            </motion.span>
-          ))}
+          검색을 넘어,
+          <span className="block text-black/38">선택되는 병원으로.</span>
         </motion.h2>
-      </div>
+
+        <motion.div
+          variants={reveal}
+          className="mt-8 max-w-3xl border-t border-black/12 pt-5 sm:mt-12 sm:pt-7"
+        >
+          <p className="max-w-2xl text-pretty text-base font-medium leading-[1.65] text-black/68 sm:text-lg [word-break:keep-all]">
+            환자가 찾는 순간부터 예약하는 순간까지,
+            <br className="hidden sm:block" /> 하나의 브랜드 경험으로 설계합니다.
+          </p>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
